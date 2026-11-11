@@ -3,59 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Popote</title>
+<title>Mitonne</title>
 <meta name="description" content="Batch cooking de la semaine selon les promotions Migros, Coop, Denner, Aldi et Lidl.">
-<meta name="theme-color" content="#f1f4ee" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111714" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f151b" media="(prefers-color-scheme: dark)">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Popote">
+<meta name="apple-mobile-web-app-title" content="Mitonne">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Barlow+Condensed:wght@600;700&family=Caveat:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
 <style>
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0}
 img{max-width:100%}
 [hidden]{display:none!important}
-/* Layout: one thumb-wide column. A sticky strip names the brand and the freshness of the prices,
+/* Mitonne. Layout: one thumb-wide column, cool kitchen-tile neutrals, a paprika enamel accent,
+   masking-tape labels for what goes in each box, and storage state in colour: fresh green, fridge teal, freezer blue.
+   Layout: one thumb-wide column. A sticky strip names the brand and the freshness of the prices,
    five views sit behind a bottom tab bar, the week is prepared in a two-step flow,
    the batch session reads like a kitchen timeline, and the yellow shelf label is the only loud element. */
 :root{
-  --paper:#f1f4ee; --surface:#ffffff; --ink:#16241f; --ink-2:#55655d; --line:#d6ddd3;
-  --accent:#1c6a4c; --accent-ink:#ffffff;
-  --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#e4e9e1;
-  --promo:#d6322a; --promo-ink:#ffffff;
-  --note:#fff4c7; --note-ink:#4b3c00;
-  --cold:#2f5fa7;
-  --c1:#1c6a4c; --c2:#c0561b; --c3:#2f5fa7; --c4:#8a3d8f; --c5:#9a7300;
-  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --paper:#f2f5f7; --surface:#ffffff; --ink:#17222e; --ink-2:#596776; --line:#d8dfe5;
+  --accent:#b9461b; --accent-ink:#ffffff; --accent-soft:#fbe9e0;
+  --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#e6ebef;
+  --promo:#d22e26; --promo-ink:#ffffff;
+  --note:#fff3c4; --note-ink:#4a3a00;
+  --tape:#efe1b4; --tape-ink:#3e3420;
+  --fresh:#2c7a4b; --fridge:#167684; --cold:#2f6fb8;
+  --c1:#b9461b; --c2:#2c7a4b; --c3:#2f6fb8; --c4:#8a3d8f; --c5:#9a7300;
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-price:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;
+  --f-hand:"Caveat","Segoe Print","Bradley Hand",cursive;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#111714; --surface:#1a231f; --ink:#e8efe9; --ink-2:#9bada3; --line:#2b3832;
-    --accent:#62c99b; --accent-ink:#0c1a14;
-    --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#2b3832;
-    --promo:#e4483f; --promo-ink:#ffffff;
-    --note:#3a3210; --note-ink:#f3e3a2;
-    --cold:#7fa8ec;
-    --c1:#62c99b; --c2:#f08a4b; --c3:#7fa8ec; --c4:#d18ad6; --c5:#e0bb45;
+    --paper:#0f151b; --surface:#17202a; --ink:#e7edf2; --ink-2:#9aa8b6; --line:#28343f;
+    --accent:#f08a5a; --accent-ink:#1a0d06; --accent-soft:#3a2418;
+    --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#28343f;
+    --promo:#e5483f; --promo-ink:#ffffff;
+    --note:#3a3110; --note-ink:#f3e3a2;
+    --tape:#5b5033; --tape-ink:#f6eac6;
+    --fresh:#5cc28a; --fridge:#4cb8c6; --cold:#7fb0ee;
+    --c1:#f08a5a; --c2:#5cc28a; --c3:#7fb0ee; --c4:#d18ad6; --c5:#e0bb45;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#111714; --surface:#1a231f; --ink:#e8efe9; --ink-2:#9bada3; --line:#2b3832;
-  --accent:#62c99b; --accent-ink:#0c1a14;
-  --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#2b3832;
-  --promo:#e4483f; --promo-ink:#ffffff;
-  --note:#3a3210; --note-ink:#f3e3a2;
-  --cold:#7fa8ec;
-  --c1:#62c99b; --c2:#f08a4b; --c3:#7fa8ec; --c4:#d18ad6; --c5:#e0bb45;
-  color-scheme:dark;
+    --paper:#0f151b; --surface:#17202a; --ink:#e7edf2; --ink-2:#9aa8b6; --line:#28343f;
+    --accent:#f08a5a; --accent-ink:#1a0d06; --accent-soft:#3a2418;
+    --tag:#ffd43b; --tag-ink:#1c1a0c; --tag-plain:#28343f;
+    --promo:#e5483f; --promo-ink:#ffffff;
+    --note:#3a3110; --note-ink:#f3e3a2;
+    --tape:#5b5033; --tape-ink:#f6eac6;
+    --fresh:#5cc28a; --fridge:#4cb8c6; --cold:#7fb0ee;
+    --c1:#f08a5a; --c2:#5cc28a; --c3:#7fb0ee; --c4:#d18ad6; --c5:#e0bb45;
+    color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
 body{
@@ -76,7 +82,8 @@ button{font-family:inherit}
   display:flex; align-items:baseline; justify-content:space-between; gap:12px;
   padding-block:14px 10px; border-bottom:1px solid var(--line);
 }
-.brand{font:800 1.5rem/1 var(--f-display);letter-spacing:-.02em}
+.brand{display:flex;align-items:center;gap:8px;font:800 1.45rem/1 var(--f-display);font-stretch:118%;letter-spacing:-.01em}
+.brand svg{width:30px;height:30px;flex:none}
 .fresh{font-size:.8rem;color:var(--ink-2);text-align:right;min-width:0}
 
 .tabs{
@@ -96,8 +103,8 @@ button{font-family:inherit}
 .tab[aria-current="page"]{color:var(--accent);border-top-color:var(--accent)}
 
 #view{display:flex;flex-direction:column;gap:18px;padding-block:18px}
-.h1{font:800 1.7rem/1.1 var(--f-display);letter-spacing:-.02em;text-wrap:balance;margin:0}
-.h2{font:800 1.15rem/1.2 var(--f-display);margin:0;text-wrap:balance}
+.h1{font:800 1.75rem/1.08 var(--f-display);font-stretch:112%;letter-spacing:-.01em;text-wrap:balance;margin:0}
+.h2{font:800 1.15rem/1.2 var(--f-display);font-stretch:110%;margin:0;text-wrap:balance}
 .lede{color:var(--ink-2);margin:0;font-size:.95rem;max-width:65ch}
 .head{display:flex;flex-direction:column;gap:6px}
 
@@ -144,6 +151,9 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 }
 .badge{display:inline-block;font:700 .7rem var(--f-body);letter-spacing:.04em;padding:.15rem .45rem;border-radius:4px;background:var(--tag-plain);color:var(--ink-2)}
 .badge.cold{background:transparent;border:1px solid var(--cold);color:var(--cold)}
+.badge.fresh{background:transparent;border:1px solid var(--fresh);color:var(--fresh)}
+.badge.fridge{background:transparent;border:1px solid var(--fridge);color:var(--fridge)}
+.badge.alt{background:var(--accent-soft);color:var(--accent)}
 
 .tag{display:inline-flex;align-items:stretch;border-radius:6px;overflow:hidden;font-family:var(--f-price);line-height:1;flex:none;font-variant-numeric:tabular-nums}
 .tag-pct{background:var(--promo);color:var(--promo-ink);font-weight:700;font-size:.95rem;padding:0 .4rem;display:flex;align-items:center}
@@ -157,7 +167,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .card[data-on="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .card-head{display:flex;justify-content:space-between;gap:8px;font-size:.78rem;color:var(--ink-2);flex-wrap:wrap}
-.card-name{font:600 1.2rem/1.2 var(--f-display);margin:0;text-wrap:balance}
+.card-name{font:700 1.15rem/1.22 var(--f-display);font-stretch:104%;margin:0;text-wrap:balance}
 .card-sv{margin:-6px 0 0;color:var(--ink-2);font-size:.9rem}
 .badges{display:flex;gap:6px;flex-wrap:wrap}
 .deal{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
@@ -198,8 +208,9 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .fact{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:.7rem .8rem;display:flex;flex-direction:column;gap:2px;min-width:0}
 .fact b{font:700 1.5rem/1.1 var(--f-price);font-variant-numeric:tabular-nums}
 .fact span{font-size:.8rem;color:var(--ink-2)}
-.dish{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:.6rem 0;border-bottom:1px solid var(--line)}
-.dish i{width:12px;height:12px;border-radius:50%;background:var(--c);margin-top:6px}
+.dish{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.dish>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.dish i{width:12px;height:12px;border-radius:50%;background:var(--c);margin-top:10px}
 .dish-n{font-weight:600}
 .dish-s{font-size:.82rem;color:var(--ink-2)}
 details summary{cursor:pointer;font-size:.85rem;color:var(--accent);font-weight:600}
@@ -276,19 +287,28 @@ details summary{cursor:pointer;font-size:.85rem;color:var(--accent);font-weight:
 .timer.ring{background:var(--promo);color:var(--promo-ink)}
 .timer button{appearance:none;border:0;background:transparent;color:inherit;font:700 1rem var(--f-body);width:28px;height:28px;cursor:pointer;border-radius:50%}
 
+.tape{display:inline-block;align-self:flex-start;background:var(--tape);color:var(--tape-ink);font:700 1.2rem/1.1 var(--f-hand);padding:.2rem .7rem .25rem;transform:rotate(-1.2deg);
+  clip-path:polygon(1.5% 6%,98% 0,100% 48%,98.5% 100%,2% 94%,0 52%)}
+.illu{width:100%;max-width:360px;height:auto;display:block}
+.cook{display:flex;flex-direction:column;gap:14px}
+.cook-card{background:var(--surface);border:2px solid var(--accent);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.cook-when{margin:0;color:var(--ink-2);font-size:.9rem}
+.cook-t{font:600 1.4rem/1.38 var(--f-body);margin:0}
+.cook-next{border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:4px}
+.cook-next p{margin:0}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(110px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:.6rem 1rem;border-radius:999px;font-size:.88rem;z-index:20;max-width:calc(100% - 32px)}
 </style>
 </head>
 <body>
 <div class="app">
   <header class="top">
-    <div class="brand">Popote</div>
+    <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M11 7c0-1.5 1.7-1.7 1.7-3.2M16 7c0-1.5 1.7-1.7 1.7-3.2M21 7c0-1.5 1.7-1.7 1.7-3.2" stroke="var(--ink-2)" stroke-width="1.6" fill="none" stroke-linecap="round"/><rect x="14" y="8.2" width="4" height="2.6" rx="1" fill="var(--ink)"/><rect x="5.5" y="10.4" width="21" height="3.2" rx="1.6" fill="var(--ink)"/><path d="M7 14.4h18v6.8a6 6 0 0 1-6 6h-6a6 6 0 0 1-6-6z" fill="var(--accent)"/><path d="M3.4 17h3.6M25 17h3.6" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/><rect x="10.6" y="18.4" width="10.8" height="3.8" rx=".6" fill="var(--tape)" transform="rotate(-3 16 20.3)"/></svg>Mitonne</div>
     <div class="fresh" id="fresh">Lecture des actions…</div>
   </header>
   <main id="view">
     <section class="empty">
-      <h1 class="h1">Popote lit les actions de la semaine</h1>
-      <p class="lede">Migros, Coop, Denner, Aldi et Lidl. Ensuite, tu choisis tes plats et Popote organise tes courses, ta session de batch cooking et ta semaine.</p>
+      <h1 class="h1">Mitonne lit les actions de la semaine</h1>
+      <p class="lede">Migros, Coop, Denner, Aldi et Lidl. Ensuite, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.</p>
     </section>
   </main>
 </div>
@@ -316,8 +336,10 @@ var TABS=['semaine','courses','batch','actions','reglages'];
 var CUIS={ch:'Suisse et montagne',fr:'Française',it:'Italienne',as:'Asiatique',in:'Indienne',me:'Méditerranée et Orient',am:'Américaine et mexicaine'};
 var CUSHORT={ch:'Suisse',fr:'Française',it:'Italienne',as:'Asiatique',in:'Indienne',me:'Méditerranéenne',am:'Américaine'};
 var CORDER=['ch','fr','it','as','in','me','am'];
-var NO={viande:'m',porc:'p',boeuf:'b',agneau:'a',poisson:'f',fruitsmer:'s',champignons:'g',epinards:'e',chou:'h',courge:'c',poivrons:'o'};
-var NO_L=[['viande','Viande'],['porc','Porc'],['boeuf','Bœuf'],['agneau','Agneau'],['poisson','Poisson'],['fruitsmer','Fruits de mer'],['champignons','Champignons'],['epinards','Épinards'],['chou','Chou'],['courge','Courge'],['poivrons','Poivrons']];
+var NO={viande:'m',porc:'p',boeuf:'b',agneau:'a',poisson:'f',fruitsmer:'s',champignons:'g',epinards:'e',chou:'h',courge:'c',poivrons:'o',tomates:'T',fromage:'Q',legumineuses:'R',olives:'V',coco:'X',poireaux:'L',gingembre:'G',patatedouce:'D'};
+var ALG=[['gluten','Gluten','w'],['lactose','Lactose','l'],['lait','Protéines de lait','l'],['oeufs','Œufs','u'],['poisson','Poisson','f'],['fruitsmer','Crustacés et mollusques','s'],['soja','Soja','y'],['moutarde','Moutarde','d'],['celeri','Céleri','k'],['noix','Fruits à coque','n']];
+var SUBST={gluten:{pates:'sans gluten',bouillon:'sans gluten',sauce_soja:'tamari sans gluten',pain:'sans gluten',nouilles:'de riz',lasagne:'sans gluten',tortillas:'de maïs',pain_burger:'sans gluten',farine:'sans gluten',chapelure:'sans gluten'},celeri:{bouillon:'sans céleri'}};
+var NO_L=[['viande','Viande'],['porc','Porc'],['boeuf','Bœuf'],['agneau','Agneau'],['poisson','Poisson'],['fruitsmer','Fruits de mer'],['champignons','Champignons'],['epinards','Épinards'],['chou','Chou'],['courge','Courge'],['poivrons','Poivrons'],['tomates','Tomates'],['fromage','Fromage'],['legumineuses','Lentilles, pois chiches, haricots'],['olives','Olives'],['coco','Lait de coco'],['poireaux','Poireaux'],['gingembre','Gingembre'],['patatedouce','Patate douce']];
 var DIETS=[['tout','Je mange de tout',''],['flexi','Peu de viande','Un seul plat avec viande ou poisson par semaine'],['sanspork','Sans porc',''],['pesce','Pas de viande, mais du poisson',''],['vege','Végétarien','Ni viande ni poisson']];
 var SPICE=[[0,'Doux'],[1,'Un peu relevé'],[2,'J’aime le piquant']];
 var PRIO=[['eco','Dépenser le moins possible','Les plus gros rabais et les plats économiques passent en premier'],['var','Me faire plaisir','Tes cuisines préférées passent en premier, les actions ensuite']];
@@ -339,28 +361,28 @@ var ING={};
  ['boeuf_hache','Viande hachée de bœuf','vi','mb'],['boeuf_steak','Steaks de bœuf','vi','mb'],['boeuf_ragout','Ragoût de bœuf','vi','mb'],
  ['porc_cotelette','Côtelettes ou steaks de porc','vi','mp'],['porc_filet','Filet mignon de porc','vi','mp'],['porc_roti','Rôti de porc','vi','mp'],
  ['porc_fume','Jambon roulé ou palette fumée','vi','mp'],['saucisse','Saucisses à rôtir','vi','mp'],['saucisson','Saucisson vaudois','vi','mp'],
- ['lardons','Lardons','vi','mp'],['jambon','Jambon cuit','vi','mp'],['cordon_bleu','Cordons-bleus','vi','mp'],['agneau','Filet d’agneau','vi','ma'],
+ ['lardons','Lardons','vi','mp'],['jambon','Jambon cuit','vi','mp'],['cordon_bleu','Cordons-bleus','vi','mplwQ'],['agneau','Filet d’agneau','vi','ma'],
  ['saumon_frais','Pavés de saumon','po','f'],['saumon_fume','Saumon fumé','po','f'],['poisson_blanc','Filets de poisson blanc','po','f'],
- ['poisson_pane','Poisson pané','po','f'],['moules','Moules','po','fs'],['crevettes','Crevettes','po','fs'],['thon_boite','Thon en boîte','ep','f'],
- ['pommes_de_terre','Pommes de terre','fl'],['patate_douce','Patates douces','fl'],['carottes','Carottes','fl'],['oignons','Oignons','fl'],
- ['ail','Ail','fl','','pc',5,'gousse'],['gingembre','Gingembre frais','fl','','pc',30,'morceau'],['poireaux','Poireaux','fl'],['courge','Courge','fl','c'],
+ ['poisson_pane','Poisson pané','po','fw'],['moules','Moules','po','fs'],['crevettes','Crevettes','po','fs'],['thon_boite','Thon en boîte','ep','f'],
+ ['pommes_de_terre','Pommes de terre','fl'],['patate_douce','Patates douces','fl','D'],['carottes','Carottes','fl'],['oignons','Oignons','fl'],
+ ['ail','Ail','fl','','pc',5,'gousse'],['gingembre','Gingembre frais','fl','G','pc',30,'morceau'],['poireaux','Poireaux','fl','L'],['courge','Courge','fl','c'],
  ['chou_blanc','Chou blanc','fl','h'],['chou_chinois','Chou chinois ou pak-choï','fl','h'],['chou_fleur','Chou-fleur','fl','h'],['brocoli','Brocoli','fl'],
- ['epinards','Épinards','fl','e'],['champignons','Champignons','fl','g'],['poivrons','Poivrons','fl','o'],['tomates','Tomates','fl'],
+ ['epinards','Épinards','fl','e'],['champignons','Champignons','fl','g'],['poivrons','Poivrons','fl','o'],['tomates','Tomates','fl','T'],
  ['salade','Salade ou rampon','fl'],['avocat','Avocat','fl','','pc',200],['citron','Citron','fl','','pc',100],['persil','Persil','fl','','pc',30,'bouquet'],
- ['oeufs','Œufs','fr','','pc',60],['creme','Crème','fr','','ml'],['lait','Lait','fr','','ml'],['yogourt','Yogourt nature','fr'],['sere','Séré nature','fr'],
- ['beurre','Beurre','fr'],['fromage_rape','Gruyère ou emmental','fr'],['raclette','Fromage à raclette','fr'],['mozzarella','Mozzarella','fr'],['feta','Feta','fr'],
- ['parmesan','Parmesan ou Grana Padano','fr'],['pate_gateau','Pâte à gâteau abaissée','fr','','pc',270,'rouleau'],['pate_pizza','Pâte à pizza abaissée','fr','','pc',320,'rouleau'],
- ['gnocchi','Gnocchi','fr'],['pates_farcies','Tortelloni ricotta-épinards','fr'],
- ['pates','Pâtes','ep'],['lasagne','Feuilles de lasagne','ep'],['nouilles','Nouilles chinoises','ep'],['riz','Riz','ep'],['riz_risotto','Riz à risotto','ep'],
- ['semoule','Semoule de couscous','ep'],['polenta','Polenta','ep'],['lentilles_vertes','Lentilles vertes','ep'],['lentilles_corail','Lentilles corail','ep'],
- ['pois_chiches','Pois chiches en boîte','ep'],['haricots_rouges','Haricots rouges en boîte','ep'],['haricots_blancs','Haricots blancs en boîte','ep'],
- ['mais','Maïs doux','ep'],['tomates_concassees','Tomates concassées','ep'],['concentre_tomate','Concentré de tomate','ep'],['lait_coco','Lait de coco','ep','','ml'],
- ['pesto','Pesto','ep'],['tortillas','Tortillas de blé','ep','','pc',40],['pain','Pain','ep'],['pain_burger','Pains à burger','ep','','pc',60,'pain'],
- ['compote_pommes','Compote de pommes','ep'],['cornichons','Cornichons','ep'],['olives','Olives','ep'],['petits_pois','Petits pois surgelés','ep'],
+ ['oeufs','Œufs','fr','u','pc',60],['creme','Crème','fr','l','ml'],['lait','Lait','fr','l','ml'],['yogourt','Yogourt nature','fr','l'],['sere','Séré nature','fr','l'],
+ ['beurre','Beurre','fr','l'],['fromage_rape','Gruyère ou emmental','fr','lQ'],['raclette','Fromage à raclette','fr','lQ'],['mozzarella','Mozzarella','fr','lQ'],['feta','Feta','fr','lQ'],
+ ['parmesan','Parmesan ou Grana Padano','fr','lQ'],['pate_gateau','Pâte à gâteau abaissée','fr','lw','pc',270,'rouleau'],['pate_pizza','Pâte à pizza abaissée','fr','w','pc',320,'rouleau'],
+ ['gnocchi','Gnocchi','fr','w'],['pates_farcies','Tortelloni ricotta-épinards','fr','lwuQ'],
+ ['pates','Pâtes','ep','w'],['lasagne','Feuilles de lasagne','ep','w'],['nouilles','Nouilles chinoises','ep','w'],['riz','Riz','ep'],['riz_risotto','Riz à risotto','ep'],
+ ['semoule','Semoule de couscous','ep','w'],['polenta','Polenta','ep'],['lentilles_vertes','Lentilles vertes','ep','R'],['lentilles_corail','Lentilles corail','ep','R'],
+ ['pois_chiches','Pois chiches en boîte','ep','R'],['haricots_rouges','Haricots rouges en boîte','ep','R'],['haricots_blancs','Haricots blancs en boîte','ep','R'],
+ ['mais','Maïs doux','ep'],['tomates_concassees','Tomates concassées','ep','T'],['concentre_tomate','Concentré de tomate','ep','T'],['lait_coco','Lait de coco','ep','X','ml'],
+ ['pesto','Pesto','ep','lnQ'],['tortillas','Tortillas de blé','ep','w','pc',40],['pain','Pain','ep','w'],['pain_burger','Pains à burger','ep','w','pc',60,'pain'],
+ ['compote_pommes','Compote de pommes','ep'],['cornichons','Cornichons','ep'],['olives','Olives','ep','V'],['petits_pois','Petits pois surgelés','ep'],
  ['vin_blanc','Vin blanc sec','ep','','ml'],
- ['huile','Huile','pl'],['huile_olive','Huile d’olive','pl'],['moutarde','Moutarde','pl'],['bouillon','Bouillon','pl'],['farine','Farine','pl'],
- ['chapelure','Chapelure','pl'],['miel','Miel','pl'],['curry','Curry en poudre','pl'],['paprika','Paprika','pl'],['cumin','Cumin','pl'],
- ['piment','Piment séché','pl'],['sauce_soja','Sauce soja','pl'],['vinaigre','Vinaigre','pl'],['origan','Origan','pl'],['thym','Thym','pl'],['muscade','Muscade','pl']
+ ['huile','Huile','pl'],['huile_olive','Huile d’olive','pl'],['moutarde','Moutarde','pl','d'],['bouillon','Bouillon','pl','wk'],['farine','Farine','pl','w'],
+ ['chapelure','Chapelure','pl','w'],['miel','Miel','pl'],['curry','Curry en poudre','pl'],['paprika','Paprika','pl'],['cumin','Cumin','pl'],
+ ['piment','Piment séché','pl'],['sauce_soja','Sauce soja','pl','wy'],['vinaigre','Vinaigre','pl'],['origan','Origan','pl'],['thym','Thym','pl'],['muscade','Muscade','pl']
 ].forEach(function(a){ING[a[0]]={n:a[1],r:a[2],f:a[3]||'',u:a[4]||'g',w:a[5]||0,pl:a[6]||''};});
 
 /* Recettes de batch cooking, pour 4 portions.
@@ -675,7 +697,7 @@ var S={
 function defaults(){
   var g=[];for(var d=0;d<7;d++){g.push(false);g.push(true);}
   return {done:false,people:2,grid:g,diet:'tout',no:[],cu:[],spice:1,oven:true,freezer:true,nDish:0,prio:'eco',stores:ORDER.slice(),
-    shopDay:'sat',shopH:'09:30',thawH:'20:00',fav:[],ban:[],hist:[],lastFire:0};
+    shopDay:'sat',shopH:'09:30',thawH:'20:00',fav:[],ban:[],hist:[],lastFire:0,alg:[],big:false};
 }
 
 /* ---------- dates, formats ---------- */
@@ -788,7 +810,31 @@ function allowed(r){
   if(p.diet==='vege'&&/[mf]/.test(f)) return false;
   if(p.diet==='pesce'&&f.indexOf('m')>=0) return false;
   if(p.diet==='sanspork'&&f.indexOf('p')>=0) return false;
+  if(!algOK(r)) return false;
   return !p.no.some(function(x){return f.indexOf(NO[x])>=0;});
+}
+function algLetter(a){for(var i=0;i<ALG.length;i++) if(ALG[i][0]===a) return ALG[i][2];return '';}
+function algOK(r){
+  var A=S.prefs.alg;
+  for(var i=0;i<A.length;i++){
+    var a=A[i],L=algLetter(a);
+    if(!L||a==='lactose') continue;
+    for(var j=0;j<r.all.length;j++){
+      var k=r.all[j][0];
+      if(ING[k].f.indexOf(L)>=0&&!(SUBST[a]&&SUBST[a][k])) return false;
+    }
+  }
+  return true;
+}
+function variantOf(k){
+  var A=S.prefs.alg,out=[];
+  A.forEach(function(a){
+    var L=algLetter(a);
+    if(!L||ING[k].f.indexOf(L)<0) return;
+    var v=a==='lactose'?(A.indexOf('lait')>=0?'':'sans lactose'):(SUBST[a]&&SUBST[a][k]);
+    if(v&&out.indexOf(v)<0) out.push(v);
+  });
+  return out.join(', ');
 }
 function roundQ(k,q){
   if(!q) return 0;
@@ -882,7 +928,7 @@ function assign(slots,ids){
 function portionsOf(w,id){var n=0;w.slots.forEach(function(s){if(s.r===id) n++;});return n*w.people;}
 function buildWeek(shopD,shopH,mode,cookH,ids){
   var c=cookOf(shopD,shopH,mode,cookH),start=toMin(c.d,c.h);
-  var w={shop:{d:shopD,h:shopH},mode:mode,cookH:cookH,cook:c,ids:ids.slice(),people:S.prefs.people,slots:[],done:{},checked:{}};
+  var w={shop:{d:shopD,h:shopH},mode:mode,cookH:cookH,cook:c,ids:ids.slice(),people:S.prefs.people,ap:S.prefs.big?1.25:1,slots:[],done:{},checked:{}};
   var end=start+150;
   for(var pass=0;pass<2;pass++){
     w.slots=assign(slotsBetween(c.d,start,end),ids);
@@ -987,7 +1033,7 @@ function events(w){
   w.slots.forEach(function(s){
     var r=B[s.r],tm=toMin(s.d,MEALH[s.m]);
     if(!r){ev.push({tm:tm,kind:'meal',k:s.m?'Soir':'Midi',txt:'Repas libre',sub:P.freezer?'':'Sans congélateur, le batch tient 3 jours.',len:60});return;}
-    var j=r.jour.filter(function(x){return ING[x[0]].r!=='pl';}).map(function(x){return lc(ING[x[0]].n)+' '+fmtQty(x[0],roundQ(x[0],x[1]*w.people/4));});
+    var j=r.jour.filter(function(x){return ING[x[0]].r!=='pl';}).map(function(x){var vt=variantOf(x[0]);return lc(ING[x[0]].n)+(vt?' '+vt:'')+' '+fmtQty(x[0],roundQ(x[0],x[1]*w.people/4*(w.ap||1)));});
     ev.push({tm:tm,kind:'meal',k:s.m?'Soir':'Midi',rid:r.id,src:s.src,txt:r.n+(r.sv?', '+r.sv:''),sub:r.j+(j.length?' Il te faut : '+j.join(', ')+'.':''),len:90});
     if(s.src==='congel'){
       var td=addDays(s.d,-1),key=td;
@@ -1002,7 +1048,7 @@ function events(w){
 function weekOver(w){var start=toMin(w.cook.d,w.cook.h);return nowMin()>start+7*1440-60;}
 function nextEvent(ev){var n=nowMin();for(var i=0;i<ev.length;i++) if(ev[i].tm+ev[i].len>=n) return ev[i];return null;}
 function programText(w){
-  var lines=['Popote · semaine du '+fmtDay(w.cook.d),''],last='';
+  var lines=['Mitonne · semaine du '+fmtDay(w.cook.d),''],last='';
   events(w).forEach(function(e){
     var d=dOf(e.tm);
     if(d!==last){lines.push('');lines.push(WD[wdOf(d)].toUpperCase()+' '+fmtDM(d));last=d;}
@@ -1020,7 +1066,7 @@ function shopping(w){
     r.main.forEach(function(k){mains[k]=1;});
     r.all.forEach(function(x){
       if(!(x[0] in need)){need[x[0]]=0;order.push(x[0]);}
-      need[x[0]]+=x[1]*por/4;
+      need[x[0]]+=x[1]*por/4*(w.ap||1);
     });
   });
   var out={byStore:{},rest:{},placard:[],pick:{},pay:0,save:0,n:0},anchors=[];
@@ -1039,6 +1085,7 @@ function shopping(w){
     if(a){(out.byStore[a.st]=out.byStore[a.st]||[]).push(row);out.pay+=row.c.total;out.save+=row.c.save;}
     else (out.rest[ING[k].r]=out.rest[ING[k].r]||[]).push(row);
   });
+  Object.keys(out.byStore).forEach(function(st){out.byStore[st].sort(function(a,b){return RORDER.indexOf(ING[a.k].r)-RORDER.indexOf(ING[b.k].r);});});
   return out;
 }
 function fmtQtyG(g){return g>=1000?fr(g/1000)+' kg':g+' g';}
@@ -1136,10 +1183,11 @@ function opt(act,v,label,sub,on,kind){
 function blk(label,body){return '<div class="block"><p class="label">'+label+'</p>'+body+'</div>';}
 function ready(){return S.loaded&&S.aState!=='loading';}
 function loadingView(){
-  return '<section class="empty"><h1 class="h1">Popote lit les actions de la semaine</h1><p class="lede">Migros, Coop, Denner, Aldi et Lidl. Ensuite, tu choisis tes plats et Popote organise tes courses, ta session de batch cooking et ta semaine.</p></section>';
+  return '<section class="empty"><h1 class="h1">Mitonne lit les actions de la semaine</h1><p class="lede">Migros, Coop, Denner, Aldi et Lidl. Ensuite, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.</p></section>';
 }
+var ILLU='<svg class="illu" viewBox="0 0 320 150" role="img" aria-label="Une cocotte qui mijote et des boîtes étiquetées pour la semaine"><path d="M8 140H312" stroke="var(--line)" stroke-width="2" stroke-linecap="round"/><g stroke="var(--ink-2)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"><path d="M64 42c-7-8 7-12 0-23"/><path d="M86 42c-7-8 7-12 0-23"/><path d="M108 42c-7-8 7-12 0-23"/></g><rect x="78" y="44" width="16" height="9" rx="3" fill="var(--ink)"/><rect x="38" y="52" width="96" height="11" rx="5.5" fill="var(--ink)"/><path d="M44 66h84v38a32 32 0 0 1-32 32H76a32 32 0 0 1-32-32z" fill="var(--accent)"/><path d="M28 80h16M128 80h16" stroke="var(--accent)" stroke-width="8" stroke-linecap="round"/><path d="M56 78h60" stroke="var(--accent-ink)" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/><g stroke="var(--ink)" stroke-width="2"><rect x="172" y="104" width="124" height="34" rx="6" fill="var(--surface)"/><rect x="168" y="97" width="132" height="9" rx="3" fill="var(--fresh)"/><rect x="180" y="62" width="108" height="32" rx="6" fill="var(--surface)"/><rect x="176" y="55" width="116" height="9" rx="3" fill="var(--fridge)"/><rect x="188" y="22" width="92" height="30" rx="6" fill="var(--surface)"/><rect x="184" y="15" width="100" height="9" rx="3" fill="var(--cold)"/></g><rect x="180" y="112" width="42" height="18" rx="2" fill="var(--tape)" transform="rotate(-3 201 121)"/><rect x="190" y="69" width="42" height="18" rx="2" fill="var(--tape)" transform="rotate(2 211 78)"/><rect x="198" y="28" width="42" height="18" rx="2" fill="var(--tape)" transform="rotate(-2 219 37)"/><g fill="var(--tape-ink)" style="font-family:var(--f-hand);font-weight:700;font-size:15px"><text x="187" y="126">sam.</text><text x="196" y="83">lun.</text><text x="204" y="42">jeu.</text></g><rect x="236" y="112" width="48" height="18" rx="4" fill="var(--accent-soft)"/><rect x="246" y="70" width="34" height="16" rx="4" fill="var(--accent-soft)"/><g stroke="var(--cold)" stroke-width="2" stroke-linecap="round"><path d="M262 28v14M255 31l14 8M269 31l-14 8"/></g></svg>';
 function noWeek(){
-  return '<section class="empty"><h1 class="h1">Prépare ta semaine</h1><p class="lede">Choisis ton jour de courses et les plats qui te font envie. Popote fait la liste, organise ta session de batch cooking à l’heure près et te dit quand décongeler chaque repas.</p>'+
+  return '<section class="empty">'+ILLU+'<h1 class="h1">Prépare ta semaine</h1><p class="lede">Choisis ton jour de courses et les plats qui te font envie. Mitonne fait la liste, organise ta session de batch cooking à l’heure près et te dit quand décongeler chaque repas.</p>'+
     '<button class="btn fill wide" data-act="w-new">Préparer ma semaine</button></section>';
 }
 function stateNote(D){
@@ -1147,7 +1195,7 @@ function stateNote(D){
   if(!S.flat.length) return '<p class="note">Aucune action n’a encore été relevée. Les plats sont proposés sans prix.</p>';
   if(!S.prefs.stores.length) return '<p class="note">Aucun magasin n’est choisi dans Réglages : les plats sont proposés sans prix.</p>';
   var miss=S.prefs.stores.filter(function(st){return !S.flat.some(function(a){return a.st===st&&valid(a,D);});});
-  if(miss.length) return '<p class="note">Pas encore d’action relevée pour le '+fmtDay(D)+' chez '+miss.map(function(s){return STORES[s];}).join(', ')+'. Popote relève les nouvelles actions le jeudi matin : reviens choisir tes plats après si tu veux en profiter.</p>';
+  if(miss.length) return '<p class="note">Pas encore d’action relevée pour le '+fmtDay(D)+' chez '+miss.map(function(s){return STORES[s];}).join(', ')+'. Mitonne relève les nouvelles actions le jeudi matin : reviens choisir tes plats après si tu veux en profiter.</p>';
   return '';
 }
 
@@ -1176,6 +1224,8 @@ function ctlGrid(){
   return h+'</div><p class="count">'+n+' repas par semaine</p>';
 }
 function ctlDiet(){return '<div class="opts">'+DIETS.map(function(d){return opt('diet',d[0],d[1],d[2],S.prefs.diet===d[0]);}).join('')+'</div>';}
+function ctlAlg(){return '<div class="chips">'+ALG.map(function(x){return chip('alg',x[0],x[1],S.prefs.alg.indexOf(x[0])>=0);}).join('')+'</div>';}
+function ctlBig(){return '<div class="chips">'+chip('big','0','Portions normales',!S.prefs.big)+chip('big','1','Portions généreuses, +25 %',S.prefs.big)+'</div>';}
 function ctlNo(){return '<div class="chips">'+NO_L.map(function(x){return chip('no',x[0],x[1],S.prefs.no.indexOf(x[0])>=0);}).join('')+'</div>';}
 function ctlCuis(){return '<div class="chips">'+chip('cu-all','x','Un peu de tout',!S.prefs.cu.length)+CORDER.map(function(c){return chip('cu',c,CUIS[c],S.prefs.cu.indexOf(c)>=0);}).join('')+'</div>';}
 function ctlSpice(){return '<div class="chips">'+SPICE.map(function(x){return chip('spice',x[0],x[1],S.prefs.spice===x[0]);}).join('')+'</div>';}
@@ -1187,25 +1237,25 @@ function ctlHabit(){return '<div class="chips">'+HABITS.map(function(x,i){return
 function ctlThaw(){return '<div class="chips">'+THAWH.map(function(h){return chip('thaw',h,h,S.prefs.thawH===h);}).join('')+'</div>';}
 function ctlStores(){return '<div class="chips">'+ORDER.map(function(st){return chip('store',st,STORES[st],S.prefs.stores.indexOf(st)>=0);}).join('')+'</div>';}
 function ctlPrio(){return '<div class="opts">'+PRIO.map(function(x){return opt('prio',x[0],x[1],x[2],S.prefs.prio===x[0]);}).join('')+'</div>';}
-var ALLERGY='<p class="fine">Ces choix écartent des recettes entières. Ils ne disent rien des allergènes d’un produit : lis toujours les étiquettes.</p>';
+var ALLERGY='<p class="fine">Mitonne écarte les plats qui contiennent ces aliments. Pour le gluten et le lactose, il garde les plats qui ont une version adaptée et te l’indique dans la liste de courses. Un produit peut contenir des traces : lis toujours les étiquettes.</p>';
 var KEEPING='<p class="fine">Frigo à 4 °C au plus. Plats cuisinés : 3 jours au frigo, 2 pour le poisson, et 2 à 3 mois au congélateur. Décongèle toujours au frigo, à couvert, et ne recongèle jamais un plat décongelé.</p>';
 
 /* ---------- questionnaire ---------- */
 function quizStep(q){
   var p=S.prefs;
   switch(q){
-  case 0: return {t:'Pour combien de personnes cuisines-tu ?',l:'Six questions rapides. Ensuite, chaque semaine, tu choisis tes plats et Popote organise tes courses, ta session de batch cooking et ta semaine.',b:ctlPeople(),ok:true};
+  case 0: return {i:1,t:'Pour combien de personnes cuisines-tu ?',l:'Six questions rapides. Ensuite, chaque semaine, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.',b:ctlPeople()+ctlBig(),ok:true};
   case 1: return {t:'Quels repas ton batch doit-il couvrir ?',l:'Coche les midis et les soirs. Une seule session de cuisine par semaine peut couvrir jusqu’à 14 repas.',b:ctlGrid(),ok:p.grid.some(Boolean),hint:'Choisis au moins un repas.'};
-  case 2: return {t:'Qu’est-ce que tu manges ?',l:'Popote n’écartera que ce que tu coches ici.',b:ctlDiet()+blk('Je n’aime pas',ctlNo())+ALLERGY,ok:true};
-  case 3: return {t:'Quelles cuisines te font envie ?',l:'Choisis-en autant que tu veux : Popote les proposera plus souvent, sans écarter les autres.',b:ctlCuis(),ok:true};
+  case 2: return {t:'Qu’est-ce que tu manges ?',l:'Mitonne n’écartera que ce que tu coches ici.',b:ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY,ok:true};
+  case 3: return {t:'Quelles cuisines te font envie ?',l:'Choisis-en autant que tu veux : Mitonne les proposera plus souvent, sans écarter les autres.',b:ctlCuis(),ok:true};
   case 4: return {t:'Comment est ta cuisine ?',l:'Le congélateur permet de tenir toute la semaine avec une seule session.',b:blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice()),ok:true};
-  default: return {t:'Où et quand fais-tu tes courses ?',l:'Popote ne cherche les actions que dans ces magasins. Le dimanche, ils sont fermés : tu choisiras chaque semaine entre les autres jours.',b:ctlStores()+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ta priorité',ctlPrio()),ok:p.stores.length>0,hint:'Choisis au moins un magasin pour profiter des actions.'};
+  default: return {t:'Où et quand fais-tu tes courses ?',l:'Mitonne ne cherche les actions que dans ces magasins. Le dimanche, ils sont fermés : tu choisiras chaque semaine entre les autres jours.',b:ctlStores()+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ta priorité',ctlPrio()),ok:p.stores.length>0,hint:'Choisis au moins un magasin pour profiter des actions.'};
   }
 }
 function viewQuiz(){
   var q=S.ui.q||0,st=quizStep(q),last=q===QN-1;
   var h='<section class="quiz"><div class="prog" role="progressbar" aria-label="Avancement du questionnaire" aria-valuemin="1" aria-valuemax="'+QN+'" aria-valuenow="'+(q+1)+'"><i style="width:'+Math.round((q+1)/QN*100)+'%"></i></div>'+
-    '<p class="label">Question '+(q+1)+' sur '+QN+'</p><div class="head"><h1 class="h1">'+st.t+'</h1><p class="lede">'+st.l+'</p></div>'+st.b;
+    (st.i?ILLU:'')+'<p class="label">Question '+(q+1)+' sur '+QN+'</p><div class="head"><h1 class="h1">'+st.t+'</h1><p class="lede">'+st.l+'</p></div>'+st.b;
   if(!st.ok&&st.hint) h+='<p class="hint">'+st.hint+'</p>';
   h+='<div class="qfoot">'+(q>0?'<button class="btn" id="q-back" data-act="q-back">Retour</button>':(S.prefs.done?'<button class="btn" id="q-cancel" data-act="q-cancel">Annuler</button>':''))+
     '<button class="btn fill" id="q-next" data-act="'+(last?'q-done':'q-next')+'"'+(st.ok?'':' disabled')+'>'+(last?'Préparer ma semaine':'Suivant')+'</button></div></section>';
@@ -1255,7 +1305,7 @@ function wizDishes(wz){
   var picked=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)>=0;}),others=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)<0;});
   var per=8,pages=Math.max(1,Math.ceil(others.length/per)),pg=wz.page%pages,show=picked.concat(others.slice(pg*per,pg*per+per));
   var h='<section class="quiz"><p class="label">Ta semaine · étape 2 sur 2</p><div class="head"><h1 class="h1">Qu’est-ce qui te ferait envie ?</h1>'+
-    '<p class="lede">'+pr.n+' repas à couvrir à partir de '+dayName(c.d)+'. '+pr.target+' plats suffisent : chacun revient environ '+Math.max(1,Math.round(pr.n/pr.target))+' fois. Les propositions tiennent compte des actions du '+fmtDay(wz.shopD)+'.</p></div>'+stateNote(wz.shopD);
+    '<p class="lede">'+pr.n+' repas à couvrir à partir de '+dayName(c.d)+'. '+pr.target+' plats suffisent : chacun revient environ '+Math.max(1,Math.round(pr.n/pr.target))+' fois. Les propositions tiennent compte des actions du '+fmtDay(wz.shopD)+'.</p></div>'+blk('Plats différents cette semaine',ctlDish())+stateNote(wz.shopD);
   if(!pr.n) h+='<p class="note">Aucun repas n’est coché après la session. Choisis tes midis et tes soirs dans Réglages.</p>';
   h+='<ul class="cards">'+show.map(function(x){return propCard(x,wz);}).join('')+'</ul>';
   if(others.length>per) h+='<button class="btn wide" data-act="w-more">Voir d’autres plats</button>';
@@ -1268,7 +1318,7 @@ function wizDishes(wz){
 }
 function propCard(x,wz){
   var r=x.r,on=wz.picks.indexOf(r.id)>=0,fav=S.prefs.fav.indexOf(r.id)>=0,a=x.md&&x.md.a;
-  var keep=S.prefs.freezer&&r.co?'<span class="badge cold">Se congèle</span>':'<span class="badge">Frigo, '+r.fr+' jours</span>';
+  var keep=S.prefs.freezer&&r.co?'<span class="badge cold">Se congèle</span>':'<span class="badge fridge">Frigo, '+r.fr+' jours</span>';
   var h='<li class="card" data-on="'+on+'"><div class="card-head"><span>'+CUSHORT[r.cu]+(rgroup(r)==='vege'?' · végétarien':'')+'</span><span>≈ '+r.act+' min de travail</span></div>'+
     '<h3 class="card-name">'+esc(r.n)+'</h3>'+(r.sv?'<p class="card-sv">'+esc(r.sv)+'</p>':'')+'<div class="badges">'+keep+(hasTag(r,'ov')?'<span class="badge">Four</span>':'')+'</div>';
   if(a){var u=untilTxt(a);h+='<div class="deal"><div class="deal-txt"><span class="store">'+STORES[a.st]+'</span><span class="deal-n">'+esc(a.n)+'</span>'+(u?'<span class="deal-s">'+esc(u)+'</span>':'')+'</div>'+tag(a)+'</div>';}
@@ -1300,7 +1350,7 @@ function viewSemaine(){
     var d=dOf(e.tm);
     if(d!==last){if(last) h+='</ul>';h+='<h2 class="dayh">'+(d===today()?'Aujourd’hui':WD[wdOf(d)])+'<span>'+fmtDM(d)+'</span></h2><ul class="tl">';last=d;}
     var past=e.tm+e.len<n,cls=e.kind==='thaw'?' thaw':(e.kind==='shop'||e.kind==='cook'?' big':'');
-    var srcTxt=e.src==='congel'?'<span class="badge cold">Du congélateur</span>':e.src==='frigo'?'<span class="badge">Du frigo</span>':e.src==='frais'?'<span class="badge">Tout juste cuisiné</span>':'';
+    var srcTxt=e.src==='congel'?'<span class="badge cold">Du congélateur</span>':e.src==='frigo'?'<span class="badge fridge">Du frigo</span>':e.src==='frais'?'<span class="badge fresh">Tout juste cuisiné</span>':'';
     h+='<li class="tl-row'+cls+(past?' done':'')+'"><span class="tl-time">'+hm(e.tm)+'</span><div class="tl-body"><span class="tl-k"'+(e.rid?' style="--c:'+colorOf(w,e.rid)+'"':'')+'>'+(e.rid?'<i></i>':'')+esc(e.k)+'</span>'+
       '<span class="tl-txt">'+esc(e.txt)+'</span>'+(srcTxt?'<div class="badges">'+srcTxt+'</div>':'')+(e.sub?'<span class="tl-meta">'+esc(e.sub)+'</span>':'')+'</div>'+
       (e.go?'<a class="btn small" href="#'+e.go+'">Ouvrir</a>':'<span></span>')+'</li>';
@@ -1310,13 +1360,33 @@ function viewSemaine(){
   h+='<div class="btns">'+(n<toMin(w.shop.d,w.shop.h)?'<button class="btn" data-act="w-edit">Changer mes plats</button>':'')+'<button class="btn" data-act="copy-prog">Copier le programme</button></div>';
   if(S.ui.copyText&&S.ui.copyKind==='prog') h+='<textarea class="copybox" id="copybox" readonly aria-label="Programme à copier">'+esc(S.ui.copyText)+'</textarea>';
   h+='<button class="btn wide" data-act="w-new">Nouvelle semaine</button>';
-  h+=(WEB?'<button class="btn fill wide" data-act="ics">Ajouter à mon agenda</button><p class="fine">Les courses, la session et chaque décongélation arrivent dans ton calendrier, avec une alarme à l’heure. Sur iPhone, si rien ne s’ouvre depuis l’icône de l’écran d’accueil, ouvre Popote dans Safari et réessaie.</p>':'<p class="fine">Pour être prévenu à l’heure, mets ces étapes dans les rappels de ton téléphone, ou demande à Claude de le faire depuis la conversation.</p>')+KEEPING;
+  h+=(WEB?'<button class="btn fill wide" data-act="ics">Ajouter à mon agenda</button><p class="fine">Les courses, la session et chaque décongélation arrivent dans ton calendrier, avec une alarme à l’heure. Sur iPhone, si rien ne s’ouvre depuis l’icône de l’écran d’accueil, ouvre Mitonne dans Safari et réessaie.</p>':'<p class="fine">Pour être prévenu à l’heure, mets ces étapes dans les rappels de ton téléphone, ou demande à Claude de le faire depuis la conversation.</p>')+KEEPING;
   return h;
+}
+function shortName(r){var n=r.n.split(',')[0];return n.length>30?n.slice(0,28).replace(/\s+\S*$/,'')+'…':n;}
+function cookView(w){
+  var ss=session(w),start=toMin(w.cook.d,w.cook.h),bc=boxCount(w);
+  var list=ss.tasks.map(function(t,i){return {t:t,i:i};}).filter(function(x){return x.t.kind!=='free';});
+  var cur=-1,doneN=0;
+  list.forEach(function(x,j){if(w.done[x.i]) doneN++;else if(cur<0) cur=j;});
+  var h='<section class="cook"><div class="row" style="justify-content:space-between"><p class="label">'+(cur<0?'Session terminée':'Étape '+(cur+1)+' sur '+list.length)+'</p><button class="btn small" data-act="cookmode">Quitter le mode cuisine</button></div>'+
+    '<div class="prog" role="progressbar" aria-label="Avancement de la session" aria-valuemin="0" aria-valuemax="'+list.length+'" aria-valuenow="'+doneN+'"><i style="width:'+Math.round(doneN/Math.max(1,list.length)*100)+'%"></i></div>';
+  if(navigator.wakeLock) h+='<button class="btn" data-act="wake">'+(WAKE?'L’écran reste allumé':'Garder l’écran allumé')+'</button>';
+  if(cur<0) return h+'<div class="cook-card"><p class="cook-t">C’est fini, bravo.</p><p class="lede">Range les boîtes : '+bc.fridge+' au frigo, '+bc.freezer+' au congélateur. L’onglet Semaine te dira quoi manger et quand décongeler.</p></div></section>';
+  var x=list[cur].t,r=B[x.rid],meta=x.p?x.a+' min, puis '+dur(x.p)+(x.eq==='f'?' sur le feu':x.eq.charAt(0)==='o'?' au four':'')+' sans toi':x.a+' min';
+  h+='<div class="cook-card"><span class="tl-k" style="--c:'+(r?colorOf(w,x.rid):'var(--ink-2)')+'"><i></i>'+(r?esc(r.n):(x.kind==='oven'?'Four':'Mise en route'))+'</span>'+
+    '<p class="cook-when">Prévu à '+hm(start+x.t)+' · '+meta+'</p><p class="cook-t">'+esc(x.txt)+'</p>'+
+    '<div class="btns">'+(x.p>=5?'<button class="btn" data-act="timer" data-v="'+list[cur].i+'">Minuteur '+dur(x.p)+'</button>':'')+'<button class="btn fill" data-act="cook-done" data-v="'+list[cur].i+'">Fait, étape suivante</button></div>'+
+    (cur>0?'<button class="btn small" data-act="cook-back" data-v="'+list[cur-1].i+'">Revenir à l’étape précédente</button>':'')+'</div>';
+  var nx=list[cur+1];
+  if(nx){var rn=B[nx.t.rid];h+='<div class="cook-next"><p class="label">Ensuite, vers '+hm(start+nx.t.t)+'</p><p>'+(rn?'<b>'+esc(rn.n)+'</b> · ':'')+esc(nx.t.txt)+'</p></div>';}
+  return h+'</section>';
 }
 function viewBatch(){
   if(!ready()) return loadingView();
   var w=S.week;
   if(!w) return noWeek();
+  if(S.ui.cook) return cookView(w);
   var ss=session(w),start=toMin(w.cook.d,w.cook.h),bc=boxCount(w),doneN=0,total=0;
   ss.tasks.forEach(function(t,i){if(t.kind!=='free'){total++;if(w.done[i]) doneN++;}});
   var h='<section class="head"><h1 class="h1">Session de batch cooking</h1><p class="lede">'+WD[wdOf(w.cook.d)]+' '+fmtDM(w.cook.d)+', de '+w.cook.h+' à '+hm(start+ss.span)+' environ. Les heures suivent ton heure de départ : si tu commences plus tard, décale-les d’autant.</p></section>';
@@ -1324,9 +1394,10 @@ function viewBatch(){
     '<div class="fact"><b>'+bc.all+'</b><span>boîtes : '+bc.fridge+' au frigo, '+bc.freezer+' au congélateur</span></div><div class="fact"><b>'+ss.burners+'</b><span>plaque'+(ss.burners>1?'s':'')+' au maximum'+(ss.temps.length?', four à '+ss.temps.join(' puis ')+' °C':'')+'</span></div></div>';
   h+='<section class="block"><h2 class="h2">Les plats</h2><div>'+w.ids.map(function(id){
     var r=B[id],por=portionsOf(w,id);
-    return '<div class="dish" style="--c:'+colorOf(w,id)+'"><i></i><div><div class="dish-n">'+esc(r.n)+'</div><div class="dish-s">'+por+' portion'+(por>1?'s':'')+' · '+(S.prefs.freezer&&r.co?'se congèle':'frigo, '+r.fr+' jours au plus')+'</div>'+
-      '<details><summary>Ingrédients pour la session</summary><ul class="ings">'+r.ing.map(function(x){var q=roundQ(x[0],x[1]*por/4);return '<li><span>'+esc(ING[x[0]].n)+'</span><span class="q">'+(q?fmtQty(x[0],q):'au goût')+'</span></li>';}).join('')+'</ul></details></div></div>';
+    return '<div class="dish" style="--c:'+colorOf(w,id)+'"><i></i><div><span class="tape">'+esc(shortName(r))+' · '+fmtDM(w.cook.d)+'</span><div class="dish-s">À écrire sur chaque couvercle · '+por+' portion'+(por>1?'s':'')+' · '+(S.prefs.freezer&&r.co?'se congèle':'frigo, '+r.fr+' jours au plus')+'</div>'+
+      '<details><summary>Ingrédients pour la session</summary><ul class="ings">'+r.ing.map(function(x){var q=roundQ(x[0],x[1]*por/4*(w.ap||1)),vt=variantOf(x[0]);return '<li><span>'+esc(ING[x[0]].n)+(vt?' <span class="badge alt">'+vt+'</span>':'')+'</span><span class="q">'+(q?fmtQty(x[0],q):'au goût')+'</span></li>';}).join('')+'</ul></details></div></div>';
   }).join('')+'</div></section>';
+  h+='<button class="btn fill wide" data-act="cookmode">Passer en mode cuisine</button><p class="fine">Une seule étape à la fois, en grand, avec son minuteur : pratique quand tu as les mains dans la farine.</p>';
   h+='<section class="block"><div class="row" style="justify-content:space-between"><h2 class="h2">Pas à pas</h2><span class="fine">'+doneN+' sur '+total+' faites</span></div>'+
     '<div class="prog" role="progressbar" aria-label="Avancement de la session" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+doneN+'"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div>';
   if(navigator.wakeLock) h+='<button class="btn" data-act="wake">'+(WAKE?'L’écran reste allumé':'Garder l’écran allumé pendant la session')+'</button>';
@@ -1348,10 +1419,15 @@ function viewBatch(){
 }
 function itemHtml(row,w){
   var k=row.k,a=row.a,on=w.checked[k],lt=leftTxt(row);
-  var sub=a?esc(a.n)+(a.d?' · '+esc(a.d):'')+' · '+esc(packsTxt(row))+(untilTxt(a)?' · '+esc(untilTxt(a)):''):'';
+  var sub=a?esc(a.n)+(a.d?' · '+esc(a.d):'')+' · '+esc(packsTxt(row))+(untilTxt(a)?' · '+esc(untilTxt(a)):''):'',vt=variantOf(k);
   return '<li class="item'+(on?' done':'')+'"><input type="checkbox" id="ck-'+k+'" data-ck="'+k+'"'+(on?' checked':'')+'>'+
     '<label class="item-body" for="ck-'+k+'"><span class="item-top"><span class="item-n">'+esc(ING[k].n)+'</span><span class="item-q">'+fmtQty(k,row.q)+'</span></span>'+
-    (sub?'<span class="item-sub">'+sub+'</span>':'')+(lt?'<span class="item-left">'+lt+'</span>':'')+'</label>'+(a?tag(a):'<span></span>')+'</li>';
+    (vt?'<span class="item-left">Prends la version '+vt+'</span>':'')+(sub?'<span class="item-sub">'+sub+'</span>':'')+(lt?'<span class="item-left">'+lt+'</span>':'')+'</label>'+(a?tag(a):'<span></span>')+'</li>';
+}
+function byRayon(rows,w){
+  var h='',cur='';
+  rows.forEach(function(r){var rc=ING[r.k].r;if(rc!==cur){if(cur) h+='</ul>';h+='<h3 class="sub-h">'+RAYONS[rc]+'</h3><ul class="items">';cur=rc;}h+=itemHtml(r,w);});
+  return cur?h+'</ul>':h;
 }
 function viewCourses(){
   if(!ready()) return loadingView();
@@ -1362,7 +1438,7 @@ function viewCourses(){
   ORDER.forEach(function(st){
     var rows=L.byStore[st];if(!rows) return;
     var sum=0;rows.forEach(function(r){sum+=r.c.total;});
-    h+='<section class="grp"><h2 class="grp-h">'+STORES[st]+'<span>'+rows.length+' produit'+(rows.length>1?'s':'')+' · env. '+fmtP(sum)+'</span></h2><ul class="items">'+rows.map(function(r){return itemHtml(r,w);}).join('')+'</ul></section>';
+    h+='<section class="grp"><h2 class="grp-h">'+STORES[st]+'<span>'+rows.length+' produit'+(rows.length>1?'s':'')+' · env. '+fmtP(sum)+'</span></h2>'+byRayon(rows,w)+'</section>';
   });
   var restKeys=RORDER.filter(function(rc){return L.rest[rc];});
   if(restKeys.length){
@@ -1372,7 +1448,7 @@ function viewCourses(){
   }
   if(L.placard.length){
     h+='<section class="grp"><h2 class="grp-h">Placard<span>vérifie ce qu’il te reste</span></h2><p class="lede">'+L.placard.map(function(r){
-      return esc(ING[r.k].n)+(r.a?' (en action chez '+STORES[r.a.st]+', '+fmtP(r.a.p)+')':'');}).join(', ')+', sel, poivre.</p></section>';
+      var vt=variantOf(r.k);return esc(ING[r.k].n)+(vt?' <b>'+vt+'</b>':'')+(r.a?' (en action chez '+STORES[r.a.st]+', '+fmtP(r.a.p)+')':'');}).join(', ')+', sel, poivre.</p></section>';
   }
   if(L.pay>0) h+='<div class="totals"><span>Produits en action</span><span><b>'+fmtP(L.pay)+'</b>'+(L.save>0.005?' au lieu de '+fmtP(L.pay+L.save):'')+'</span></div>'+
     '<p class="fine">Seuls les produits en action ont un prix. Le reste de la liste n’est pas chiffré, car les prix hors action ne sont pas relevés.</p>';
@@ -1403,9 +1479,9 @@ function viewReglages(){
   var p=S.prefs;
   var h='<section class="head"><h1 class="h1">Réglages</h1><p class="lede">Tes goûts et ton rythme. Les changements s’appliquent quand tu prépares ta prochaine semaine.</p></section>'+
     '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button>';
-  h+='<section class="sect"><h2 class="h2">À table</h2>'+ctlPeople()+'</section>';
+  h+='<section class="sect"><h2 class="h2">À table</h2>'+ctlPeople()+ctlBig()+'</section>';
   h+='<section class="sect"><h2 class="h2">Repas couverts par le batch</h2>'+ctlGrid()+'</section>';
-  h+='<section class="sect"><h2 class="h2">Ce que je mange</h2>'+ctlDiet()+blk('Je n’aime pas',ctlNo())+ALLERGY+'</section>';
+  h+='<section class="sect"><h2 class="h2">Ce que je mange</h2>'+ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY+'</section>';
   h+='<section class="sect"><h2 class="h2">Cuisines préférées</h2>'+ctlCuis()+'</section>';
   h+='<section class="sect"><h2 class="h2">Ma cuisine</h2>'+blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice())+blk('Plats différents par semaine',ctlDish())+'</section>';
   h+='<section class="sect"><h2 class="h2">Courses</h2>'+blk('Mes magasins',ctlStores())+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ma priorité',ctlPrio())+'</section>';
@@ -1413,7 +1489,7 @@ function viewReglages(){
   h+='<section class="sect"><h2 class="h2">Mes plats</h2>';
   if(p.fav.length) h+=blk('Favoris, proposés plus souvent','<ul class="srcs">'+p.fav.filter(function(id){return B[id];}).map(function(id){
     return '<li><b>'+esc(B[id].n)+'</b><button class="btn small" id="b-unfav-'+id+'" data-act="fav" data-v="'+id+'">Retirer</button></li>';}).join('')+'</ul>');
-  else h+='<p class="fine">Touche le cœur d’un plat quand tu prépares ta semaine : Popote le proposera plus souvent.</p>';
+  else h+='<p class="fine">Touche le cœur d’un plat quand tu prépares ta semaine : Mitonne le proposera plus souvent.</p>';
   if(p.ban.length) h+='<div class="block"><p class="fine">Écartés : '+p.ban.filter(function(id){return B[id];}).map(function(id){return esc(B[id].n);}).join(', ')+'.</p><button class="btn" data-act="unban">Les proposer à nouveau</button></div>';
   h+='</section>';
   if(WEB) h+='<section class="sect"><h2 class="h2">Sauvegarde</h2><p class="fine">Tes réglages et ta semaine restent sur ce téléphone. Garde une copie de temps en temps, pour la retrouver si tu changes de téléphone ou effaces ton navigateur.</p>'+
@@ -1425,7 +1501,7 @@ function viewReglages(){
     return '<li><b>'+STORES[st]+'</b><span>'+(isIso(d.updated)?'relevé le '+fmtDay(d.updated):'date inconnue')+(src?' · '+esc(src):'')+'</span></li>';
   }).join('')+'</ul>';
   else h+='<p class="fine">Aucun relevé chargé pour l’instant.</p>';
-  h+='<p class="fine">Popote relève les actions publiées par les enseignes le lundi, le jeudi et le vendredi matin. Les prix hors action ne sont pas suivis.</p>'+
+  h+='<p class="fine">Mitonne relève les actions publiées par les enseignes le lundi, le jeudi et le vendredi matin. Les prix hors action ne sont pas suivis.</p>'+
     '<p class="fine">Les relevés Migros, Coop, Aldi et Lidl valent pour la Suisse romande (canton de Vaud). Les actions Migros peuvent différer d’une coopérative régionale à l’autre : l’étiquette en magasin fait foi.</p></section>';
   return h;
 }
@@ -1436,8 +1512,8 @@ function recentFire(){return Date.now()-(S.prefs.lastFire||0)<20*60000;}
 function refreshBlock(){
   var R=S.refresh,recent=recentFire();
   var auto='<p class="fine">Les promotions se mettent aussi à jour toutes seules le lundi, le jeudi et le vendredi à 9:37.</p>';
-  if(WEB) return '<button class="btn fill wide" id="b-refresh" data-act="refresh">Recharger les promotions</button><p class="fine">Popote relit les derniers prix publiés sur le site. Pour lancer un nouveau relevé tout de suite, ouvre <a href="'+ART_URL+'" target="_blank" rel="noopener">Popote dans Claude</a> et utilise son bouton Actualiser.</p>'+auto;
-  if(R.avail===false) return '<p class="fine">L’actualisation à la demande n’est pas disponible dans cet affichage. Ouvre Popote dans claude.ai pour l’utiliser.</p>'+auto;
+  if(WEB) return '<button class="btn fill wide" id="b-refresh" data-act="refresh">Recharger les promotions</button><p class="fine">Mitonne relit les derniers prix publiés sur le site. Pour lancer un nouveau relevé tout de suite, ouvre <a href="'+ART_URL+'" target="_blank" rel="noopener">ta version dans Claude</a> et utilise son bouton Actualiser.</p>'+auto;
+  if(R.avail===false) return '<p class="fine">L’actualisation à la demande n’est pas disponible dans cet affichage. Ouvre Mitonne dans claude.ai pour l’utiliser.</p>'+auto;
   if(R.avail===null) return auto;
   var label=R.busy?'Lancement du relevé…':(recent&&R.waiting?'Relevé lancé à '+hm(Math.floor(S.prefs.lastFire/60000)):'Actualiser les promotions');
   var h='<button class="btn fill wide" id="b-refresh" data-act="refresh"'+(R.busy||(recent&&R.waiting)?' disabled':'')+'>'+label+'</button>';
@@ -1459,7 +1535,7 @@ function refreshPromos(){
       R.waiting=true;R.sig0=actionsSig();S.prefs.lastFire=Date.now();save();
       R.msg='Le service n’a pas répondu à temps. Le relevé a peut-être démarré quand même : attends 20 minutes avant de réessayer.';
     }
-    else if(c==='approval_required'||c==='not_in_manifest') R.msg='Popote a besoin de ton accord pour lancer le relevé. Appuie à nouveau sur le bouton et choisis Autoriser.';
+    else if(c==='approval_required'||c==='not_in_manifest') R.msg='Mitonne a besoin de ton accord pour lancer le relevé. Appuie à nouveau sur le bouton et choisis Autoriser.';
     else if(c==='server_not_connected'||c==='selection_required'||c==='server_not_found') R.msg='Le connecteur Claude Code Remote n’est pas disponible sur ton compte. Ajoute-le dans claude.ai, dans Réglages puis Connecteurs.';
     else if(c==='needs_reauth') R.msg='Reconnecte Claude Code Remote dans claude.ai, dans Réglages puis Connecteurs, puis réessaie.';
     else if(c==='blocked_by_policy') R.msg='Ton organisation ne permet pas de lancer cette tâche depuis une page.';
@@ -1481,12 +1557,12 @@ function icsDate(m){var d=new Date(m*60000);function z(n){return ('0'+n).slice(-
 function icsEsc(x){return String(x).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');}
 function icsFold(line){var out=[];while(line.length>60){out.push(line.slice(0,60));line=' '+line.slice(60);}out.push(line);return out.join('\r\n');}
 function icsText(w){
-  var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Popote//Batch cooking//FR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Popote'];
+  var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Mitonne//Batch cooking//FR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Mitonne'];
   events(w).filter(function(e){return e.kind!=='meal';}).forEach(function(e,i){
     var len=e.kind==='cook'?e.len:e.kind==='shop'?60:15;
-    var title=e.kind==='shop'?'Popote · Courses':e.kind==='cook'?'Popote · Batch cooking':'Popote · Décongeler';
+    var title=e.kind==='shop'?'Mitonne · Courses':e.kind==='cook'?'Mitonne · Batch cooking':'Mitonne · Décongeler';
     var desc=e.txt+(e.kind==='shop'?'\n\n'+listText(w):'');
-    L.push('BEGIN:VEVENT','UID:popote-'+w.cook.d+'-'+e.kind+'-'+i+'@popote','DTSTAMP:'+stamp,'DTSTART:'+icsDate(e.tm),'DTEND:'+icsDate(e.tm+len),
+    L.push('BEGIN:VEVENT','UID:mitonne-'+w.cook.d+'-'+e.kind+'-'+i+'@mitonne','DTSTAMP:'+stamp,'DTSTART:'+icsDate(e.tm),'DTEND:'+icsDate(e.tm+len),
       'SUMMARY:'+icsEsc(title),'DESCRIPTION:'+icsEsc(desc),
       'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:'+icsEsc(title+' : '+e.txt),'TRIGGER:'+(e.kind==='thaw'?'PT0M':'-PT30M'),'END:VALARM','END:VEVENT');
   });
@@ -1599,12 +1675,17 @@ function onClick(e){
   case 'ban': if(p.ban.indexOf(v)<0) p.ban.push(v);if(wz) wz.picks=wz.picks.filter(function(x){return x!==v;});save();render();toast('Ce plat ne sera plus proposé');break;
   case 'unban': p.ban=[];save();render();toast('Tous les plats peuvent revenir');break;
   case 'refresh': refreshPromos();break;
+  case 'alg': toggleIn(p.alg,v);prefChanged();break;
+  case 'big': p.big=v==='1';prefChanged();break;
+  case 'cookmode': S.ui.cook=!S.ui.cook;render();window.scrollTo(0,0);break;
+  case 'cook-done': if(S.week){S.week.done[v]=1;save();render();window.scrollTo(0,0);}break;
+  case 'cook-back': if(S.week){delete S.week.done[v];save();render();window.scrollTo(0,0);}break;
   case 'ics':
-    if(S.week&&downloadFile('popote-semaine-'+S.week.cook.d+'.ics',icsText(S.week),'text/calendar;charset=utf-8')) toast('Ouvre le fichier pour ajouter les rappels à ton agenda');
+    if(S.week&&downloadFile('mitonne-semaine-'+S.week.cook.d+'.ics',icsText(S.week),'text/calendar;charset=utf-8')) toast('Ouvre le fichier pour ajouter les rappels à ton agenda');
     else toast('Le fichier n’a pas pu être créé.');
     break;
   case 'backup':
-    if(downloadFile('popote-sauvegarde-'+today()+'.json',JSON.stringify(snapshot(),null,1),'application/json')) toast('Sauvegarde téléchargée');
+    if(downloadFile('mitonne-sauvegarde-'+today()+'.json',JSON.stringify(snapshot(),null,1),'application/json')) toast('Sauvegarde téléchargée');
     else toast('La sauvegarde n’a pas pu être créée.');
     break;
   case 'fstore': S.ui.fStore=v;render();break;
@@ -1657,7 +1738,7 @@ function onChange(e){
   var t=e.target;if(!t||!t.getAttribute) return;
   if(t.id==='restore'&&t.files&&t.files[0]){
     var fr=new FileReader();
-    fr.onload=function(){try{var d=JSON.parse(fr.result);if(!d||!d.prefs) throw new Error('vide');S.week=null;S.prefs=defaults();apply(d);save();render();toast('Sauvegarde restaurée');}catch(err){toast('Ce fichier n’est pas une sauvegarde de Popote.');}};
+    fr.onload=function(){try{var d=JSON.parse(fr.result);if(!d||!d.prefs) throw new Error('vide');S.week=null;S.prefs=defaults();apply(d);save();render();toast('Sauvegarde restaurée');}catch(err){toast('Ce fichier n’est pas une sauvegarde de Mitonne.');}};
     fr.readAsText(t.files[0]);t.value='';return;
   }
   var k=t.getAttribute('data-ck'),bt=t.getAttribute('data-bt'),inp=t.getAttribute('data-in');
@@ -1681,13 +1762,13 @@ function onHash(e){
 }
 
 /* ---------- mémoire ---------- */
-var LS='popote-state',stateRef=null,saveT=null,saving=false,dirty=false;
+var LS='mitonne-state',LS_OLD='popote-state',stateRef=null,saveT=null,saving=false,dirty=false;
 function snapshot(){
   var p=S.prefs,w=S.week;
   return {v:3,
     prefs:{done:!!p.done,people:p.people,grid:p.grid.map(Boolean),diet:p.diet,no:p.no.slice(),cu:p.cu.slice(),spice:p.spice,oven:!!p.oven,freezer:!!p.freezer,nDish:p.nDish,
-      prio:p.prio,stores:p.stores.slice(),shopDay:p.shopDay,shopH:p.shopH,thawH:p.thawH,fav:p.fav.slice(),ban:p.ban.slice(),hist:p.hist.slice(),lastFire:p.lastFire||0},
-    week:w?{shop:w.shop,mode:w.mode,cookH:w.cookH,cook:w.cook,ids:w.ids.slice(),people:w.people,slots:w.slots.map(function(s){return {d:s.d,m:s.m,r:s.r,src:s.src};}),done:Object.assign({},w.done),checked:Object.assign({},w.checked)}:null};
+      prio:p.prio,stores:p.stores.slice(),shopDay:p.shopDay,shopH:p.shopH,thawH:p.thawH,fav:p.fav.slice(),ban:p.ban.slice(),hist:p.hist.slice(),lastFire:p.lastFire||0,alg:p.alg.slice(),big:!!p.big},
+    week:w?{shop:w.shop,mode:w.mode,cookH:w.cookH,cook:w.cook,ids:w.ids.slice(),people:w.people,ap:w.ap||1,slots:w.slots.map(function(s){return {d:s.d,m:s.m,r:s.r,src:s.src};}),done:Object.assign({},w.done),checked:Object.assign({},w.checked)}:null};
 }
 function apply(d){
   if(!d||typeof d!=='object') return;
@@ -1711,6 +1792,8 @@ function apply(d){
     if(Array.isArray(p.ban)) P.ban=p.ban.filter(function(id){return B[id];});
     if(Array.isArray(p.hist)) P.hist=p.hist.filter(function(x){return x&&isIso(x.w)&&Array.isArray(x.ids);}).slice(0,3).map(function(x){return {w:x.w,ids:x.ids.filter(function(id){return B[id];})};});
     if(typeof p.lastFire==='number'&&p.lastFire>0) P.lastFire=p.lastFire;
+    if(Array.isArray(p.alg)) P.alg=p.alg.filter(function(x){return algLetter(x);});
+    if(typeof p.big==='boolean') P.big=p.big;
     P.done=(d.v===2||d.v===3)&&p.done===true;
   }
   var w=d.week;
@@ -1719,10 +1802,10 @@ function apply(d){
     var slots=w.slots.filter(function(s){return s&&isIso(s.d)&&(s.m===0||s.m===1);}).map(function(s){
       var r=B[s.r]?s.r:'';return {d:s.d,m:s.m,r:r,src:r&&['frais','frigo','congel'].indexOf(s.src)>=0?s.src:'libre'};});
     if(ids.length&&slots.length) S.week={shop:{d:w.shop.d,h:w.shop.h},mode:w.mode==='next'?'next':'after',cookH:isHM(w.cookH)?w.cookH:'10:00',cook:{d:w.cook.d,h:w.cook.h},
-      ids:ids,people:w.people>=1&&w.people<=8?w.people:P.people,slots:slots,done:w.done&&typeof w.done==='object'?w.done:{},checked:w.checked&&typeof w.checked==='object'?w.checked:{}};
+      ids:ids,people:w.people>=1&&w.people<=8?w.people:P.people,ap:w.ap===1.25?1.25:1,slots:slots,done:w.done&&typeof w.done==='object'?w.done:{},checked:w.checked&&typeof w.checked==='object'?w.checked:{}};
   }
 }
-function loadLocal(){try{var raw=localStorage.getItem(LS);if(raw) apply(JSON.parse(raw));}catch(e){}}
+function loadLocal(){try{var raw=localStorage.getItem(LS)||localStorage.getItem(LS_OLD);if(raw) apply(JSON.parse(raw));}catch(e){}}
 function save(){
   if(!S.loaded) return;
   dirty=true;clearTimeout(saveT);saveT=setTimeout(flush,500);

@@ -1,5 +1,5 @@
-/* Popote : l'appli s'ouvre sans réseau ; les prix et la page viennent du réseau quand il est là. */
-var V='popote-v1';
+/* Mitonne : l'appli s'ouvre sans réseau ; les prix et la page viennent du réseau quand il est là. */
+var V='mitonne-v2';
 var SHELL=['./','index.html','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png','data/actions.json'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll(SHELL);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==V;}).map(function(k){return caches.delete(k);}));}).then(function(){return self.clients.claim();}));});

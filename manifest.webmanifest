@@ -1,13 +1,13 @@
 {
- "name": "Popote",
- "short_name": "Popote",
+ "name": "Mitonne",
+ "short_name": "Mitonne",
  "description": "Batch cooking de la semaine selon les promotions Migros, Coop, Denner, Aldi et Lidl.",
  "lang": "fr",
  "start_url": "./#semaine",
  "scope": "./",
  "display": "standalone",
- "background_color": "#f1f4ee",
- "theme_color": "#1c6a4c",
+ "background_color": "#f2f5f7",
+ "theme_color": "#17222e",
  "icons": [
   {
    "src": "icons/icon-192.png",
