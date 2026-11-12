@@ -154,6 +154,13 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .badge.fresh{background:transparent;border:1px solid var(--fresh);color:var(--fresh)}
 .badge.fridge{background:transparent;border:1px solid var(--fridge);color:var(--fridge)}
 .badge.alt{background:var(--accent-soft);color:var(--accent)}
+.badge.fit{background:var(--fresh);color:var(--paper)}
+.macros{display:flex;flex-wrap:wrap;gap:2px 14px;margin:0;font-size:.8rem;color:var(--ink-2);align-items:baseline}
+.macros b{font:700 1.15rem/1 var(--f-price);color:var(--ink);font-variant-numeric:tabular-nums;margin-right:2px}
+.filters{display:flex;flex-direction:column;gap:12px;min-width:0}
+.filters .block{min-width:0}
+.chips.tight{gap:6px}
+.chips.tight .chip{min-height:34px;padding:.35rem .7rem;font-size:.8rem}
 
 .tag{display:inline-flex;align-items:stretch;border-radius:6px;overflow:hidden;font-family:var(--f-price);line-height:1;flex:none;font-variant-numeric:tabular-nums}
 .tag-pct{background:var(--promo);color:var(--promo-ink);font-weight:700;font-size:.95rem;padding:0 .4rem;display:flex;align-items:center}
@@ -333,15 +340,16 @@ var ORDER=['migros','coop','denner','aldi','lidl'];
 var RAYONS={fl:'Fruits et légumes',vi:'Viande et charcuterie',po:'Poisson',fr:'Frais',ep:'Épicerie',pl:'Placard'};
 var RORDER=['fl','vi','po','fr','ep'];
 var TABS=['semaine','courses','batch','actions','reglages'];
-var CUIS={ch:'Suisse et montagne',fr:'Française',it:'Italienne',as:'Asiatique',in:'Indienne',me:'Méditerranée et Orient',am:'Américaine et mexicaine'};
-var CUSHORT={ch:'Suisse',fr:'Française',it:'Italienne',as:'Asiatique',in:'Indienne',me:'Méditerranéenne',am:'Américaine'};
-var CORDER=['ch','fr','it','as','in','me','am'];
-var NO={viande:'m',porc:'p',boeuf:'b',agneau:'a',poisson:'f',fruitsmer:'s',champignons:'g',epinards:'e',chou:'h',courge:'c',poivrons:'o',tomates:'T',fromage:'Q',legumineuses:'R',olives:'V',coco:'X',poireaux:'L',gingembre:'G',patatedouce:'D'};
-var ALG=[['gluten','Gluten','w'],['lactose','Lactose','l'],['lait','Protéines de lait','l'],['oeufs','Œufs','u'],['poisson','Poisson','f'],['fruitsmer','Crustacés et mollusques','s'],['soja','Soja','y'],['moutarde','Moutarde','d'],['celeri','Céleri','k'],['noix','Fruits à coque','n']];
+var CUIS={ch:'Suisse et montagne',fr:'Française',it:'Italienne',ib:'Espagnole et portugaise',me:'Méditerranée et Orient',in:'Indienne',as:'Chinoise et thaïe',jk:'Japonaise et coréenne',am:'Américaine',mx:'Mexicaine et tex-mex'};
+var CUSHORT={ch:'Suisse',fr:'Française',it:'Italienne',ib:'Ibérique',me:'Méditerranéenne',in:'Indienne',as:'Asiatique',jk:'Japon et Corée',am:'Américaine',mx:'Tex-mex'};
+var CORDER=['ch','fr','it','ib','me','in','as','jk','am','mx'];
+var NO={viande:'m',porc:'p',boeuf:'b',agneau:'a',poisson:'f',fruitsmer:'s',champignons:'g',epinards:'e',chou:'h',courge:'c',poivrons:'o',tomates:'T',fromage:'Q',legumineuses:'R',olives:'V',coco:'X',poireaux:'L',gingembre:'G',patatedouce:'D',courgettes:'Z',tofu:'F'};
+var ALG=[['gluten','Gluten','w'],['lactose','Lactose','l'],['lait','Protéines de lait','l'],['oeufs','Œufs','u'],['poisson','Poisson','f'],['fruitsmer','Crustacés et mollusques','s'],['soja','Soja','y'],['moutarde','Moutarde','d'],['celeri','Céleri','k'],['noix','Fruits à coque','n'],['arachides','Arachides','z'],['sesame','Sésame','j']];
 var SUBST={gluten:{pates:'sans gluten',bouillon:'sans gluten',sauce_soja:'tamari sans gluten',pain:'sans gluten',nouilles:'de riz',lasagne:'sans gluten',tortillas:'de maïs',pain_burger:'sans gluten',farine:'sans gluten',chapelure:'sans gluten'},celeri:{bouillon:'sans céleri'}};
-var NO_L=[['viande','Viande'],['porc','Porc'],['boeuf','Bœuf'],['agneau','Agneau'],['poisson','Poisson'],['fruitsmer','Fruits de mer'],['champignons','Champignons'],['epinards','Épinards'],['chou','Chou'],['courge','Courge'],['poivrons','Poivrons'],['tomates','Tomates'],['fromage','Fromage'],['legumineuses','Lentilles, pois chiches, haricots'],['olives','Olives'],['coco','Lait de coco'],['poireaux','Poireaux'],['gingembre','Gingembre'],['patatedouce','Patate douce']];
+var NO_L=[['viande','Viande'],['porc','Porc'],['boeuf','Bœuf'],['agneau','Agneau'],['poisson','Poisson'],['fruitsmer','Fruits de mer'],['champignons','Champignons'],['epinards','Épinards'],['chou','Chou'],['courge','Courge'],['poivrons','Poivrons'],['tomates','Tomates'],['fromage','Fromage'],['legumineuses','Lentilles, pois chiches, haricots'],['olives','Olives'],['coco','Lait de coco'],['poireaux','Poireaux'],['gingembre','Gingembre'],['patatedouce','Patate douce'],['courgettes','Courgettes'],['tofu','Tofu']];
 var DIETS=[['tout','Je mange de tout',''],['flexi','Peu de viande','Un seul plat avec viande ou poisson par semaine'],['sanspork','Sans porc',''],['pesce','Pas de viande, mais du poisson',''],['vege','Végétarien','Ni viande ni poisson']];
 var SPICE=[[0,'Doux'],[1,'Un peu relevé'],[2,'J’aime le piquant']];
+var GOALS=[['eq','Équilibré','Des plats variés, sans compter les calories'],['fit','Léger et protéiné','Dans l’esprit fit : moins de calories, beaucoup de protéines'],['muscle','Prise de muscle','Le plus de protéines possible, des assiettes copieuses']];
 var PRIO=[['eco','Dépenser le moins possible','Les plus gros rabais et les plats économiques passent en premier'],['var','Me faire plaisir','Tes cuisines préférées passent en premier, les actions ensuite']];
 var WD=['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
 var PRESETS=[['soirs','Tous les soirs'],['tout','Midis et soirs'],['semaine','Lun–ven, midi et soir'],['weekend','Soirs + midis du week-end']];
@@ -369,7 +377,7 @@ var ING={};
  ['chou_blanc','Chou blanc','fl','h'],['chou_chinois','Chou chinois ou pak-choï','fl','h'],['chou_fleur','Chou-fleur','fl','h'],['brocoli','Brocoli','fl'],
  ['epinards','Épinards','fl','e'],['champignons','Champignons','fl','g'],['poivrons','Poivrons','fl','o'],['tomates','Tomates','fl','T'],
  ['salade','Salade ou rampon','fl'],['avocat','Avocat','fl','','pc',200],['citron','Citron','fl','','pc',100],['persil','Persil','fl','','pc',30,'bouquet'],
- ['oeufs','Œufs','fr','u','pc',60],['creme','Crème','fr','l','ml'],['lait','Lait','fr','l','ml'],['yogourt','Yogourt nature','fr','l'],['sere','Séré nature','fr','l'],
+ ['oeufs','Œufs','fr','u','pc',60],['creme','Crème','fr','l','ml'],['lait','Lait','fr','l','ml'],['yogourt','Yogourt nature','fr','l'],['sere','Séré maigre nature','fr','l'],
  ['beurre','Beurre','fr','l'],['fromage_rape','Gruyère ou emmental','fr','lQ'],['raclette','Fromage à raclette','fr','lQ'],['mozzarella','Mozzarella','fr','lQ'],['feta','Feta','fr','lQ'],
  ['parmesan','Parmesan ou Grana Padano','fr','lQ'],['pate_gateau','Pâte à gâteau abaissée','fr','lw','pc',270,'rouleau'],['pate_pizza','Pâte à pizza abaissée','fr','w','pc',320,'rouleau'],
  ['gnocchi','Gnocchi','fr','w'],['pates_farcies','Tortelloni ricotta-épinards','fr','lwuQ'],
@@ -380,10 +388,50 @@ var ING={};
  ['pesto','Pesto','ep','lnQ'],['tortillas','Tortillas de blé','ep','w','pc',40],['pain','Pain','ep','w'],['pain_burger','Pains à burger','ep','w','pc',60,'pain'],
  ['compote_pommes','Compote de pommes','ep'],['cornichons','Cornichons','ep'],['olives','Olives','ep','V'],['petits_pois','Petits pois surgelés','ep'],
  ['vin_blanc','Vin blanc sec','ep','','ml'],
+ ['poulet_haut','Hauts de cuisse de poulet désossés','vi','m'],['dinde','Émincé ou escalopes de dinde','vi','m'],
+ ['boeuf_maigre','Viande hachée de bœuf maigre (5 %)','vi','mb'],['chorizo','Chorizo','vi','mp'],
+ ['courgettes','Courgettes','fl','Z'],['concombre','Concombre','fl'],['chou_frise','Chou frisé ou kale','fl','h'],
+ ['skyr','Skyr nature','fr','l'],['fromage_frais','Fromage frais léger','fr','lQ'],['tofu','Tofu nature','fr','yF'],
+ ['coco_light','Lait de coco light','ep','X','ml'],['gochujang','Gochujang (pâte de piment coréenne)','ep','wy'],
+ ['beurre_cacahuete','Beurre de cacahuète','ep','z'],['edamame','Edamame surgelés','ep','y'],
+ ['pain_pita','Pains pita','ep','w','pc',70,'pain'],
  ['huile','Huile','pl'],['huile_olive','Huile d’olive','pl'],['moutarde','Moutarde','pl','d'],['bouillon','Bouillon','pl','wk'],['farine','Farine','pl','w'],
  ['chapelure','Chapelure','pl','w'],['miel','Miel','pl'],['curry','Curry en poudre','pl'],['paprika','Paprika','pl'],['cumin','Cumin','pl'],
- ['piment','Piment séché','pl'],['sauce_soja','Sauce soja','pl','wy'],['vinaigre','Vinaigre','pl'],['origan','Origan','pl'],['thym','Thym','pl'],['muscade','Muscade','pl']
+ ['piment','Piment séché','pl'],['sauce_soja','Sauce soja','pl','wy'],['vinaigre','Vinaigre','pl'],['origan','Origan','pl'],['thym','Thym','pl'],['muscade','Muscade','pl'],
+ ['huile_sesame','Huile de sésame','pl','j'],['sesame','Graines de sésame','pl','j']
 ].forEach(function(a){ING[a[0]]={n:a[1],r:a[2],f:a[3]||'',u:a[4]||'g',w:a[5]||0,pl:a[6]||''};});
+
+/* Valeurs nutritionnelles moyennes, telles qu'achetées (cru, sec, égoutté pour les conserves) :
+   kcal, protéines, glucides, lipides pour 100 g ou 100 ml, ou pour une pièce.
+   Le dernier nombre, quand il y en a un, est la quantité comptée pour 4 portions quand la recette dit « au goût ». */
+var NUT={
+ poulet_blanc:[110,23.5,0,1.5],poulet_cuisse:[160,13,0,11.5],poulet_haut:[125,19.5,0,5],dinde:[105,23.5,0,1],
+ boeuf_hache:[215,19,0,15],boeuf_maigre:[125,21,0,5],boeuf_steak:[125,22,0,4],boeuf_ragout:[150,20,0,8],
+ porc_cotelette:[150,20,0,7.5],porc_filet:[110,21.5,0,2.5],porc_roti:[170,19,0,10],porc_fume:[200,18,1,14],
+ saucisse:[280,13,1,25],saucisson:[330,18,1,28],lardons:[300,14,0,27],jambon:[115,19,1,3.5],cordon_bleu:[230,16,10,14],
+ agneau:[120,21,0,4],chorizo:[455,24,2,38],
+ saumon_frais:[200,20,0,13],saumon_fume:[180,22,0,10],poisson_blanc:[80,18,0,0.7],poisson_pane:[200,12,17,9],
+ moules:[25,3.5,1,0.6],crevettes:[80,18,0,1],thon_boite:[105,24,0,1],
+ pommes_de_terre:[75,2,16,0.1],patate_douce:[85,1.6,20,0.1],carottes:[38,0.8,7.5,0.2],oignons:[38,1.2,8,0.2],
+ ail:[7,0.3,1.6,0],gingembre:[24,0.5,5,0.2],poireaux:[30,1.5,5,0.3],courge:[30,1,6,0.1],chou_blanc:[25,1.3,4.5,0.2],
+ chou_chinois:[15,1.2,2,0.2],chou_fleur:[25,2,3,0.3],brocoli:[34,3,4,0.4],epinards:[23,2.9,1.4,0.4],champignons:[22,3,1,0.3],
+ poivrons:[28,1,5,0.3],tomates:[18,0.9,3,0.2],salade:[15,1.3,1.5,0.2],avocat:[225,2.8,3,21],citron:[20,0.5,3,0.2],
+ persil:[15,1,1.5,0.2],courgettes:[17,1.2,2.5,0.3],concombre:[12,0.6,2,0.1],chou_frise:[50,4,6,0.9],
+ oeufs:[75,6.5,0.4,5.2],creme:[250,2.5,3.5,24],lait:[65,3.3,4.8,3.6],yogourt:[70,4,5,3.5],sere:[68,12,4,0.3],skyr:[63,11,4,0.2],
+ fromage_frais:[130,9,5,8],beurre:[740,0.7,0.6,82],fromage_rape:[400,28,0,32],raclette:[350,23,0,28],mozzarella:[250,18,1,19],
+ feta:[265,15,1,22],parmesan:[400,33,0,29],tofu:[130,13.5,1.5,7.5],
+ pate_gateau:[1134,16,122,62],pate_pizza:[864,22,150,18],gnocchi:[150,3.5,33,0.3],pates_farcies:[260,10,40,7],
+ pates:[355,12.5,71,1.5],lasagne:[355,12.5,71,1.5],nouilles:[360,13,70,2.5],riz:[350,7,78,0.6],riz_risotto:[350,7,78,0.6],
+ semoule:[360,12.5,72,1.5],polenta:[360,8,77,1.3],lentilles_vertes:[330,25,50,1.5],lentilles_corail:[340,24,55,1.5],
+ pois_chiches:[120,7,16,2.5],haricots_rouges:[100,7,14,0.5],haricots_blancs:[95,6.5,13,0.5],mais:[80,3,14,1.2],
+ tomates_concassees:[22,1.2,3.5,0.2],concentre_tomate:[85,4.5,14,0.5],lait_coco:[180,1.6,3,18],coco_light:[70,0.6,2,7],
+ pesto:[450,5,5,45],tortillas:[120,3.5,20,3],pain:[250,8.5,48,1.5],pain_burger:[160,5.5,28,2.5],pain_pita:[190,6,38,1],
+ compote_pommes:[75,0.3,18,0.1],cornichons:[15,0.5,2,0.1],olives:[150,1,2,15],petits_pois:[70,5.5,9,0.4],vin_blanc:[50,0,1,0],
+ gochujang:[210,4,45,1,15],beurre_cacahuete:[600,25,15,50],edamame:[120,11,7,5],
+ huile:[900,0,0,100,20],huile_olive:[900,0,0,100,20],huile_sesame:[900,0,0,100,10],sesame:[570,18,12,50,5],
+ moutarde:[150,7,4,11,10],bouillon:[250,10,20,15,8],farine:[340,10,70,1.2,40],chapelure:[360,12,72,2,40],miel:[310,0,80,0,30],
+ sauce_soja:[60,8,6,0,40],vinaigre:[20,0,1,0,20]
+};
 
 /* Recettes de batch cooking, pour 4 portions.
    ing : cuisiné pendant la session. jour : préparé au moment du repas (féculents, salade, pain).
@@ -391,28 +439,28 @@ var ING={};
    st : étapes [travail actif en min, cuisson sans surveillance en min, matériel ('' rien, 'f' une plaque, 'o200' le four à 200 °C), texte, étapes attendues].
    Sans liste d'étapes attendues, une étape attend la précédente ; [] veut dire qu'elle peut démarrer tout de suite. */
 var BATCH=[
-{id:'bolognaise',n:'Sauce bolognaise',sv:'avec des spaghetti',tg:'it eco',main:['boeuf_hache'],fr:3,co:1,
+{id:'bolognaise',n:'Sauce bolognaise',sv:'avec des spaghetti',tg:'it eco mij',main:['boeuf_hache'],fr:3,co:1,
  ing:[['boeuf_hache',500],['oignons',150],['carottes',150],['ail',2],['tomates_concassees',800],['concentre_tomate',30],['origan',0],['huile_olive',0]],
  jour:[['pates',400],['parmesan',60]],
  j:'Réchauffe la sauce 10 minutes à feu doux. Cuis les pâtes al dente et sers avec le fromage râpé.',
  st:[[10,0,'','Hache l’oignon, l’ail et la carotte en petits dés.'],
   [8,0,'f','Dans une grande casserole, fais revenir les légumes 5 minutes dans l’huile d’olive, puis ajoute la viande et fais-la dorer en l’émiettant.'],
   [2,35,'f','Ajoute le concentré, les tomates, l’origan, du sel et du poivre. Laisse mijoter 35 minutes à couvert, à feu doux.']]},
-{id:'chili',n:'Chili con carne',sv:'avec du riz',tg:'am sp1 eco',main:['boeuf_hache'],fr:3,co:1,
+{id:'chili',n:'Chili con carne',sv:'avec du riz',tg:'mx sp1 eco mij',main:['boeuf_hache'],fr:3,co:1,
  ing:[['boeuf_hache',500],['haricots_rouges',500],['mais',285],['tomates_concassees',800],['oignons',150],['ail',2],['cumin',0],['paprika',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe le chili 10 minutes à la casserole ou 3 minutes au micro-ondes. Cuis le riz (15 minutes).',
  st:[[8,0,'','Hache l’oignon et l’ail. Égoutte et rince les haricots et le maïs.'],
   [8,0,'f','Fais revenir l’oignon et l’ail dans l’huile, ajoute la viande et fais-la dorer avec 2 cuillères à café de cumin et autant de paprika.'],
   [2,30,'f','Ajoute les tomates, les haricots et le maïs. Laisse mijoter 30 minutes à feu doux.']]},
-{id:'chili-sin-carne',n:'Chili sin carne aux haricots',sv:'avec du riz',tg:'am sp1 eco',main:['haricots_rouges'],fr:3,co:1,
+{id:'chili-sin-carne',n:'Chili sin carne aux haricots',sv:'avec du riz',tg:'mx sp1 eco mij',main:['haricots_rouges'],fr:3,co:1,
  ing:[['haricots_rouges',750],['mais',285],['tomates_concassees',800],['oignons',200],['carottes',200],['ail',2],['cumin',0],['paprika',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe le chili 10 minutes à la casserole ou 3 minutes au micro-ondes. Cuis le riz (15 minutes).',
  st:[[10,0,'','Hache l’oignon et l’ail, coupe les carottes en petits dés. Égoutte et rince les haricots et le maïs.'],
   [8,0,'f','Fais revenir l’oignon, l’ail et les carottes 8 minutes dans l’huile avec 2 cuillères à café de cumin et de paprika.'],
   [2,25,'f','Ajoute les tomates, les haricots et le maïs. Laisse mijoter 25 minutes.']]},
-{id:'curry-poulet',n:'Curry de poulet au lait de coco',sv:'avec du riz',tg:'in sp1',main:['poulet_blanc'],fr:3,co:1,
+{id:'curry-poulet',n:'Curry de poulet au lait de coco',sv:'avec du riz',tg:'in sp1 mij',main:['poulet_blanc'],fr:3,co:1,
  ing:[['poulet_blanc',600],['lait_coco',400],['carottes',250],['oignons',150],['ail',2],['gingembre',1],['epinards',150],['curry',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe le curry à feu doux jusqu’à ce qu’il soit bien chaud. Cuis le riz (15 minutes).',
@@ -420,7 +468,7 @@ var BATCH=[
   [7,0,'f','Fais revenir l’oignon, l’ail et le gingembre avec 2 cuillères à soupe de curry, puis ajoute le poulet et fais-le dorer 5 minutes.'],
   [2,15,'f','Ajoute les carottes et le lait de coco. Laisse mijoter 15 minutes à couvert.'],
   [2,0,'f','Incorpore les épinards, laisse-les tomber 2 minutes et sale.']]},
-{id:'dahl',n:'Dahl de lentilles corail',sv:'avec du riz',tg:'in sp1 eco',main:['lentilles_corail'],fr:3,co:1,
+{id:'dahl',n:'Dahl de lentilles corail',sv:'avec du riz',tg:'in sp1 eco mij',main:['lentilles_corail'],fr:3,co:1,
  ing:[['lentilles_corail',350],['lait_coco',400],['tomates_concassees',400],['oignons',150],['ail',2],['gingembre',1],['epinards',150],['curry',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe avec un peu d’eau, le dahl épaissit au frigo. Cuis le riz (15 minutes).',
@@ -428,7 +476,7 @@ var BATCH=[
   [4,0,'f','Fais revenir l’oignon, l’ail et le gingembre avec 2 cuillères à soupe de curry dans l’huile.'],
   [2,18,'f','Ajoute les lentilles, les tomates, le lait de coco et 4 dl d’eau. Laisse mijoter 18 minutes en remuant de temps en temps.'],
   [2,0,'f','Incorpore les épinards et sale.']]},
-{id:'curry-pois-chiches',n:'Curry de pois chiches et épinards',sv:'avec du riz',tg:'in sp1 eco',main:['pois_chiches'],fr:3,co:1,
+{id:'curry-pois-chiches',n:'Curry de pois chiches et épinards',sv:'avec du riz',tg:'in sp1 eco mij',main:['pois_chiches'],fr:3,co:1,
  ing:[['pois_chiches',750],['epinards',300],['tomates_concassees',800],['lait_coco',200],['oignons',150],['ail',2],['curry',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe à feu doux. Cuis le riz (15 minutes).',
@@ -436,7 +484,7 @@ var BATCH=[
   [4,0,'f','Fais revenir l’oignon et l’ail avec 2 cuillères à soupe de curry dans l’huile.'],
   [2,15,'f','Ajoute les tomates, le lait de coco et les pois chiches. Laisse mijoter 15 minutes.'],
   [2,0,'f','Ajoute les épinards, laisse-les tomber 2 minutes et sale.']]},
-{id:'curry-poisson',n:'Curry de poisson blanc au lait de coco',sv:'avec du riz',tg:'in sp1',main:['poisson_blanc'],fr:2,co:1,
+{id:'curry-poisson',n:'Curry de poisson blanc au lait de coco',sv:'avec du riz',tg:'in sp1 mij',main:['poisson_blanc'],fr:2,co:1,
  ing:[['poisson_blanc',600],['lait_coco',400],['tomates_concassees',400],['oignons',150],['ail',2],['gingembre',1],['epinards',150],['curry',0],['huile',0]],
  jour:[['riz',300]],
  j:'Réchauffe doucement, sans faire bouillir. Cuis le riz (15 minutes).',
@@ -444,7 +492,7 @@ var BATCH=[
   [4,0,'f','Fais revenir l’oignon, l’ail et le gingembre avec 2 cuillères à soupe de curry.'],
   [2,8,'f','Ajoute les tomates et le lait de coco, laisse mijoter 8 minutes.'],
   [2,5,'f','Ajoute le poisson et les épinards, cuis 5 minutes à feu doux sans trop remuer.']]},
-{id:'goulache',n:'Goulache de bœuf au paprika',sv:'avec des nouilles au beurre',tg:'ch sp1',main:['boeuf_ragout'],fr:3,co:1,
+{id:'goulache',n:'Goulache de bœuf au paprika',sv:'avec des nouilles au beurre',tg:'ch sp1 mij',main:['boeuf_ragout'],fr:3,co:1,
  ing:[['boeuf_ragout',800],['oignons',500],['carottes',200],['ail',2],['concentre_tomate',40],['paprika',0],['cumin',0],['bouillon',0],['huile',0]],
  jour:[['pates',400],['beurre',20]],
  j:'Réchauffe la goulache 10 minutes à feu doux. Cuis les nouilles et mélange-les au beurre.',
@@ -452,7 +500,7 @@ var BATCH=[
   [12,0,'f','Dans une cocotte, fais dorer la viande en deux fois dans l’huile, puis réserve-la.'],
   [6,0,'f','Fais fondre les oignons dans la cocotte, ajoute 2 cuillères à soupe de paprika, une pincée de cumin, l’ail et le concentré.'],
   [2,90,'f','Remets la viande, ajoute les carottes et 5 dl de bouillon. Laisse mijoter 1 h 30 à couvert, à feu très doux.']]},
-{id:'boeuf-carottes',n:'Bœuf mijoté aux carottes',sv:'avec des pommes de terre',tg:'fr',main:['boeuf_ragout'],fr:3,co:1,
+{id:'boeuf-carottes',n:'Bœuf mijoté aux carottes',sv:'avec des pommes de terre',tg:'fr mij',main:['boeuf_ragout'],fr:3,co:1,
  ing:[['boeuf_ragout',800],['carottes',600],['oignons',200],['ail',2],['concentre_tomate',30],['farine',0],['bouillon',0],['thym',0],['huile',0]],
  jour:[['pommes_de_terre',800]],
  j:'Réchauffe 10 minutes à feu doux. Cuis les pommes de terre à l’eau ou à la vapeur (20 minutes).',
@@ -480,7 +528,7 @@ var BATCH=[
   [6,0,'','Égoutte les pommes de terre et écrase-les avec le lait chaud et le beurre.',[1]],
   [5,0,'','Étale la viande dans un plat, couvre de purée et de fromage râpé.',[2,3]],
   [1,25,'o200','Gratine le hachis 25 minutes à 200 °C.']]},
-{id:'boulettes-tomate',n:'Boulettes de bœuf à la sauce tomate',sv:'avec de la semoule',tg:'me',main:['boeuf_hache'],fr:3,co:1,
+{id:'boulettes-tomate',n:'Boulettes de bœuf à la sauce tomate',sv:'avec de la semoule',tg:'me mij',main:['boeuf_hache'],fr:3,co:1,
  ing:[['boeuf_hache',600],['oeufs',1],['oignons',150],['ail',2],['persil',1],['tomates_concassees',800],['cumin',0],['paprika',0],['chapelure',0],['huile_olive',0]],
  jour:[['semoule',300]],
  j:'Réchauffe 10 minutes à feu doux. Verse de l’eau bouillante salée sur la semoule, couvre 5 minutes et égrène-la.',
@@ -488,7 +536,7 @@ var BATCH=[
   [10,0,'f','Dore les boulettes 5 minutes dans l’huile d’olive, puis réserve-les.'],
   [3,0,'f','Fais revenir le reste de l’oignon et l’ail, ajoute les tomates et le paprika.'],
   [1,15,'f','Remets les boulettes et laisse mijoter 15 minutes.']]},
-{id:'poulet-basquaise',n:'Poulet basquaise',sv:'avec du riz',tg:'fr',main:['poulet_cuisse'],fr:3,co:1,
+{id:'poulet-basquaise',n:'Poulet basquaise',sv:'avec du riz',tg:'fr mij',main:['poulet_cuisse'],fr:3,co:1,
  ing:[['poulet_cuisse',1000],['poivrons',400],['tomates_concassees',400],['oignons',200],['ail',3],['paprika',0],['thym',0],['huile_olive',0]],
  jour:[['riz',300]],
  j:'Réchauffe 10 minutes à couvert. Cuis le riz (15 minutes).',
@@ -496,7 +544,7 @@ var BATCH=[
   [10,0,'f','Dore les cuisses salées dans l’huile d’olive, 5 minutes de chaque côté, puis réserve-les.'],
   [8,0,'f','Fais revenir les oignons et les poivrons, ajoute l’ail et 1 cuillère à café de paprika.'],
   [2,35,'f','Ajoute les tomates et le thym, remets le poulet et laisse mijoter 35 minutes à couvert.']]},
-{id:'tajine-poulet',n:'Tajine de poulet au citron et aux olives',sv:'avec de la semoule',tg:'me',main:['poulet_cuisse'],fr:3,co:1,
+{id:'tajine-poulet',n:'Tajine de poulet au citron et aux olives',sv:'avec de la semoule',tg:'me mij',main:['poulet_cuisse'],fr:3,co:1,
  ing:[['poulet_cuisse',1000],['oignons',300],['carottes',300],['citron',2],['olives',100],['ail',3],['cumin',0],['bouillon',0],['huile_olive',0]],
  jour:[['semoule',300]],
  j:'Réchauffe 10 minutes à couvert. Verse de l’eau bouillante salée sur la semoule, couvre 5 minutes et égrène-la.',
@@ -533,7 +581,7 @@ var BATCH=[
  st:[[12,0,'','Coupe les pommes de terre en quartiers, les carottes en tronçons et les oignons en quartiers.'],
   [4,0,'','Mélange les légumes sur une plaque avec l’ail, de l’huile, du sel et du thym. Frotte les cuisses d’huile, de paprika et de sel, et pose-les sur les légumes.'],
   [1,45,'o200','Enfourne la plaque 45 minutes à 200 °C, en remuant les légumes à mi-cuisson.']]},
-{id:'soupe-legumes',n:'Soupe de légumes maison',sv:'avec du pain et du fromage',tg:'ch eco',main:['poireaux','carottes'],fr:3,co:1,
+{id:'soupe-legumes',n:'Soupe de légumes maison',sv:'avec du pain et du fromage',tg:'ch eco sou',main:['poireaux','carottes'],fr:3,co:1,
  ing:[['poireaux',400],['carottes',400],['pommes_de_terre',500],['oignons',150],['creme',100],['bouillon',0]],
  jour:[['pain',300],['fromage_rape',150]],
  j:'Réchauffe la soupe et sers-la avec le pain et le fromage.',
@@ -541,7 +589,7 @@ var BATCH=[
   [3,0,'f','Fais suer les légumes 3 minutes dans une grande casserole avec un peu d’eau.'],
   [1,25,'f','Couvre de 1,5 l de bouillon et laisse cuire 25 minutes.'],
   [4,0,'','Mixe la soupe et ajoute la crème.']]},
-{id:'soupe-lentilles',n:'Soupe de lentilles corail et carottes au cumin',sv:'avec du pain',tg:'me eco',main:['lentilles_corail'],fr:3,co:1,
+{id:'soupe-lentilles',n:'Soupe de lentilles corail et carottes au cumin',sv:'avec du pain',tg:'me eco sou',main:['lentilles_corail'],fr:3,co:1,
  ing:[['lentilles_corail',300],['carottes',400],['oignons',150],['ail',2],['tomates_concassees',400],['citron',1],['cumin',0],['bouillon',0],['huile_olive',0]],
  jour:[['pain',300]],
  j:'Réchauffe la soupe avec un peu d’eau et sers-la avec le pain.',
@@ -549,14 +597,14 @@ var BATCH=[
   [5,0,'f','Fais revenir l’oignon, l’ail et les carottes dans l’huile d’olive avec 2 cuillères à café de cumin.'],
   [1,20,'f','Ajoute les lentilles, les tomates et 1,2 l de bouillon. Laisse cuire 20 minutes.'],
   [4,0,'','Mixe, ajoute le jus du citron et rectifie le sel.']]},
-{id:'minestrone',n:'Minestrone aux haricots blancs',sv:'avec du parmesan',tg:'it eco',main:['haricots_blancs'],fr:3,co:1,
+{id:'minestrone',n:'Minestrone aux haricots blancs',sv:'avec du parmesan',tg:'it eco sou',main:['haricots_blancs'],fr:3,co:1,
  ing:[['carottes',300],['poireaux',300],['pommes_de_terre',400],['tomates_concassees',400],['haricots_blancs',500],['ail',2],['bouillon',0],['huile_olive',0]],
  jour:[['pates',120],['parmesan',60]],
  j:'Réchauffe la soupe, ajoute une poignée de petites pâtes et cuis 8 à 10 minutes. Sers avec le parmesan.',
  st:[[15,0,'','Coupe les carottes, le poireau et les pommes de terre en petits dés, hache l’ail, égoutte les haricots.'],
   [4,0,'f','Fais revenir l’ail, les carottes et le poireau dans l’huile d’olive.'],
   [1,25,'f','Ajoute les pommes de terre, les tomates, les haricots et 1,5 l de bouillon. Laisse cuire 25 minutes.']]},
-{id:'veloute-courge',n:'Velouté de courge',sv:'avec des tartines au fromage',tg:'fr eco',main:['courge'],fr:3,co:1,
+{id:'veloute-courge',n:'Velouté de courge',sv:'avec des tartines au fromage',tg:'fr eco sou',main:['courge'],fr:3,co:1,
  ing:[['courge',1200],['pommes_de_terre',300],['oignons',150],['creme',150],['bouillon',0]],
  jour:[['pain',300],['fromage_rape',150]],
  j:'Réchauffe le velouté. Couvre des tranches de pain de fromage et passe-les 5 minutes à la poêle couverte ou sous le gril.',
@@ -572,7 +620,7 @@ var BATCH=[
   [4,0,'f','Fais revenir l’oignon et l’ail dans l’huile d’olive avec 2 cuillères à café de cumin et 1 de paprika.'],
   [1,25,'f','Ajoute les carottes, la courge, les tomates et 8 dl de bouillon. Laisse mijoter 25 minutes.'],
   [1,5,'f','Ajoute les pois chiches et poursuis 5 minutes.']]},
-{id:'saucisses-lentilles',n:'Saucisses aux lentilles',sv:'',tg:'fr eco',main:['saucisse'],fr:3,co:1,
+{id:'saucisses-lentilles',n:'Saucisses aux lentilles',sv:'',tg:'fr eco mij',main:['saucisse'],fr:3,co:1,
  ing:[['saucisse',500],['lentilles_vertes',400],['carottes',300],['oignons',150],['ail',2],['bouillon',0],['moutarde',0],['huile',0]],
  jour:[],
  j:'Réchauffe 10 minutes à feu doux, avec un peu d’eau.',
@@ -605,7 +653,7 @@ var BATCH=[
   [2,10,'f','Fais fondre les poireaux 10 minutes dans le beurre.'],
   [4,0,'','Répartis les poireaux et le fromage sur la pâte. Bats les œufs avec la crème, du sel, du poivre et de la muscade, puis verse.'],
   [1,35,'o200','Enfourne la tarte 35 minutes dans le bas du four à 200 °C.']]},
-{id:'papet-vaudois',n:'Papet vaudois',sv:'',tg:'ch',main:['saucisson'],fr:3,co:0,
+{id:'papet-vaudois',n:'Papet vaudois',sv:'',tg:'ch mij',main:['saucisson'],fr:3,co:0,
  ing:[['saucisson',400],['poireaux',1000],['pommes_de_terre',600],['oignons',100],['creme',100],['beurre',20],['bouillon',0]],
  jour:[],
  j:'Réchauffe 10 minutes à feu doux, à couvert, avec un peu d’eau.',
@@ -613,7 +661,7 @@ var BATCH=[
   [5,0,'f','Fais suer l’oignon et les poireaux 5 minutes dans le beurre.'],
   [2,45,'f','Ajoute les pommes de terre et 2 dl de bouillon, pose le saucisson entier sans le piquer. Couvre et cuis 45 minutes à feu doux.'],
   [3,0,'','Ajoute la crème et écrase légèrement les légumes. Coupe le saucisson en tranches.']]},
-{id:'potee-chou',n:'Potée au chou blanc et au lard',sv:'',tg:'ch eco',main:['chou_blanc','lardons'],fr:3,co:0,
+{id:'potee-chou',n:'Potée au chou blanc et au lard',sv:'',tg:'ch eco mij',main:['chou_blanc','lardons'],fr:3,co:0,
  ing:[['chou_blanc',800],['lardons',200],['pommes_de_terre',800],['carottes',300],['oignons',150],['bouillon',0],['thym',0]],
  jour:[],
  j:'Réchauffe 10 minutes à couvert, avec un peu de bouillon.',
@@ -629,7 +677,7 @@ var BATCH=[
   [8,0,'f','Saisis le rôti sur toutes ses faces dans une cocotte qui va au four.'],
   [2,70,'o180','Ajoute les légumes, l’ail et 2 dl de bouillon autour de la viande. Enfourne 1 h 10 à 180 °C.'],
   [5,10,'','Laisse reposer la viande 10 minutes, puis tranche-la.']]},
-{id:'jambon-chou',n:'Jambon roulé et chou braisé',sv:'avec des pommes de terre',tg:'ch',main:['porc_fume'],fr:3,co:1,
+{id:'jambon-chou',n:'Jambon roulé et chou braisé',sv:'avec des pommes de terre',tg:'ch mij',main:['porc_fume'],fr:3,co:1,
  ing:[['porc_fume',900],['chou_blanc',800],['oignons',150],['beurre',20],['bouillon',0]],
  jour:[['pommes_de_terre',800],['moutarde',0]],
  j:'Réchauffe le chou et les tranches de jambon 10 minutes à couvert. Cuis les pommes de terre (20 minutes).',
@@ -653,27 +701,248 @@ var BATCH=[
  st:[[8,0,'','Coupe l’oignon et les poivrons en lanières, hache l’ail.'],
   [3,0,'f','Fais revenir l’oignon et les poivrons dans l’huile d’olive.'],
   [2,20,'f','Ajoute l’ail, 1 cuillère à café de cumin et de paprika, puis les tomates. Laisse réduire 20 minutes.']]},
-{id:'salade-lentilles',n:'Salade de lentilles, feta et carottes',sv:'froide, à emporter',tg:'me eco',main:['lentilles_vertes','feta'],fr:3,co:0,
+{id:'salade-lentilles',n:'Salade de lentilles, feta et carottes',sv:'froide, à emporter',tg:'me eco bowl',main:['lentilles_vertes','feta'],fr:3,co:0,
  ing:[['lentilles_vertes',350],['feta',200],['carottes',300],['oignons',80],['persil',1],['moutarde',0],['vinaigre',0],['huile_olive',0]],
  jour:[],
  j:'Rien à cuire : sors la salade du frigo 15 minutes avant de manger.',
  st:[[2,22,'f','Cuis les lentilles rincées 22 minutes à l’eau non salée : elles doivent rester fermes.'],
   [8,0,'','Râpe les carottes, hache l’oignon et le persil. Prépare une vinaigrette avec 5 cuillères à soupe d’huile d’olive, 2 de vinaigre et 1 cuillère à café de moutarde.',[]],
   [4,0,'','Égoutte et sale les lentilles, mélange-les tièdes avec la vinaigrette, les légumes et la feta émiettée.',[0,1]]]},
-{id:'salade-pates-thon',n:'Salade de pâtes au thon et au maïs',sv:'froide, à emporter',tg:'it eco',main:['thon_boite'],fr:2,co:0,
+{id:'salade-pates-thon',n:'Salade de pâtes au thon et au maïs',sv:'froide, à emporter',tg:'it eco bowl',main:['thon_boite'],fr:2,co:0,
  ing:[['pates',350],['thon_boite',280],['mais',285],['tomates',300],['oignons',80],['huile_olive',0],['vinaigre',0],['moutarde',0]],
  jour:[],
  j:'Rien à cuire : mange-la froide.',
  st:[[2,10,'f','Cuis les pâtes al dente.'],
   [8,0,'','Coupe les tomates en dés, hache l’oignon, égoutte le thon et le maïs. Prépare une vinaigrette à la moutarde.',[]],
   [4,0,'','Rince les pâtes à l’eau froide, égoutte-les et mélange-les avec le reste.',[0,1]]]},
-{id:'patates-douces-feta',n:'Patates douces rôties, pois chiches et feta',sv:'tiède ou froid',tg:'me ov',main:['patate_douce'],fr:3,co:0,
+{id:'patates-douces-feta',n:'Patates douces rôties, pois chiches et feta',sv:'tiède ou froid',tg:'me ov bowl',main:['patate_douce'],fr:3,co:0,
  ing:[['patate_douce',1200],['pois_chiches',500],['oignons',150],['paprika',0],['huile_olive',0]],
  jour:[['feta',200],['salade',100],['citron',1]],
  j:'Mange tiède ou froid, avec la feta émiettée, la salade et un filet de citron.',
  st:[[10,0,'','Coupe les patates douces en dés et l’oignon en quartiers, égoutte les pois chiches.'],
   [3,0,'','Mélange-les sur une plaque avec de l’huile d’olive, du paprika et du sel.'],
-  [1,30,'o210','Rôtis la plaque 30 minutes à 210 °C en remuant une fois.']]}
+  [1,30,'o210','Rôtis la plaque 30 minutes à 210 °C en remuant une fois.']]},
+/* ---- Fit et gourmand : protéinés, plus légers, inspirés de la cuisine fitness ---- */
+{id:'poulet-gochujang',n:'Poulet crémeux gochujang-coco et pak-choï',sv:'avec du riz',tg:'jk sp1 mij',main:['poulet_haut'],fr:3,co:1,
+ ing:[['poulet_haut',600],['coco_light',400],['gochujang',40],['concentre_tomate',20],['chou_chinois',400],['oignons',100],['ail',2],['sauce_soja',30],['paprika',0],['huile',10]],
+ jour:[['riz',240]],
+ j:'Réchauffe à feu doux 8 minutes, ou 3 minutes au micro-ondes. Cuis le riz (15 minutes).',
+ st:[[10,0,'','Coupe le poulet en gros morceaux et assaisonne-le de paprika, de sel et de poivre. Émince l’oignon, hache l’ail, coupe le pak-choï en quartiers.'],
+  [8,0,'f','Saisis le poulet 6 minutes dans l’huile bien chaude, sans trop le remuer pour qu’il dore, puis réserve-le.'],
+  [3,0,'f','Dans la même poêle, fais fondre l’oignon et l’ail 2 minutes, puis ajoute le gochujang et le concentré de tomate et remue 1 minute.'],
+  [2,12,'f','Verse le lait de coco light en grattant le fond, remets le poulet et laisse mijoter 12 minutes à couvert. Ajoute la sauce soja.'],
+  [2,3,'f','Pose le pak-choï sur le dessus, couvre et laisse cuire 3 minutes.']]},
+{id:'nouilles-cacahuete',n:'Nouilles au poulet, sauce cacahuète',sv:'nouilles cuites le jour même',tg:'as',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',500],['beurre_cacahuete',80],['sauce_soja',60],['miel',20],['citron',1],['ail',2],['gingembre',1],['carottes',300],['poivrons',300],['chou_chinois',300],['huile',10]],
+ jour:[['nouilles',240]],
+ j:'Cuis les nouilles 4 minutes. Réchauffe le poulet et sa sauce à la poêle avec un fond d’eau, puis mélange avec les nouilles.',
+ st:[[12,0,'','Coupe le poulet en lanières, les poivrons en fines lanières et le chou en rubans, râpe les carottes, l’ail et le gingembre.'],
+  [4,0,'','Sauce : mélange le beurre de cacahuète, la sauce soja, le miel, le jus du citron et 1 dl d’eau chaude jusqu’à ce que ce soit lisse.',[]],
+  [7,0,'f','Saisis le poulet 5 minutes dans l’huile à feu vif, puis réserve-le.',[0]],
+  [5,0,'f','Fais sauter les légumes, l’ail et le gingembre 4 minutes : ils doivent rester croquants.'],
+  [2,1,'f','Remets le poulet, verse la sauce et mélange 1 minute.',[1,3]]]},
+{id:'tenders-four',n:'Tenders de poulet croustillants et frites de patate douce',sv:'sauce moutarde-miel au skyr',tg:'am ov ff',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',700],['chapelure',80],['oeufs',2],['patate_douce',900],['paprika',0],['huile',20]],
+ jour:[['skyr',250],['moutarde',0],['miel',0]],
+ j:'Réchauffe tenders et frites 10 minutes au four à 200 °C ou au air fryer, pour qu’ils restent croustillants. Sauce : mélange le skyr avec 1 cuillère à soupe de moutarde et 1 de miel.',
+ st:[[10,0,'','Coupe le poulet en lanières. Bats les œufs avec 1 cuillère à café de paprika, du sel et du poivre. Verse la chapelure dans une assiette creuse.'],
+  [10,0,'','Coupe les patates douces en frites, mélange-les avec la moitié de l’huile, du paprika et du sel, et étale-les sur une plaque.',[]],
+  [10,0,'','Passe chaque lanière dans l’œuf puis dans la chapelure, pose-les sur une seconde plaque et arrose du reste de l’huile.',[0]],
+  [1,25,'o220','Enfourne les deux plaques 25 minutes à 220 °C, en retournant à mi-cuisson.',[1,2]]]},
+{id:'kebab-poulet',n:'Kebab maison au poulet, sauce blanche au skyr',sv:'en pain pita, avec des crudités',tg:'me ov ff',main:['poulet_haut'],fr:3,co:0,
+ ing:[['poulet_haut',700],['skyr',400],['ail',3],['citron',1],['persil',1],['paprika',0],['cumin',0],['huile',10]],
+ jour:[['pain_pita',4],['salade',120],['tomates',250],['oignons',50]],
+ j:'Réchauffe le poulet 2 minutes à la poêle bien chaude. Toaste les pitas et garnis-les de poulet, de salade, de tomate et d’oignon émincés, puis de sauce blanche.',
+ st:[[10,0,'','Coupe le poulet en fines lanières et mélange-le avec 100 g de skyr, 2 gousses d’ail râpées, 2 cuillères à café de paprika, 1 de cumin, le jus du citron, l’huile et du sel. Laisse mariner pendant la suite.'],
+  [5,0,'','Sauce blanche : mélange le reste du skyr avec la dernière gousse d’ail râpée, le persil haché, du sel et du poivre. Mets-la au frigo dans un bocal.',[]],
+  [3,20,'o220','Étale le poulet sur une plaque et enfourne 20 minutes à 220 °C, jusqu’à ce qu’il soit doré sur les bords.',[0]]]},
+{id:'burgers-fit',n:'Burgers maison au bœuf maigre, sauce burger légère',sv:'steaks prêts, montage le jour même',tg:'am ff',main:['boeuf_maigre'],fr:3,co:1,
+ ing:[['boeuf_maigre',600],['oignons',100],['paprika',0],['huile',5]],
+ jour:[['pain_burger',4],['fromage_rape',60],['salade',80],['tomates',200],['skyr',150],['cornichons',60],['concentre_tomate',20],['moutarde',0]],
+ j:'Réchauffe les steaks 2 minutes par face à la poêle, avec une tranche de fromage dessus à la fin. Toaste les pains. Sauce : skyr, cornichons hachés, 1 cuillère à café de moutarde et le concentré de tomate. Monte les burgers avec la salade et la tomate.',
+ st:[[8,0,'','Hache finement l’oignon. Mélange-le avec la viande, 1 cuillère à café de paprika, du sel et du poivre, et forme 4 steaks un peu plus larges que les pains.'],
+  [10,0,'f','Saisis les steaks 3 minutes de chaque côté dans une poêle très chaude à peine huilée, en deux fois si besoin.']]},
+{id:'pates-saumon-fit',n:'Pâtes au saumon, citron et épinards, version légère',sv:'pâtes cuites le jour même',tg:'it',main:['saumon_frais'],fr:2,co:0,
+ ing:[['saumon_frais',400],['fromage_frais',150],['lait',200],['epinards',200],['citron',1],['ail',2],['huile_olive',5]],
+ jour:[['pates',280]],
+ j:'Cuis les pâtes et garde un fond d’eau de cuisson. Réchauffe doucement la sauce avec 3 cuillères à soupe de cette eau, puis mélange avec les pâtes.',
+ st:[[6,0,'','Coupe le saumon en dés, hache l’ail, râpe le zeste du citron et presse-le.'],
+  [5,0,'f','Fais revenir l’ail 1 minute dans l’huile d’olive, ajoute le saumon et saisis-le 3 minutes.'],
+  [3,4,'f','Ajoute le fromage frais, le lait, le zeste et le jus du citron, puis les épinards. Laisse cuire 4 minutes, sale et poivre.']]},
+{id:'bowl-burrito',n:'Bowl burrito au poulet, haricots et maïs',sv:'avec du riz et du skyr',tg:'mx sp1 bowl',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',600],['haricots_rouges',400],['mais',285],['poivrons',300],['oignons',150],['citron',1],['cumin',0],['paprika',0],['piment',0],['huile',10]],
+ jour:[['riz',200],['salade',100],['tomates',200],['skyr',150]],
+ j:'Cuis le riz (15 minutes) et réchauffe la garniture 3 minutes à la poêle ou au micro-ondes. Dresse en bol avec la salade, la tomate en dés et une cuillère de skyr.',
+ st:[[10,0,'','Coupe le poulet en dés, les poivrons en lanières, émince l’oignon. Égoutte et rince les haricots et le maïs.'],
+  [8,0,'f','Saisis le poulet 5 minutes dans l’huile avec 2 cuillères à café de cumin, 2 de paprika et une pincée de piment. Réserve-le.'],
+  [3,6,'f','Fais sauter l’oignon et les poivrons 5 minutes, ajoute les haricots, le maïs et le poulet, laisse chauffer 3 minutes et arrose du jus du citron.']]},
+{id:'teriyaki-saumon',n:'Saumon teriyaki au four et brocoli',sv:'avec du riz',tg:'jk ov',main:['saumon_frais'],fr:2,co:0,
+ ing:[['saumon_frais',500],['brocoli',500],['sauce_soja',60],['miel',30],['gingembre',1],['ail',2],['sesame',10]],
+ jour:[['riz',240]],
+ j:'Réchauffe 2 minutes au micro-ondes, à couvert, ou mange tiède. Cuis le riz (15 minutes).',
+ st:[[5,0,'','Sauce teriyaki : mélange la sauce soja, le miel, le gingembre et l’ail râpés.'],
+  [4,0,'f','Fais réduire la sauce 3 minutes à feu moyen : elle doit napper la cuillère.'],
+  [6,0,'','Coupe le brocoli en bouquets. Pose les pavés de saumon et le brocoli sur une plaque, sale le brocoli.',[]],
+  [2,14,'o200','Nappe le saumon de la moitié de la sauce et enfourne 14 minutes à 200 °C. Arrose du reste de sauce et parsème de sésame.',[1,2]]]},
+{id:'butter-chicken',n:'Butter chicken léger',sv:'avec du riz',tg:'in mij',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',700],['skyr',150],['tomates_concassees',400],['oignons',150],['ail',3],['gingembre',1],['creme',100],['beurre',15],['curry',0],['paprika',0]],
+ jour:[['riz',240]],
+ j:'Réchauffe à feu doux 8 minutes, ou 3 minutes au micro-ondes. Cuis le riz (15 minutes).',
+ st:[[8,0,'','Coupe le poulet en dés et mélange-le avec le skyr, 2 cuillères à café de curry, 1 de paprika et du sel.'],
+  [6,0,'','Hache l’oignon, l’ail et le gingembre.',[]],
+  [6,0,'f','Fais fondre le beurre, ajoute l’oignon, l’ail et le gingembre et laisse fondre 5 minutes.',[1]],
+  [3,15,'f','Ajoute les tomates et 1 cuillère à soupe de curry, puis le poulet avec sa marinade. Laisse mijoter 15 minutes à couvert.',[0,2]],
+  [1,2,'f','Verse la crème, laisse frémir 2 minutes et rectifie le sel.']]},
+{id:'chili-dinde',n:'Chili de dinde à la patate douce',sv:'avec une cuillère de skyr',tg:'mx sp1 mij',main:['dinde'],fr:3,co:1,
+ ing:[['dinde',600],['patate_douce',500],['haricots_rouges',400],['tomates_concassees',800],['oignons',150],['ail',2],['cumin',0],['paprika',0],['piment',0],['huile',10]],
+ jour:[['skyr',150]],
+ j:'Réchauffe 10 minutes à la casserole ou 3 minutes au micro-ondes, et sers avec une cuillère de skyr.',
+ st:[[12,0,'','Coupe la dinde en petits dés et les patates douces en cubes de 2 cm, hache l’oignon et l’ail. Égoutte et rince les haricots.'],
+  [8,0,'f','Fais dorer la dinde, l’oignon et l’ail dans l’huile avec 2 cuillères à café de cumin, 2 de paprika et une pincée de piment.'],
+  [2,25,'f','Ajoute les tomates, les patates douces et les haricots. Laisse mijoter 25 minutes à couvert, jusqu’à ce que les patates douces soient tendres.']]},
+{id:'lasagnes-fit',n:'Lasagnes légères aux courgettes',sv:'avec une salade',tg:'it ov',main:['boeuf_maigre'],fr:3,co:1,
+ ing:[['boeuf_maigre',500],['courgettes',400],['tomates_concassees',800],['oignons',100],['carottes',150],['lasagne',200],['sere',250],['lait',200],['oeufs',1],['fromage_rape',60],['muscade',0],['huile_olive',10]],
+ jour:[['salade',150]],
+ j:'Réchauffe une part 3 minutes au micro-ondes ou 20 minutes au four à 180 °C. Sers avec la salade.',
+ st:[[10,0,'','Hache l’oignon et la carotte, coupe les courgettes en petits dés.'],
+  [8,0,'f','Fais dorer la viande avec l’oignon et la carotte dans l’huile d’olive, puis ajoute les courgettes 3 minutes.'],
+  [2,15,'f','Ajoute les tomates, sale, poivre et laisse mijoter 15 minutes.'],
+  [4,0,'','Crème légère : fouette le séré avec le lait, l’œuf, de la muscade, du sel et du poivre.',[]],
+  [10,0,'','Dans un grand plat, alterne sauce, feuilles de lasagne et crème au séré. Termine par la crème et le fromage râpé.',[2,3]],
+  [1,35,'o190','Enfourne les lasagnes 35 minutes à 190 °C.']]},
+{id:'poulet-effiloche',n:'Poulet effiloché sauce barbecue maison',sv:'en wraps, avec de la salade et du skyr',tg:'am mij ff',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',700],['oignons',150],['ail',2],['concentre_tomate',70],['tomates_concassees',400],['miel',30],['moutarde',10],['vinaigre',0],['paprika',0],['huile',10]],
+ jour:[['tortillas',8],['salade',100],['skyr',120]],
+ j:'Réchauffe le poulet 3 minutes à la poêle ou au micro-ondes. Chauffe les tortillas 20 secondes à sec dans une poêle, garnis-les de poulet, de salade et d’un peu de skyr, et roule-les.',
+ st:[[6,0,'','Émince l’oignon, hache l’ail.'],
+  [6,0,'f','Fais fondre l’oignon et l’ail 5 minutes dans l’huile, puis ajoute le concentré, les tomates, le miel, la moutarde, 2 cuillères à soupe de vinaigre et 2 cuillères à café de paprika.'],
+  [2,25,'f','Plonge les blancs de poulet entiers dans la sauce et laisse mijoter 25 minutes à couvert, en les retournant une fois.'],
+  [6,0,'','Effiloche le poulet avec deux fourchettes et mélange-le à la sauce.']]},
+{id:'wok-boeuf',n:'Bœuf sauté au brocoli, sauce soja-gingembre',sv:'avec du riz',tg:'as',main:['boeuf_steak'],fr:3,co:1,
+ ing:[['boeuf_steak',500],['brocoli',500],['poivrons',200],['oignons',100],['sauce_soja',60],['miel',15],['gingembre',1],['ail',2],['farine',10],['huile',15]],
+ jour:[['riz',240]],
+ j:'Réchauffe 2 minutes à la poêle bien chaude ou au micro-ondes. Cuis le riz (15 minutes).',
+ st:[[12,0,'','Coupe le bœuf en fines lamelles et mélange-le avec la farine et 2 cuillères à soupe de sauce soja. Coupe le brocoli en petits bouquets, les poivrons en lanières, émince l’oignon, râpe l’ail et le gingembre.'],
+  [5,0,'f','Saisis le bœuf 2 minutes à feu très vif dans la moitié de l’huile, puis réserve-le.'],
+  [6,0,'f','Fais sauter les légumes 5 minutes dans le reste de l’huile avec l’ail, le gingembre et 3 cuillères à soupe d’eau.'],
+  [2,0,'f','Remets le bœuf, ajoute le reste de la sauce soja et le miel, et mélange 1 minute.']]},
+{id:'bowl-thon',n:'Bowl thon, edamame et carottes, sauce sésame',sv:'avec du riz et du concombre',tg:'jk bowl',main:['thon_boite'],fr:2,co:0,
+ ing:[['thon_boite',400],['edamame',300],['carottes',300],['sauce_soja',40],['huile_sesame',15],['miel',10],['vinaigre',0],['sesame',10]],
+ jour:[['riz',240],['concombre',300]],
+ j:'Cuis le riz (15 minutes) et coupe le concombre en dés. Dresse en bol, tiède ou froid, avec le thon, les edamame, les carottes et la sauce.',
+ st:[[2,4,'f','Cuis les edamame 4 minutes à l’eau bouillante salée, puis rafraîchis-les à l’eau froide.'],
+  [8,0,'','Râpe les carottes. Sauce : mélange la sauce soja, l’huile de sésame, 1 cuillère à soupe de vinaigre, le miel et le sésame.',[]],
+  [5,0,'','Égoutte le thon et émiette-le. Range le thon, les edamame et les carottes dans les boîtes, la sauce à part dans un petit pot.',[0,1]]]},
+{id:'tofu-croustillant',n:'Tofu croustillant, légumes sautés et sauce cacahuète',sv:'avec du riz',tg:'as ov',main:['tofu'],fr:3,co:0,
+ ing:[['tofu',600],['edamame',200],['brocoli',400],['carottes',300],['beurre_cacahuete',40],['sauce_soja',50],['miel',15],['citron',1],['ail',1],['gingembre',1],['farine',20],['huile',10]],
+ jour:[['riz',160]],
+ j:'Réchauffe le tofu 8 minutes au four à 200 °C ou au air fryer, et les légumes 2 minutes à la poêle. Cuis le riz (15 minutes) et nappe de sauce.',
+ st:[[8,0,'','Éponge le tofu dans un linge, coupe-le en cubes et roule-les dans la farine avec 2 cuillères à soupe de sauce soja et la moitié de l’huile.'],
+  [1,25,'o220','Étale le tofu sur une plaque et enfourne 25 minutes à 220 °C, en retournant à mi-cuisson.'],
+  [10,0,'','Coupe le brocoli en bouquets et les carottes en bâtonnets, râpe l’ail et le gingembre. Sauce : mélange le beurre de cacahuète, le reste de la sauce soja, le miel, le jus du citron et 6 cuillères à soupe d’eau chaude.',[]],
+  [2,4,'f','Fais sauter les légumes et les edamame 6 minutes dans le reste de l’huile avec l’ail et le gingembre.',[2]],
+  [2,0,'','Range le tofu et les légumes dans les boîtes, la sauce à part dans un petit pot : le tofu reste croustillant.',[1,3]]]},
+/* ---- Pour varier : Espagne et Portugal, Japon, classiques allégés ---- */
+{id:'poulet-piri-piri',n:'Poulet piri-piri, pommes de terre et poivrons au four',sv:'',tg:'ib sp1 ov',main:['poulet_haut'],fr:3,co:1,
+ ing:[['poulet_haut',800],['pommes_de_terre',800],['poivrons',300],['oignons',150],['citron',1],['ail',3],['paprika',0],['piment',0],['origan',0],['huile',20]],
+ jour:[],
+ j:'Réchauffe 15 minutes au four à 180 °C ou 3 minutes au micro-ondes.',
+ st:[[8,0,'','Marinade : mélange l’huile, le jus du citron, l’ail râpé, 2 cuillères à café de paprika, 1 d’origan, du piment à ton goût et du sel. Enrobe-en le poulet.'],
+  [12,0,'','Coupe les pommes de terre en quartiers, les poivrons en lanières et les oignons en quartiers.',[]],
+  [4,0,'','Étale les légumes sur une plaque, mélange-les avec un peu de marinade et pose le poulet dessus.',[0,1]],
+  [1,40,'o200','Enfourne 40 minutes à 200 °C, en remuant les légumes à mi-cuisson.']]},
+{id:'paella',n:'Paella au poulet et aux crevettes',sv:'',tg:'ib',main:['poulet_haut','crevettes'],fr:2,co:1,
+ ing:[['poulet_haut',500],['crevettes',250],['riz_risotto',300],['poivrons',300],['oignons',150],['petits_pois',200],['tomates_concassees',200],['ail',3],['citron',1],['paprika',0],['bouillon',0],['huile_olive',20]],
+ jour:[],
+ j:'Réchauffe 4 minutes au micro-ondes avec 2 cuillères à soupe d’eau, ou 8 minutes à la poêle à couvert. Arrose d’un filet de citron.',
+ st:[[10,0,'','Coupe le poulet en morceaux et les poivrons en lanières, hache l’oignon et l’ail. Prépare 9 dl de bouillon chaud.'],
+  [8,0,'f','Dans une grande poêle, dore le poulet 5 minutes dans l’huile d’olive, puis ajoute l’oignon, l’ail et les poivrons 3 minutes.'],
+  [3,18,'f','Ajoute le riz, 2 cuillères à café de paprika (et une pincée de safran ou de curcuma si tu en as), les tomates et le bouillon. Laisse cuire 18 minutes à feu doux sans remuer.'],
+  [2,5,'f','Ajoute les crevettes et les petits pois, couvre et laisse cuire 5 minutes. Coupe le citron en quartiers.']]},
+{id:'caldo-verde',n:'Caldo verde, soupe au chou frisé et au chorizo',sv:'avec du pain',tg:'ib sou eco',main:['chou_frise','chorizo'],fr:3,co:1,
+ ing:[['pommes_de_terre',900],['chou_frise',300],['oignons',150],['ail',3],['chorizo',150],['bouillon',0],['huile_olive',20]],
+ jour:[['pain',200]],
+ j:'Réchauffe la soupe 8 minutes à feu doux. Sers avec le pain.',
+ st:[[12,0,'','Épluche les pommes de terre et coupe-les en morceaux, émince l’oignon, hache l’ail. Retire les côtes du chou et coupe les feuilles en très fines lanières. Coupe le chorizo en rondelles.'],
+  [5,0,'f','Fais revenir l’oignon et l’ail 4 minutes dans l’huile d’olive.'],
+  [2,20,'f','Ajoute les pommes de terre et 1,5 l de bouillon. Laisse cuire 20 minutes.'],
+  [4,0,'','Mixe la soupe jusqu’à ce qu’elle soit lisse.'],
+  [2,6,'f','Ajoute le chou et le chorizo et laisse frémir 6 minutes.']]},
+{id:'soupe-thai',n:'Soupe thaïe au poulet et au lait de coco light',sv:'avec des nouilles',tg:'as sp1 sou',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',500],['coco_light',400],['champignons',250],['carottes',200],['citron',1],['gingembre',1],['ail',2],['sauce_soja',40],['curry',0],['piment',0],['bouillon',0],['huile',5]],
+ jour:[['nouilles',160]],
+ j:'Réchauffe la soupe 8 minutes à feu doux. Cuis les nouilles 4 minutes et ajoute-les dans les bols.',
+ st:[[10,0,'','Coupe le poulet en fines lamelles, émince les champignons, coupe les carottes en fins bâtonnets, râpe le gingembre et l’ail.'],
+  [4,0,'f','Fais revenir le gingembre et l’ail 1 minute dans l’huile avec 1 cuillère à café de curry et une pincée de piment.'],
+  [2,10,'f','Verse 8 dl de bouillon et le lait de coco light, ajoute les carottes et les champignons. Laisse frémir 10 minutes.'],
+  [2,6,'f','Ajoute le poulet et laisse frémir 6 minutes. Hors du feu, ajoute la sauce soja et le jus du citron.']]},
+{id:'curry-japonais',n:'Curry japonais au poulet',sv:'avec du riz',tg:'jk mij',main:['poulet_haut'],fr:3,co:1,
+ ing:[['poulet_haut',600],['pommes_de_terre',400],['carottes',300],['oignons',200],['compote_pommes',100],['farine',30],['sauce_soja',30],['miel',15],['curry',0],['bouillon',0],['huile',10]],
+ jour:[['riz',240]],
+ j:'Réchauffe à feu doux 8 minutes, ou 3 minutes au micro-ondes. Cuis le riz (15 minutes).',
+ st:[[12,0,'','Coupe le poulet en morceaux, les pommes de terre et les carottes en cubes, émince les oignons.'],
+  [10,0,'f','Fais dorer le poulet dans l’huile, ajoute les oignons et laisse-les fondre 5 minutes.'],
+  [2,0,'f','Saupoudre de farine et de 2 cuillères à soupe de curry, et mélange 1 minute.'],
+  [2,20,'f','Verse 8 dl de bouillon, ajoute les pommes de terre, les carottes, la compote, la sauce soja et le miel. Laisse mijoter 20 minutes, jusqu’à ce que la sauce épaississe.']]},
+{id:'hachis-patate-douce',n:'Hachis parmentier de patate douce au bœuf maigre',sv:'avec une salade',tg:'fr ov',main:['boeuf_maigre'],fr:3,co:1,
+ ing:[['boeuf_maigre',500],['patate_douce',900],['oignons',150],['carottes',200],['concentre_tomate',30],['lait',100],['fromage_rape',40],['bouillon',0],['thym',0],['huile',5]],
+ jour:[['salade',150]],
+ j:'Réchauffe une part 3 minutes au micro-ondes ou 20 minutes au four à 180 °C. Sers avec la salade.',
+ st:[[12,0,'','Épluche les patates douces et coupe-les en morceaux. Hache l’oignon et la carotte.'],
+  [2,18,'f','Cuis les patates douces 18 minutes à l’eau salée.'],
+  [8,0,'f','Fais revenir l’oignon et la carotte, ajoute la viande et fais-la dorer. Ajoute le concentré, le thym et 1 dl de bouillon, et laisse réduire 5 minutes.',[0]],
+  [5,0,'','Égoutte les patates douces et écrase-les avec le lait chaud, du sel et du poivre.',[1]],
+  [5,0,'','Étale la viande dans un plat, couvre de purée et de fromage râpé.',[2,3]],
+  [1,20,'o200','Gratine 20 minutes à 200 °C.']]},
+{id:'cabillaud-croute',n:'Cabillaud en croûte d’herbes, purée de chou-fleur',sv:'',tg:'fr ov',main:['poisson_blanc'],fr:2,co:1,
+ ing:[['poisson_blanc',600],['chapelure',40],['persil',1],['citron',1],['huile_olive',15],['chou_fleur',800],['pommes_de_terre',300],['lait',100],['beurre',10]],
+ jour:[],
+ j:'Réchauffe le poisson 10 minutes au four à 180 °C (ou 2 minutes au micro-ondes, à couvert) et la purée 3 minutes au micro-ondes.',
+ st:[[10,0,'','Coupe le chou-fleur en bouquets et les pommes de terre épluchées en morceaux.'],
+  [2,20,'f','Cuis le chou-fleur et les pommes de terre 20 minutes à l’eau salée.'],
+  [6,0,'','Hache le persil et mélange-le avec la chapelure, le zeste du citron, l’huile d’olive et du sel. Pose les filets sur une plaque et couvre-les de ce mélange.',[]],
+  [1,12,'o200','Enfourne le poisson 12 minutes à 200 °C.',[2]],
+  [6,0,'','Égoutte les légumes et écrase-les avec le lait chaud, le beurre et du sel.',[1]]]},
+{id:'gnocchi-poulet',n:'Gnocchi au poulet, tomates, épinards et mozzarella',sv:'gnocchi poêlés le jour même',tg:'it',main:['poulet_blanc'],fr:3,co:1,
+ ing:[['poulet_blanc',500],['tomates_concassees',400],['epinards',200],['oignons',100],['ail',2],['origan',0],['huile_olive',10]],
+ jour:[['gnocchi',600],['mozzarella',125]],
+ j:'Fais dorer les gnocchi 5 minutes à la poêle, ajoute la sauce au poulet, couvre de mozzarella en morceaux et laisse fondre 2 minutes à couvert.',
+ st:[[8,0,'','Coupe le poulet en dés, hache l’oignon et l’ail.'],
+  [6,0,'f','Fais dorer le poulet 5 minutes dans l’huile d’olive avec l’oignon et l’ail.'],
+  [2,12,'f','Ajoute les tomates et 1 cuillère à café d’origan, sale, poivre et laisse mijoter 12 minutes.'],
+  [1,2,'f','Incorpore les épinards et laisse-les tomber 2 minutes.']]},
+{id:'zurichoise-legere',n:'Émincé de bœuf aux champignons à la zurichoise, version légère',sv:'avec du riz',tg:'ch',main:['boeuf_steak'],fr:3,co:1,
+ ing:[['boeuf_steak',500],['champignons',400],['oignons',150],['vin_blanc',100],['fromage_frais',100],['persil',1],['bouillon',0],['huile',10]],
+ jour:[['riz',240]],
+ j:'Réchauffe à feu doux 6 minutes, sans faire bouillir. Cuis le riz (15 minutes).',
+ st:[[10,0,'','Coupe le bœuf en fines lanières, émince les champignons et l’oignon, hache le persil.'],
+  [5,0,'f','Saisis le bœuf 2 minutes à feu très vif dans la moitié de l’huile, puis réserve-le.'],
+  [7,0,'f','Fais revenir l’oignon et les champignons 6 minutes dans le reste de l’huile, puis verse le vin blanc et laisse réduire 2 minutes.'],
+  [2,3,'f','Ajoute 1,5 dl de bouillon et le fromage frais, laisse épaissir 3 minutes, puis remets le bœuf et le persil, et mélange.']]},
+/* ---- Végétariens ---- */
+{id:'bolo-lentilles',n:'Bolognaise de lentilles',sv:'avec des spaghetti',tg:'it eco mij',main:['lentilles_corail'],fr:3,co:1,
+ ing:[['lentilles_corail',250],['tomates_concassees',800],['carottes',200],['oignons',150],['ail',2],['concentre_tomate',30],['origan',0],['huile_olive',15]],
+ jour:[['pates',320],['parmesan',40]],
+ j:'Réchauffe la sauce 10 minutes à feu doux, avec un peu d’eau si elle a épaissi. Cuis les pâtes et sers avec le fromage râpé.',
+ st:[[10,0,'','Hache l’oignon, l’ail et la carotte en petits dés. Rince les lentilles.'],
+  [6,0,'f','Fais revenir les légumes 5 minutes dans l’huile d’olive.'],
+  [2,22,'f','Ajoute les lentilles, le concentré, les tomates, 4 dl d’eau et l’origan. Laisse mijoter 22 minutes en remuant de temps en temps, puis sale et poivre.']]},
+{id:'falafel-bowl',n:'Bowl de falafels au four, sauce au skyr et au concombre',sv:'avec de la semoule',tg:'me ov bowl',main:['pois_chiches'],fr:3,co:0,
+ ing:[['pois_chiches',800],['oignons',100],['ail',2],['persil',1],['farine',40],['cumin',0],['huile_olive',20],['skyr',250],['concombre',200],['citron',1]],
+ jour:[['semoule',200],['tomates',250]],
+ j:'Réchauffe les falafels 8 minutes au four à 200 °C ou au air fryer. Verse de l’eau bouillante salée sur la semoule, couvre 5 minutes et égrène-la. Dresse avec la tomate et la sauce.',
+ st:[[8,0,'','Égoutte et sèche les pois chiches. Mixe-les avec l’oignon, l’ail, le persil, la farine, 2 cuillères à café de cumin et du sel : la pâte doit se tenir.'],
+  [10,0,'','Forme une vingtaine de boulettes un peu aplaties, pose-les sur une plaque et badigeonne-les d’huile d’olive.'],
+  [1,22,'o200','Enfourne 22 minutes à 200 °C, en retournant à mi-cuisson.'],
+  [6,0,'','Sauce : râpe le concombre, presse-le pour enlever l’eau et mélange-le avec le skyr, le jus du citron, du sel et du poivre.',[]]]},
+{id:'frittata',n:'Frittata au four, épinards, poivrons et feta',sv:'avec du pain et une salade',tg:'it ov eco',main:['oeufs'],fr:3,co:0,
+ ing:[['oeufs',10],['epinards',250],['poivrons',250],['oignons',100],['feta',150],['lait',100],['origan',0],['huile_olive',10]],
+ jour:[['pain',200],['salade',120]],
+ j:'Mange-la froide ou réchauffe une part 1 minute au micro-ondes. Sers avec le pain et la salade.',
+ st:[[10,0,'','Émince l’oignon et coupe les poivrons en dés. Bats les œufs avec le lait, l’origan, du sel et du poivre.'],
+  [7,0,'f','Fais revenir l’oignon et les poivrons 5 minutes dans l’huile d’olive, puis ajoute les épinards et laisse-les tomber.'],
+  [3,0,'','Étale les légumes dans un plat huilé, verse les œufs et émiette la feta dessus.'],
+  [1,25,'o180','Enfourne 25 minutes à 180 °C, jusqu’à ce que le centre soit pris.']]}
 ];
 var B={};
 BATCH.forEach(function(r){
@@ -697,7 +966,7 @@ var S={
 function defaults(){
   var g=[];for(var d=0;d<7;d++){g.push(false);g.push(true);}
   return {done:false,people:2,grid:g,diet:'tout',no:[],cu:[],spice:1,oven:true,freezer:true,nDish:0,prio:'eco',stores:ORDER.slice(),
-    shopDay:'sat',shopH:'09:30',thawH:'20:00',fav:[],ban:[],hist:[],lastFire:0,alg:[],big:false};
+    shopDay:'sat',shopH:'09:30',thawH:'20:00',fav:[],ban:[],hist:[],lastFire:0,alg:[],big:false,goal:'eq'};
 }
 
 /* ---------- dates, formats ---------- */
@@ -794,7 +1063,7 @@ function rgroup(r){
   if(r._g) return r._g;
   var m=ING[r.main[0]].f,f=rflags(r),g;
   if(m.indexOf('f')>=0) g='poisson';
-  else if(r.main[0].indexOf('poulet')===0) g='poulet';
+  else if(r.main[0].indexOf('poulet')===0||r.main[0]==='dinde') g='poulet';
   else if(m.indexOf('b')>=0) g='boeuf';
   else if(m.indexOf('a')>=0) g='agneau';
   else if(m.indexOf('p')>=0) g='porc';
@@ -826,6 +1095,46 @@ function algOK(r){
   }
   return true;
 }
+/* ---------- valeurs nutritionnelles et catégories ---------- */
+function macros(r){
+  if(r._m) return r._m;
+  var t=[0,0,0,0];
+  r.all.forEach(function(x){
+    var n=NUT[x[0]];if(!n) return;
+    var q=x[1]||n[4]||0,f=ING[x[0]].u==='pc'?q:q/100;
+    for(var i=0;i<4;i++) t[i]+=n[i]*f;
+  });
+  return r._m={k:t[0]/4,p:t[1]/4,c:t[2]/4,f:t[3]/4};
+}
+function apF(){return S.prefs.big?1.25:1;}
+function isFit(r){var m=macros(r);return m.p>=28&&m.k<=620&&m.f*9<=m.k*0.35;}
+function kcal(v){return Math.round(v/10)*10;}
+function macroTxt(r,f){var m=macros(r);f=f||1;return '≈ '+kcal(m.k*f)+' kcal et '+Math.round(m.p*f)+' g de protéines par portion';}
+function macroHtml(r,f){
+  var m=macros(r);f=f||1;
+  return '<p class="macros"><span><b>'+kcal(m.k*f)+'</b> kcal</span><span><b>'+Math.round(m.p*f)+' g</b> protéines</span><span>'+Math.round(m.c*f)+' g glucides · '+Math.round(m.f*f)+' g lipides</span></p>';
+}
+function hasIng(r,ks){return r.all.some(function(x){return ks.indexOf(x[0])>=0;});}
+var CATS=[
+ ['all','Tout'],
+ ['fit','Fit et protéiné',function(r){return isFit(r);}],
+ ['leger','Moins de 500 kcal',function(r){return macros(r).k<500;}],
+ ['prot','40 g de protéines ou plus',function(r){return macros(r).p>=40;}],
+ ['express','Express, 20 min de travail',function(r){return r.act<=25;}],
+ ['mij','Mijotés et currys',function(r){return hasTag(r,'mij');}],
+ ['sou','Soupes',function(r){return hasTag(r,'sou');}],
+ ['bowl','Bowls et salades',function(r){return hasTag(r,'bowl');}],
+ ['ff','Burgers, wraps et kebab',function(r){return hasTag(r,'ff');}],
+ ['four','Au four et gratins',function(r){return hasTag(r,'ov');}],
+ ['pates','Pâtes et gnocchi',function(r){return hasIng(r,['pates','lasagne','gnocchi','pates_farcies']);}],
+ ['riz','Riz et nouilles',function(r){return hasIng(r,['riz','riz_risotto','nouilles']);}],
+ ['eco','Petit budget',function(r){return hasTag(r,'eco');}],
+ ['fav','Mes favoris',function(r){return S.prefs.fav.indexOf(r.id)>=0;}]
+];
+var PROTS=[['all','Tout'],['poulet','Volaille'],['viande','Bœuf, porc, agneau'],['poisson','Poisson et fruits de mer'],['vege','Végétarien']];
+function protOf(r){var g=rgroup(r);return g==='poulet'||g==='poisson'||g==='vege'?g:'viande';}
+function catOK(r,c){if(!c||c==='all') return true;for(var i=0;i<CATS.length;i++) if(CATS[i][0]===c) return CATS[i][2](r);return true;}
+function matchWz(r,wz){return catOK(r,wz.cat)&&(!wz.prot||wz.prot==='all'||protOf(r)===wz.prot);}
 function variantOf(k){
   var A=S.prefs.alg,out=[];
   A.forEach(function(a){
@@ -876,6 +1185,9 @@ function baseScore(r,D,p,thisWeek){
   if(P.spice===0&&sp===1) s-=10;
   if(P.spice===2&&sp>0) s+=6;
   if(P.freezer&&r.co) s+=4;
+  var m=macros(r);
+  if(P.goal==='fit'){if(isFit(r)) s+=14;else if(m.k>700) s-=12;s+=Math.max(-6,Math.min(6,(m.p-30)*0.3));}
+  else if(P.goal==='muscle'){s+=Math.max(-10,Math.min(14,(m.p-32)*0.7));if(m.k<450) s-=4;}
   P.hist.filter(function(x){return x.w!==thisWeek;}).forEach(function(x,ix){if(x.ids.indexOf(r.id)>=0) s-=ix===0?25:12;});
   return s;
 }
@@ -1034,7 +1346,7 @@ function events(w){
     var r=B[s.r],tm=toMin(s.d,MEALH[s.m]);
     if(!r){ev.push({tm:tm,kind:'meal',k:s.m?'Soir':'Midi',txt:'Repas libre',sub:P.freezer?'':'Sans congélateur, le batch tient 3 jours.',len:60});return;}
     var j=r.jour.filter(function(x){return ING[x[0]].r!=='pl';}).map(function(x){var vt=variantOf(x[0]);return lc(ING[x[0]].n)+(vt?' '+vt:'')+' '+fmtQty(x[0],roundQ(x[0],x[1]*w.people/4*(w.ap||1)));});
-    ev.push({tm:tm,kind:'meal',k:s.m?'Soir':'Midi',rid:r.id,src:s.src,txt:r.n+(r.sv?', '+r.sv:''),sub:r.j+(j.length?' Il te faut : '+j.join(', ')+'.':''),len:90});
+    ev.push({tm:tm,kind:'meal',k:s.m?'Soir':'Midi',rid:r.id,src:s.src,txt:r.n+(r.sv?', '+r.sv:''),sub:r.j+(j.length?' Il te faut : '+j.join(', ')+'.':'')+' Par portion : '+macroTxt(r,w.ap||1).replace(' par portion','')+'.',len:90});
     if(s.src==='congel'){
       var td=addDays(s.d,-1),key=td;
       (thaw[key]=thaw[key]||[]).push((w.people>1?'1 boîte':'1 portion')+' de '+lc(r.n)+' pour '+(s.m?'demain soir':'demain midi'));
@@ -1157,10 +1469,11 @@ function autoPick(wz){
     if(!r.co&&(fresh>=1||!P.freezer&&fresh>=2)) return false;
     return true;
   }
-  [true,false].forEach(function(strict){
+  [[true,true],[false,true],[true,false],[false,false]].forEach(function(o){
     pr.list.forEach(function(c){
       if(picks.length>=pr.target||picks.indexOf(c.r.id)>=0) return;
-      if(ok(c.r,strict)) picks.push(c.r.id);
+      if(o[1]&&!matchWz(c.r,wz)) return;
+      if(ok(c.r,o[0])) picks.push(c.r.id);
     });
   });
   return picks;
@@ -1236,7 +1549,9 @@ function ctlDish(){return '<div class="chips">'+[[0,'Selon mes repas'],[2,'2'],[
 function ctlHabit(){return '<div class="chips">'+HABITS.map(function(x,i){return chip('habit',i,x[2]+', '+x[1],S.prefs.shopDay===x[0]&&S.prefs.shopH===x[1]);}).join('')+'</div>';}
 function ctlThaw(){return '<div class="chips">'+THAWH.map(function(h){return chip('thaw',h,h,S.prefs.thawH===h);}).join('')+'</div>';}
 function ctlStores(){return '<div class="chips">'+ORDER.map(function(st){return chip('store',st,STORES[st],S.prefs.stores.indexOf(st)>=0);}).join('')+'</div>';}
+function ctlGoal(){return '<div class="opts">'+GOALS.map(function(x){return opt('goal',x[0],x[1],x[2],S.prefs.goal===x[0]);}).join('')+'</div>';}
 function ctlPrio(){return '<div class="opts">'+PRIO.map(function(x){return opt('prio',x[0],x[1],x[2],S.prefs.prio===x[0]);}).join('')+'</div>';}
+var NUTNOTE='Calories et macros par portion, accompagnement compris : ce sont des estimations faites d’après des valeurs nutritionnelles moyennes. Un plat « Fit » apporte au moins 28 g de protéines pour 620 kcal au plus, avec un tiers des calories au maximum venant des lipides.';
 var ALLERGY='<p class="fine">Mitonne écarte les plats qui contiennent ces aliments. Pour le gluten et le lactose, il garde les plats qui ont une version adaptée et te l’indique dans la liste de courses. Un produit peut contenir des traces : lis toujours les étiquettes.</p>';
 var KEEPING='<p class="fine">Frigo à 4 °C au plus. Plats cuisinés : 3 jours au frigo, 2 pour le poisson, et 2 à 3 mois au congélateur. Décongèle toujours au frigo, à couvert, et ne recongèle jamais un plat décongelé.</p>';
 
@@ -1247,7 +1562,7 @@ function quizStep(q){
   case 0: return {i:1,t:'Pour combien de personnes cuisines-tu ?',l:'Six questions rapides. Ensuite, chaque semaine, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.',b:ctlPeople()+ctlBig(),ok:true};
   case 1: return {t:'Quels repas ton batch doit-il couvrir ?',l:'Coche les midis et les soirs. Une seule session de cuisine par semaine peut couvrir jusqu’à 14 repas.',b:ctlGrid(),ok:p.grid.some(Boolean),hint:'Choisis au moins un repas.'};
   case 2: return {t:'Qu’est-ce que tu manges ?',l:'Mitonne n’écartera que ce que tu coches ici.',b:ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY,ok:true};
-  case 3: return {t:'Quelles cuisines te font envie ?',l:'Choisis-en autant que tu veux : Mitonne les proposera plus souvent, sans écarter les autres.',b:ctlCuis(),ok:true};
+  case 3: return {t:'Qu’est-ce qui te fait envie ?',l:'Ton objectif et tes cuisines préférées : Mitonne proposera ces plats plus souvent, sans écarter les autres.',b:blk('Ton objectif',ctlGoal())+blk('Cuisines',ctlCuis()),ok:true};
   case 4: return {t:'Comment est ta cuisine ?',l:'Le congélateur permet de tenir toute la semaine avec une seule session.',b:blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice()),ok:true};
   default: return {t:'Où et quand fais-tu tes courses ?',l:'Mitonne ne cherche les actions que dans ces magasins. Le dimanche, ils sont fermés : tu choisiras chaque semaine entre les autres jours.',b:ctlStores()+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ta priorité',ctlPrio()),ok:p.stores.length>0,hint:'Choisis au moins un magasin pour profiter des actions.'};
   }
@@ -1302,13 +1617,15 @@ function estimate(wz){
 }
 function wizDishes(wz){
   var pr=proposals(wz),c=cookOf(wz.shopD,wz.shopH,wz.mode,wz.cookH),P=S.prefs;
-  var picked=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)>=0;}),others=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)<0;});
+  var picked=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)>=0;}),others=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)<0&&matchWz(x.r,wz);});
   var per=8,pages=Math.max(1,Math.ceil(others.length/per)),pg=wz.page%pages,show=picked.concat(others.slice(pg*per,pg*per+per));
   var h='<section class="quiz"><p class="label">Ta semaine · étape 2 sur 2</p><div class="head"><h1 class="h1">Qu’est-ce qui te ferait envie ?</h1>'+
-    '<p class="lede">'+pr.n+' repas à couvrir à partir de '+dayName(c.d)+'. '+pr.target+' plats suffisent : chacun revient environ '+Math.max(1,Math.round(pr.n/pr.target))+' fois. Les propositions tiennent compte des actions du '+fmtDay(wz.shopD)+'.</p></div>'+blk('Plats différents cette semaine',ctlDish())+stateNote(wz.shopD);
+    '<p class="lede">'+pr.n+' repas à couvrir à partir de '+dayName(c.d)+'. '+pr.target+' plats suffisent : chacun revient environ '+Math.max(1,Math.round(pr.n/pr.target))+' fois. Les propositions tiennent compte des actions du '+fmtDay(wz.shopD)+'.</p></div>'+blk('Plats différents cette semaine',ctlDish())+stateNote(wz.shopD)+filtersHtml(wz,pr);
   if(!pr.n) h+='<p class="note">Aucun repas n’est coché après la session. Choisis tes midis et tes soirs dans Réglages.</p>';
   h+='<ul class="cards">'+show.map(function(x){return propCard(x,wz);}).join('')+'</ul>';
+  if(!others.length&&pr.list.length) h+='<p class="note">Aucun autre plat dans cette sélection. Essaie une autre envie, ou « Tout ».</p>';
   if(others.length>per) h+='<button class="btn wide" data-act="w-more">Voir d’autres plats</button>';
+  h+='<p class="fine">'+NUTNOTE+'</p>';
   var e=estimate(wz);
   h+='<div class="wbar"><p class="wbar-s"><b>'+wz.picks.length+' plat'+(wz.picks.length>1?'s':'')+' choisi'+(wz.picks.length>1?'s':'')+'</b> sur '+pr.target+' conseillés'+
     (e?' · session d’environ <b>'+dur(e.ss.span)+'</b>, dont '+dur(e.ss.act)+' de travail':'')+'</p>'+
@@ -1316,11 +1633,20 @@ function wizDishes(wz){
     '<button class="btn fill wide" data-act="w-ok"'+(wz.picks.length?'':' disabled')+'>Valider ma semaine</button></div></section>';
   return h;
 }
+function filtersHtml(wz,pr){
+  var all=pr.list.map(function(x){return x.r;}),cat=wz.cat||'all',pro=wz.prot||'all';
+  var cats=CATS.filter(function(c){return c[0]==='all'||c[0]===cat||all.some(c[2]);});
+  var prots=PROTS.filter(function(c){return c[0]==='all'||c[0]===pro||all.some(function(r){return protOf(r)===c[0];});});
+  var n=all.filter(function(r){return matchWz(r,wz);}).length,on=cat!=='all'||pro!=='all';
+  return '<div class="filters">'+blk('Envie de','<div class="chips tight">'+cats.map(function(c){return chip('w-cat',c[0],c[1],cat===c[0]);}).join('')+'</div>')+
+    (prots.length>2?blk('Avec','<div class="chips tight">'+prots.map(function(c){return chip('w-prot',c[0],c[1],pro===c[0]);}).join('')+'</div>'):'')+
+    '<p class="count">'+n+' plat'+(n>1?'s':'')+(on?' dans cette sélection':' possibles avec tes réglages')+'</p></div>';
+}
 function propCard(x,wz){
   var r=x.r,on=wz.picks.indexOf(r.id)>=0,fav=S.prefs.fav.indexOf(r.id)>=0,a=x.md&&x.md.a;
   var keep=S.prefs.freezer&&r.co?'<span class="badge cold">Se congèle</span>':'<span class="badge fridge">Frigo, '+r.fr+' jours</span>';
   var h='<li class="card" data-on="'+on+'"><div class="card-head"><span>'+CUSHORT[r.cu]+(rgroup(r)==='vege'?' · végétarien':'')+'</span><span>≈ '+r.act+' min de travail</span></div>'+
-    '<h3 class="card-name">'+esc(r.n)+'</h3>'+(r.sv?'<p class="card-sv">'+esc(r.sv)+'</p>':'')+'<div class="badges">'+keep+(hasTag(r,'ov')?'<span class="badge">Four</span>':'')+'</div>';
+    '<h3 class="card-name">'+esc(r.n)+'</h3>'+(r.sv?'<p class="card-sv">'+esc(r.sv)+'</p>':'')+macroHtml(r,apF())+'<div class="badges">'+(isFit(r)?'<span class="badge fit">Fit</span>':'')+keep+(hasTag(r,'ov')?'<span class="badge">Four</span>':'')+'</div>';
   if(a){var u=untilTxt(a);h+='<div class="deal"><div class="deal-txt"><span class="store">'+STORES[a.st]+'</span><span class="deal-n">'+esc(a.n)+'</span>'+(u?'<span class="deal-s">'+esc(u)+'</span>':'')+'</div>'+tag(a)+'</div>';}
   h+='<div class="card-acts"><button class="btn'+(on?' fill':'')+'" id="b-pick-'+r.id+'" data-act="w-pick" data-v="'+r.id+'" aria-pressed="'+on+'">'+(on?'Choisi ✓':'Je prends')+'</button>'+
     '<button class="btn icon" id="b-fav-'+r.id+'" data-act="fav" data-v="'+r.id+'" aria-pressed="'+fav+'" aria-label="'+(fav?'Retirer des favoris':'Ajouter aux favoris')+'">'+HEART+'</button>'+
@@ -1394,7 +1720,7 @@ function viewBatch(){
     '<div class="fact"><b>'+bc.all+'</b><span>boîtes : '+bc.fridge+' au frigo, '+bc.freezer+' au congélateur</span></div><div class="fact"><b>'+ss.burners+'</b><span>plaque'+(ss.burners>1?'s':'')+' au maximum'+(ss.temps.length?', four à '+ss.temps.join(' puis ')+' °C':'')+'</span></div></div>';
   h+='<section class="block"><h2 class="h2">Les plats</h2><div>'+w.ids.map(function(id){
     var r=B[id],por=portionsOf(w,id);
-    return '<div class="dish" style="--c:'+colorOf(w,id)+'"><i></i><div><span class="tape">'+esc(shortName(r))+' · '+fmtDM(w.cook.d)+'</span><div class="dish-s">À écrire sur chaque couvercle · '+por+' portion'+(por>1?'s':'')+' · '+(S.prefs.freezer&&r.co?'se congèle':'frigo, '+r.fr+' jours au plus')+'</div>'+
+    return '<div class="dish" style="--c:'+colorOf(w,id)+'"><i></i><div><span class="tape">'+esc(shortName(r))+' · '+fmtDM(w.cook.d)+'</span><div class="dish-s">À écrire sur chaque couvercle · '+por+' portion'+(por>1?'s':'')+' · '+(S.prefs.freezer&&r.co?'se congèle':'frigo, '+r.fr+' jours au plus')+'</div><div class="dish-s">'+macroTxt(r,w.ap||1)+'</div>'+
       '<details><summary>Ingrédients pour la session</summary><ul class="ings">'+r.ing.map(function(x){var q=roundQ(x[0],x[1]*por/4*(w.ap||1)),vt=variantOf(x[0]);return '<li><span>'+esc(ING[x[0]].n)+(vt?' <span class="badge alt">'+vt+'</span>':'')+'</span><span class="q">'+(q?fmtQty(x[0],q):'au goût')+'</span></li>';}).join('')+'</ul></details></div></div>';
   }).join('')+'</div></section>';
   h+='<button class="btn fill wide" data-act="cookmode">Passer en mode cuisine</button><p class="fine">Une seule étape à la fois, en grand, avec son minuteur : pratique quand tu as les mains dans la farine.</p>';
@@ -1481,6 +1807,7 @@ function viewReglages(){
     '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button>';
   h+='<section class="sect"><h2 class="h2">À table</h2>'+ctlPeople()+ctlBig()+'</section>';
   h+='<section class="sect"><h2 class="h2">Repas couverts par le batch</h2>'+ctlGrid()+'</section>';
+  h+='<section class="sect"><h2 class="h2">Mon objectif</h2>'+ctlGoal()+'<p class="fine">'+NUTNOTE+'</p></section>';
   h+='<section class="sect"><h2 class="h2">Ce que je mange</h2>'+ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY+'</section>';
   h+='<section class="sect"><h2 class="h2">Cuisines préférées</h2>'+ctlCuis()+'</section>';
   h+='<section class="sect"><h2 class="h2">Ma cuisine</h2>'+blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice())+blk('Plats différents par semaine',ctlDish())+'</section>';
@@ -1707,6 +2034,9 @@ function onClick(e){
   case 'habit': var hb=HABITS[+v];if(hb){p.shopDay=hb[0];p.shopH=hb[1];prefChanged();}break;
   case 'thaw': p.thawH=v;prefChanged();break;
   case 'prio': p.prio=v;prefChanged();break;
+  case 'goal': if(GOALS.some(function(x){return x[0]===v;})){p.goal=v;prefChanged();}break;
+  case 'w-cat': if(wz){wz.cat=v;wz.page=0;render();}break;
+  case 'w-prot': if(wz){wz.prot=v;wz.page=0;render();}break;
   case 'store': toggleIn(p.stores,v);p.stores=ORDER.filter(function(x){return p.stores.indexOf(x)>=0;});prefChanged();break;
   case 'q-next': S.ui.q=Math.min(QN-1,(S.ui.q||0)+1);render();window.scrollTo(0,0);break;
   case 'q-back': S.ui.q=Math.max(0,(S.ui.q||0)-1);render();window.scrollTo(0,0);break;
@@ -1767,7 +2097,7 @@ function snapshot(){
   var p=S.prefs,w=S.week;
   return {v:3,
     prefs:{done:!!p.done,people:p.people,grid:p.grid.map(Boolean),diet:p.diet,no:p.no.slice(),cu:p.cu.slice(),spice:p.spice,oven:!!p.oven,freezer:!!p.freezer,nDish:p.nDish,
-      prio:p.prio,stores:p.stores.slice(),shopDay:p.shopDay,shopH:p.shopH,thawH:p.thawH,fav:p.fav.slice(),ban:p.ban.slice(),hist:p.hist.slice(),lastFire:p.lastFire||0,alg:p.alg.slice(),big:!!p.big},
+      prio:p.prio,stores:p.stores.slice(),shopDay:p.shopDay,shopH:p.shopH,thawH:p.thawH,fav:p.fav.slice(),ban:p.ban.slice(),hist:p.hist.slice(),lastFire:p.lastFire||0,alg:p.alg.slice(),big:!!p.big,goal:p.goal,cuv:2},
     week:w?{shop:w.shop,mode:w.mode,cookH:w.cookH,cook:w.cook,ids:w.ids.slice(),people:w.people,ap:w.ap||1,slots:w.slots.map(function(s){return {d:s.d,m:s.m,r:s.r,src:s.src};}),done:Object.assign({},w.done),checked:Object.assign({},w.checked)}:null};
 }
 function apply(d){
@@ -1778,7 +2108,8 @@ function apply(d){
     if(Array.isArray(p.grid)&&p.grid.length===14) P.grid=p.grid.map(Boolean);
     if(DIETS.some(function(x){return x[0]===p.diet;})) P.diet=p.diet;
     if(Array.isArray(p.no)) P.no=p.no.filter(function(x){return NO[x];});
-    if(Array.isArray(p.cu)) P.cu=p.cu.filter(function(x){return CUIS[x];});
+    if(Array.isArray(p.cu)){P.cu=p.cu.filter(function(x){return CUIS[x];});if(p.cuv!==2&&P.cu.indexOf('am')>=0&&P.cu.indexOf('mx')<0) P.cu.push('mx');}
+    if(GOALS.some(function(x){return x[0]===p.goal;})) P.goal=p.goal;
     if(p.spice===0||p.spice===1||p.spice===2) P.spice=p.spice;
     if(typeof p.oven==='boolean') P.oven=p.oven;
     if(typeof p.freezer==='boolean') P.freezer=p.freezer;
@@ -1878,7 +2209,8 @@ function boot(){
 if(typeof module==='object'&&module.exports) module.exports={S:S,ING:ING,BATCH:BATCH,B:B,CUIS:CUIS,flatten:flatten,buildWeek:buildWeek,session:session,assign:assign,shopping:shopping,events:events,
   listText:listText,programText:programText,proposals:proposals,autoPick:autoPick,newWiz:newWiz,cookOf:cookOf,slotsBetween:slotsBetween,portionsOf:portionsOf,
   viewSemaine:viewSemaine,viewCourses:viewCourses,viewBatch:viewBatch,viewActions:viewActions,viewReglages:viewReglages,viewQuiz:viewQuiz,viewWiz:viewWiz,
-  defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm};
+  defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm,
+  macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore};
 else boot();
 })();
 </script>
