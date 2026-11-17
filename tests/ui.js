@@ -67,6 +67,17 @@ const shots = process.argv[2];
         await noHScroll('l’onglet ' + tab); await snap('3-' + tab);
       });
     }
+    await step('panier', async () => {
+      await page.evaluate(() => { location.hash = '#courses'; }); await page.waitForTimeout(200);
+      if (!(await page.$eval('#basket', e => e.hidden))) throw new Error('le compteur du panier s’affiche alors que rien n’est coché');
+      await page.click('.item input[type=checkbox]'); await page.waitForTimeout(100);
+      const txt = await page.$eval('#basket', e => e.hidden ? '' : e.textContent);
+      if (!/^1 sur \d+ dans ton panier$/.test(txt)) throw new Error('compteur du panier inattendu : « ' + txt + ' »');
+      if (await page.$eval('#b-uncheck', e => e.hidden)) throw new Error('« Tout décocher » n’apparaît pas après avoir coché');
+      await snap('4-panier');
+      await page.click('#b-uncheck'); await page.waitForTimeout(100);
+      if (!(await page.$eval('#basket', e => e.hidden))) throw new Error('« Tout décocher » ne remet pas le compteur à zéro');
+    });
     if (errs.length) { fails++; console.error('ÉCHEC [' + scheme + '] erreurs JavaScript : ' + errs.join(' | ')); }
     await ctx.close();
   }

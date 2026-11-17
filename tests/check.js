@@ -137,6 +137,33 @@ section('semaines types', () => {
   });
 });
 
+section('agenda et liste de courses', () => {
+  freshState();
+  const z = Object.assign({}, WZ, { cat: 'all', prot: 'all', picks: [] });
+  z.picks = P.autoPick(z);
+  const w = P.buildWeek(z.shopD, z.shopH, z.mode, z.cookH, z.picks);
+  P.S.week = w; P.S.ui.wiz = null;
+  ok(P.icsEsc('a;b,c\nd') === 'a\\;b\\,c\\nd', 'le fichier agenda doit échapper ; , et les retours à la ligne');
+  const ics = P.icsText(w);
+  ok(/^BEGIN:VCALENDAR/.test(ics) && /END:VCALENDAR\r\n$/.test(ics), 'fichier agenda mal formé');
+  ok(!/[^\\];/.test(ics.replace(/\r\n /g, '').split('\r\n').filter(l => /^(DESCRIPTION|SUMMARY):/.test(l)).join('\n')), 'point-virgule non échappé dans le fichier agenda');
+  const L = P.shopping(w);
+  let bk = P.basket(w, L);
+  ok(bk.tot === L.n && bk.got === 0, 'le compteur du panier doit compter tous les articles hors placard');
+  ok(/id="basket"[^>]*hidden/.test(P.viewCourses()) && /id="b-uncheck"[^>]*hidden/.test(P.viewCourses()), 'compteur et « Tout décocher » doivent être cachés tant que rien n’est coché');
+  const first = (Object.values(L.byStore)[0] || Object.values(L.rest)[0])[0];
+  w.checked[first.k] = 1; w.checked.inconnu = 1;
+  bk = P.basket(w, L);
+  ok(bk.got === 1, 'le compteur du panier doit ignorer les articles qui ne sont plus dans la liste');
+  ok(P.basketTxt(bk) === '1 sur ' + bk.tot + ' dans ton panier', 'texte du compteur du panier inattendu');
+  ok(P.basketTxt({ got: bk.tot, tot: bk.tot }).startsWith('Tout est dans ton panier'), 'le panier complet doit être signalé');
+  ok(!/id="basket"[^>]*hidden/.test(P.viewCourses()), 'le compteur doit s’afficher dès qu’un article est coché');
+  ok(!/data-act="share"/.test(P.viewCourses()), 'sans partage dans le navigateur, pas de bouton Envoyer');
+  navigator.share = () => Promise.resolve();
+  ok(/data-act="share"/.test(P.viewCourses()) && /data-act="copy"/.test(P.viewCourses()), 'avec le partage, les boutons Envoyer et Copier doivent apparaître');
+  delete navigator.share;
+});
+
 section('questionnaire', () => {
   freshState(); P.S.prefs.done = false;
   for (let q = 0; q < 6; q++) { P.S.ui.q = q; ok(!BAD.test(P.viewQuiz()), 'question ' + (q + 1) + ' invalide'); }

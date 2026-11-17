@@ -267,6 +267,7 @@ details summary{cursor:pointer;font-size:.85rem;color:var(--accent);font-weight:
 .tog{appearance:none;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--accent-ink);font:700 1.1rem var(--f-body);cursor:pointer}
 .tog[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
 .count{margin:0;font-size:.88rem;color:var(--ink-2)}
+.basket{margin:.5rem 0 0;font-weight:700;color:var(--accent)}
 .opts{display:flex;flex-direction:column;gap:8px}
 .opt{appearance:none;display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;width:100%;padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:600 .95rem/1.3 var(--f-body);cursor:pointer}
 .opt>span:first-child{display:flex;flex-direction:column;gap:2px;min-width:0}
@@ -1755,12 +1756,21 @@ function byRayon(rows,w){
   rows.forEach(function(r){var rc=ING[r.k].r;if(rc!==cur){if(cur) h+='</ul>';h+='<h3 class="sub-h">'+RAYONS[rc]+'</h3><ul class="items">';cur=rc;}h+=itemHtml(r,w);});
   return cur?h+'</ul>':h;
 }
+function basket(w,L){
+  var tot=0,got=0;
+  ORDER.forEach(function(st){(L.byStore[st]||[]).forEach(function(r){tot++;if(w.checked[r.k]) got++;});});
+  RORDER.forEach(function(rc){(L.rest[rc]||[]).forEach(function(r){tot++;if(w.checked[r.k]) got++;});});
+  return {got:got,tot:tot};
+}
+function basketTxt(b){return b.tot&&b.got>=b.tot?'Tout est dans ton panier ✓':b.got+' sur '+b.tot+' dans ton panier';}
 function viewCourses(){
   if(!ready()) return loadingView();
   var w=S.week;
   if(!w) return noWeek();
   var L=shopping(w);
-  var h='<section class="head"><h1 class="h1">Liste de courses</h1><p class="lede">'+WD[wdOf(w.shop.d)]+' '+fmtDM(w.shop.d)+' à '+w.shop.h+' · '+L.n+' articles pour '+w.ids.length+' plats</p></section>'+stateNote(w.shop.d);
+  var h='<section class="head"><h1 class="h1">Liste de courses</h1><p class="lede">'+WD[wdOf(w.shop.d)]+' '+fmtDM(w.shop.d)+' à '+w.shop.h+' · '+L.n+' articles pour '+w.ids.length+' plats</p>';
+  var bk=basket(w,L);
+  h+='<p class="basket" id="basket" aria-live="polite"'+(bk.got?'':' hidden')+'>'+basketTxt(bk)+'</p></section>'+stateNote(w.shop.d);
   ORDER.forEach(function(st){
     var rows=L.byStore[st];if(!rows) return;
     var sum=0;rows.forEach(function(r){sum+=r.c.total;});
@@ -1779,9 +1789,9 @@ function viewCourses(){
   if(L.pay>0) h+='<div class="totals"><span>Produits en action</span><span><b>'+fmtP(L.pay)+'</b>'+(L.save>0.005?' au lieu de '+fmtP(L.pay+L.save):'')+'</span></div>'+
     '<p class="fine">Seuls les produits en action ont un prix. Le reste de la liste n’est pas chiffré, car les prix hors action ne sont pas relevés.</p>';
   h+='<p class="fine">La liste comprend aussi ce qui se prépare le jour du repas : riz, pâtes, pain, salade.</p>';
-  if(L.n) h+='<button class="btn fill wide" data-act="copy">Copier la liste</button>';
+  if(L.n) h+=canShare()?'<div class="btns"><button class="btn fill" id="b-share" data-act="share">Envoyer la liste</button><button class="btn" id="b-copy" data-act="copy">Copier</button></div>':'<button class="btn fill wide" id="b-copy" data-act="copy">Copier la liste</button>';
   if(S.ui.copyText&&S.ui.copyKind==='list') h+='<textarea class="copybox" id="copybox" readonly aria-label="Liste de courses à copier">'+esc(S.ui.copyText)+'</textarea>';
-  if(Object.keys(w.checked).length) h+='<button class="btn wide" data-act="uncheck">Tout décocher</button>';
+  h+='<button class="btn wide" id="b-uncheck" data-act="uncheck"'+(bk.got?'':' hidden')+'>Tout décocher</button>';
   return h;
 }
 function viewActions(){
@@ -1881,7 +1891,7 @@ function downloadFile(name,text,type){
   }catch(e){return false;}
 }
 function icsDate(m){var d=new Date(m*60000);function z(n){return ('0'+n).slice(-2);}return d.getFullYear()+z(d.getMonth()+1)+z(d.getDate())+'T'+z(d.getHours())+z(d.getMinutes())+'00';}
-function icsEsc(x){return String(x).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');}
+function icsEsc(x){return String(x).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');}
 function icsFold(line){var out=[];while(line.length>60){out.push(line.slice(0,60));line=' '+line.slice(60);}out.push(line);return out.join('\r\n');}
 function icsText(w){
   var stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z',L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Mitonne//Batch cooking//FR','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Mitonne'];
@@ -1967,6 +1977,14 @@ function tick(){
 }
 
 /* ---------- gestes ---------- */
+function canShare(){try{return typeof navigator.share==='function';}catch(e){return false;}}
+function copyText(txt,kind){
+  var fallback=function(){S.ui.copyText=txt;S.ui.copyKind=kind;render();var b=document.getElementById('copybox');if(b){b.focus();b.select();}toast('Sélectionne le texte et copie-le.');};
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function(){toast(kind==='list'?'Liste copiée':'Programme copié');},fallback);
+    else fallback();
+  }catch(err){fallback();}
+}
 function toggleIn(arr,v){var ix=arr.indexOf(v);if(ix>=0) arr.splice(ix,1);else arr.push(v);}
 function prefChanged(){save();render();}
 function go(tab){S.ui.tab=tab;try{if(location.hash!=='#'+tab) history.replaceState(null,'','#'+tab);}catch(e){}}
@@ -2053,14 +2071,17 @@ function onClick(e){
     if(WAKE){try{WAKE.release();}catch(err){}WAKE=null;render();break;}
     try{navigator.wakeLock.request('screen').then(function(l){WAKE=l;l.addEventListener('release',function(){WAKE=null;});render();},function(){toast('L’écran ne peut pas rester allumé ici.');});}catch(err){toast('L’écran ne peut pas rester allumé ici.');}
     break;
+  case 'share':
+    if(!S.week) break;
+    var stxt=listText(S.week);
+    try{
+      navigator.share({title:'Liste de courses',text:stxt}).catch(function(err){if(!err||err.name!=='AbortError') copyText(stxt,'list');});
+    }catch(err){copyText(stxt,'list');}
+    break;
   case 'copy': case 'copy-prog':
     if(!S.week) break;
-    var kind=act==='copy'?'list':'prog',txt=kind==='list'?listText(S.week):programText(S.week);
-    var fallback=function(){S.ui.copyText=txt;S.ui.copyKind=kind;render();var b=document.getElementById('copybox');if(b){b.focus();b.select();}toast('Sélectionne le texte et copie-le.');};
-    try{
-      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function(){toast(kind==='list'?'Liste copiée':'Programme copié');},fallback);
-      else fallback();
-    }catch(err){fallback();}
+    var kind=act==='copy'?'list':'prog';
+    copyText(kind==='list'?listText(S.week):programText(S.week),kind);
     break;
   }
 }
@@ -2075,6 +2096,9 @@ function onChange(e){
   if(k&&S.week){
     if(t.checked) S.week.checked[k]=1;else delete S.week.checked[k];
     var li=t.closest('.item');if(li) li.classList.toggle('done',t.checked);
+    var bk=basket(S.week,shopping(S.week)),be=document.getElementById('basket'),ub=document.getElementById('b-uncheck');
+    if(be){be.textContent=basketTxt(bk);be.hidden=!bk.got;}
+    if(ub) ub.hidden=!bk.got;
     save();
   }else if(bt!=null&&S.week){
     if(t.checked) S.week.done[bt]=1;else delete S.week.done[bt];
@@ -2210,7 +2234,8 @@ if(typeof module==='object'&&module.exports) module.exports={S:S,ING:ING,BATCH:B
   listText:listText,programText:programText,proposals:proposals,autoPick:autoPick,newWiz:newWiz,cookOf:cookOf,slotsBetween:slotsBetween,portionsOf:portionsOf,
   viewSemaine:viewSemaine,viewCourses:viewCourses,viewBatch:viewBatch,viewActions:viewActions,viewReglages:viewReglages,viewQuiz:viewQuiz,viewWiz:viewWiz,
   defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm,
-  macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore};
+  macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore,
+  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt};
 else boot();
 })();
 </script>
