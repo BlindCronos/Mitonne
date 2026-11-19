@@ -6,8 +6,14 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Total des calories et protéines de la semaine, par jour.
 - Mode « frigo vide » : proposer des plats avec ce qui reste.
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
-- Session de batch : cases à cocher plus grandes, plus faciles à toucher avec les mains mouillées.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
+
+## 2026-11-19 : nouvelle identité visuelle
+- Mitonne change de look : noir et blanc, un jaune d'étiquette pour les économies, la prochaine étape et les prix, et le rouge seulement pour les promotions.
+- Deux polices au lieu de quatre, plus grandes et plus lisibles.
+- Boutons et cases à cocher plus grands, plus faciles à toucher, même avec les mains mouillées.
+- En mode sombre, le jaune devient la couleur des boutons.
+- Nouveau logo et nouvelle icône sur l'écran d'accueil du téléphone. L'onglet « Batch » s'appelle maintenant « Cuisine ».
 
 ## 2026-11-17
 - Liste de courses : un compteur « 3 sur 13 dans ton panier » s’affiche dès que tu coches un article, et indique quand tout est pris.

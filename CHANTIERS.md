@@ -14,6 +14,12 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 
 ## Phase 1 : une app simple et agréable, prête pour des testeurs
 
+### Chantier 0 : nouvelle identité visuelle « Étiquette »
+- **Statut :** fait (2026-11-19, COMMIT)
+- **Prérequis :** aucun
+- **Pourquoi :** audit du design du 2026-11-19 : 4 polices, 4 styles de boutons, 9 arrondis différents, l'orange utilisé partout, du texte à 13 px et des cases à cocher de 22 px. Diogo a choisi, parmi 3 maquettes, la mise en page « Étiquette » avec la typographie « Prune ».
+- **Contenu :** noir et blanc francs, jaune d'étiquette pour ce qui compte (économies, prochaine étape, prix), rouge réservé aux promotions ; Outfit pour les titres et les chiffres, Plus Jakarta Sans pour le texte ; angles de 2 à 6 px, filets noirs de 2 px entre les sections ; zones à toucher de 44 px au moins, cases à cocher de 28 px ; en sombre, le jaune devient la couleur d'action. Nouveau logo (« MITONNE » sur étiquette jaune), nouvelle icône, onglet « Batch » renommé « Cuisine ». Aucun changement de fonctionnement : les chantiers 1 et 2 simplifient ensuite les écrans dans ce style.
+
 ### Chantier 1 : écran « Plats », la semaine proposée d'emblée
 - **Statut :** à faire
 - **Prérequis :** aucun
