@@ -86,7 +86,7 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Contenu :** renseigner `FEEDBACK_URL` dans `index.html` (lien `https://forms.gle/…` ou `https://docs.google.com/forms/…`), incrémenter le cache, tester, publier. Le bouton « Donner mon avis » apparaît alors tout seul.
 
 ### Chantier 10 : prix du panier estimé
-- **Statut :** fait (2026-11-19, COMMIT)
+- **Statut :** fait (2026-11-19, dde52fd)
 - **Pourquoi :** Diogo veut que la personne connaisse le prix de son panier avant d’aller au magasin, pas seulement ses économies.
 - **Fait :** prix habituel estimé pour chaque ingrédient acheté (`PRICE` : paquet courant et prix moyen des grandes surfaces suisses), arrondi au paquet entier ; les produits en action gardent leur prix relevé. Total estimé et prix par portion dans Courses et Semaine, prix du panier dès l’écran Plats, total dans la liste copiée, prix estimé sur chaque article sans action. Un ingrédient secondaire n’est pris en action que s’il coûte moins que son paquet habituel. Les sources n’affichent plus rappn.
 
