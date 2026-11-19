@@ -9,6 +9,12 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : « % pour toi »
+- Chaque plat proposé affiche maintenant un score, par exemple « 92 % pour toi », avec la raison principale : la promo du moment, « tu aimes la cuisine italienne », « léger et protéiné, comme ton objectif », « dans tes favoris »…
+- Mitonne apprend de tes choix : après chaque repas, l'onglet Semaine te demande « Tu as aimé ? ». Un pouce vers le haut fait revenir le plat plus souvent, un pouce vers le bas le fait reculer, lui et les plats qui lui ressemblent. Échanger un plat le fait un peu reculer, l'ajouter à la main le fait un peu avancer.
+- Les plats sont triés du plus au moins adapté à toi.
+- C'est un indice de préférence, pas une promesse. Tout reste sur ton téléphone, rien n'est envoyé.
+
 ## 2026-11-19 : des écrans plus courts
 - Semaine : chaque jour se replie. Seul le jour en cours est ouvert, les autres montrent en une ligne ce que tu manges. L'agenda, la copie du programme et les conseils de conservation sont regroupés en bas.
 - Cuisine : le bouton « Passer en mode cuisine » est en haut. Le pas à pas montre l'étape en cours et les 2 suivantes ; les étapes faites et les suivantes s'affichent d'un toucher. Les plats et leurs étiquettes sont repliés.

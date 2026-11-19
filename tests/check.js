@@ -234,6 +234,72 @@ section('sauvegarde', () => {
   ok(P.S.prefs.cu.includes('mx'), 'la migration de l’ancienne cuisine américaine et mexicaine ne fonctionne plus');
 });
 
+section('% pour toi : score, raisons, apprentissage', () => {
+  // Les plats sont triés par score, le pourcentage reste dans ses bornes et les raisons ne sont jamais vides.
+  const profiles = [{}, { goal: 'fit', cu: ['it', 'as'] }, { goal: 'muscle', prio: 'var', spice: 2 }, { diet: 'vege', freezer: false }];
+  profiles.forEach(pf => {
+    freshState(); Object.assign(P.S.prefs, pf);
+    const z = Object.assign({}, WZ, { cat: 'all', prot: 'all', picks: [] });
+    const pr = P.proposals(z);
+    for (let i = 1; i < pr.list.length; i++) ok(pr.list[i - 1].pct >= pr.list[i].pct, JSON.stringify(pf) + ' : les plats ne sont pas triés par « % pour toi »');
+    const pk = P.autoPick(z).map(id => pr.list.find(x => x.r.id === id).pct);
+    for (let i = 1; i < pk.length; i++) ok(pk[i - 1] >= pk[i], JSON.stringify(pf) + ' : la semaine proposée n’est pas triée par « % pour toi »');
+    pr.list.forEach(x => {
+      ok(x.pct >= 40 && x.pct <= 98, x.r.id + ' : pourcentage hors bornes (' + x.pct + ')');
+      [false, true].forEach(np => {
+        const rs = P.reasons(x.r, x.md, np);
+        ok(rs.length >= 1 && rs.length <= 2 && rs.every(t => typeof t === 'string' && t.length > 3 && !BAD.test(t)), x.r.id + ' : raisons vides ou invalides ' + JSON.stringify(rs));
+      });
+    });
+  });
+  // Un 👎 fait baisser le plat et les plats proches, pas les plats sans rapport.
+  freshState();
+  const r = P.B['curry-poulet'], near = P.BATCH.find(x => x.id !== r.id && P.rgroup(x) === P.rgroup(r) && x.cu === r.cu);
+  const far = P.BATCH.find(x => P.rgroup(x) !== P.rgroup(r) && x.cu !== r.cu && x.main[0] !== r.main[0]);
+  const sc = x => P.baseScore(x, WZ.shopD, 6, WZ.shopD);
+  const s0 = [sc(r), sc(near), sc(far)];
+  P.learn(r.id, P.SIG.down);
+  const s1 = [sc(r), sc(near), sc(far)];
+  ok(s1[0] < s0[0] - 10, '👎 ne fait pas assez baisser le plat (' + s0[0].toFixed(1) + ' → ' + s1[0].toFixed(1) + ')');
+  ok(s1[1] < s0[1], '👎 ne fait pas baisser un plat proche (' + near.id + ')');
+  ok(Math.abs(s1[2] - s0[2]) < 1e-9, '👎 change le score d’un plat sans rapport (' + far.id + ')');
+  P.learn(r.id, -P.SIG.down);
+  ok(!(r.id in P.S.prefs.taste), 'annuler un 👎 ne remet pas la note à zéro');
+  // Signaux légers : échanger fait baisser un peu, ajouter à la main fait monter un peu.
+  P.learn(far.id, P.SIG.swap); ok(sc(far) < s0[2] && sc(far) > s0[2] - 10, 'Échanger doit faire baisser un peu le plat');
+  P.learn(far.id, -P.SIG.swap); P.learn(far.id, P.SIG.add); ok(sc(far) > s0[2], 'Ajouter un plat à la main doit le faire monter');
+  ok(P.reasons(far, null, true).length >= 1, 'raisons vides après apprentissage');
+  // Note bornée
+  for (let i = 0; i < 10; i++) P.learn(r.id, P.SIG.up);
+  ok(P.S.prefs.taste[r.id] === 3, 'la note apprise doit rester entre -3 et 3');
+  ok(P.reasons(r, null, true).includes('tu as aimé ce plat'), 'la raison « tu as aimé ce plat » manque après des 👍');
+  // Votes de la semaine : voter, changer d'avis, annuler.
+  freshState();
+  const w = P.buildWeek(WZ.shopD, WZ.shopH, WZ.mode, WZ.cookH, ['bolognaise', 'curry-poulet', 'dense-bean-salad']);
+  P.S.week = w;
+  ok(w.votes && !Object.keys(w.votes).length, 'une nouvelle semaine doit commencer sans vote');
+  const e1 = P.voteEff(1) - P.voteEff(0), e2 = P.voteEff(-1) - P.voteEff(1);
+  P.learn('bolognaise', e1); P.learn('bolognaise', e2);
+  ok(P.S.prefs.taste.bolognaise === P.SIG.down, 'changer son vote de 👍 à 👎 doit donner exactement un 👎');
+  // Sauvegarde : la note et les votes survivent ; une ancienne sauvegarde s'ouvre sans erreur.
+  w.votes.bolognaise = -1;
+  const snap = JSON.parse(JSON.stringify(P.snapshot()));
+  P.S.prefs = P.defaults(); P.S.week = null; P.apply(snap);
+  ok(P.S.prefs.taste.bolognaise === P.SIG.down, 'la note apprise ne survit pas à une sauvegarde');
+  ok(P.S.week && P.S.week.votes.bolognaise === -1, 'les votes de la semaine ne survivent pas à une sauvegarde');
+  const old = JSON.parse(JSON.stringify(snap)); delete old.prefs.taste; delete old.week.votes;
+  P.S.prefs = P.defaults(); P.S.week = null; P.apply(old);
+  ok(P.S.prefs.taste && !Object.keys(P.S.prefs.taste).length && P.S.week && P.S.week.votes && !Object.keys(P.S.week.votes).length, 'une ancienne sauvegarde sans note ni vote ne s’ouvre pas proprement');
+  P.S.prefs = P.defaults(); P.apply({ v: 3, prefs: { done: true, taste: { bolognaise: 'x', inconnu: 2, chili: 9 } } });
+  ok(!('bolognaise' in P.S.prefs.taste) && !('inconnu' in P.S.prefs.taste) && P.S.prefs.taste.chili === 3, 'les notes invalides d’une sauvegarde doivent être ignorées ou bornées');
+  // Les votes s'affichent après le repas.
+  freshState(); P.S.week = P.buildWeek('2026-11-14', '09:30', 'after', '10:00', ['bolognaise', 'curry-poulet']);
+  P.S.ui.fold = {}; P.S.week.slots.forEach(sl => { P.S.ui.fold['j-' + P.S.week.shop.d + '-' + sl.d] = true; });
+  const hv = P.viewSemaine(); P.S.ui.fold = {};
+  ok(!BAD.test(hv) && hv.indexOf('data-act="vote"') >= 0, 'les boutons 👍 et 👎 n’apparaissent pas après un repas passé');
+  P.S.week = null;
+});
+
 fs.rmSync(tmp, { recursive: true, force: true });
 if (fails) { console.error('\n' + fails + ' échec(s) sur ' + checks + ' vérifications.'); process.exit(1); }
 console.log('OK : ' + checks + ' vérifications, ' + P.BATCH.length + ' recettes.');
