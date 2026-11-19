@@ -12,10 +12,11 @@ Mitonne est l'application de batch cooking de Diogo : choix des plats selon les 
 - `tools/build-artifact.py` : fabrique la version Claude (artefact) à partir d'`index.html`.
 - `AMELIORATIONS.md` : journal des améliorations et idées en attente.
 - `CHANTIERS.md` : la feuille de route, découpée en chantiers (un chantier = une session).
+- `EVALUATION.md` : bilan du projet et proposition d'architecture pour la version publique (prix en direct, saisons, cantons).
 
 ## Méthode de travail : un chantier par session
-Diogo ouvre une nouvelle session pour chaque chantier, plutôt qu'une longue conversation. Toute la mémoire du projet est donc dans ce dépôt : ce fichier, `CHANTIERS.md` et `AMELIORATIONS.md`.
-- **Au début** : lis ces trois fichiers. Si Diogo écrit « Chantier N », fais ce chantier. S'il écrit « Prochain chantier », prends le premier chantier « à faire » dont les prérequis sont remplis, et dis lequel tu prends. Si un prérequis manque, dis-le et propose le chantier suivant possible.
+Diogo ouvre une nouvelle session pour chaque chantier, plutôt qu'une longue conversation. Toute la mémoire du projet est donc dans ce dépôt : ce fichier, `CHANTIERS.md`, `AMELIORATIONS.md` et `EVALUATION.md`.
+- **Au début** : lis ces quatre fichiers. Si Diogo écrit « Chantier N », fais ce chantier. S'il écrit « Prochain chantier », prends le premier chantier « à faire » dont les prérequis sont remplis, et dis lequel tu prends. Si un prérequis manque, dis-le et propose le chantier suivant possible.
 - **Pendant** : reste dans le périmètre du chantier. Une idée hors sujet va dans « Idées en attente » d'`AMELIORATIONS.md`, pas dans le code.
 - **Si le chantier ne tient pas dans la session** : arrête-toi sur un état cohérent et testé, publie-le, puis découpe le reste en un nouveau chantier « N bis » juste sous le chantier N, avec son statut et ce qu'il reste à faire.
 - **À la fin** : tests verts, publication sur `main`, version Claude republiée (`python3 tools/build-artifact.py` puis `publish_files` sur le slug `7ab9c9ba-6d6e-403b-8c8b-5eb5f3ba4ec9`, si les outils claude-artifacts sont disponibles ; sinon, signale-le), section datée dans `AMELIORATIONS.md`, statut du chantier passé à « fait (date, commit) ». Termine par un résumé court pour Diogo et le prochain chantier conseillé.

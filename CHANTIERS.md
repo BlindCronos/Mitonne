@@ -94,8 +94,24 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Statut :** en attente
 - **Prérequis :** chantier 8 fait (hébergement) ; Diogo a choisi le service qui fera tourner le relevé (par exemple GitHub Actions ou une tâche planifiée Cloudflare) ; conditions d’utilisation des sites relevés vérifiées.
 - **Pourquoi :** Diogo veut que tout soit affiché en direct : les actions publiées par les enseignes doivent arriver dans l’app sans intervention, aussitôt relevées.
+- **Architecture proposée :** voir « Proposition pour la version publique » dans `EVALUATION.md` (un robot par magasin, base de prix avec historique et correspondance ingrédient ↔ produits, fichiers de prix par canton servis par un CDN, contrôles de cohérence).
 - **Contenu :** relevé automatique et fréquent des actions (et, si possible, des prix habituels pour remplacer les estimations de `PRICE`), contrôle de cohérence avant publication, publication automatique de `data/actions.json` sur le site, date et heure du dernier relevé affichées dans l’app. Garder la règle d’exactitude de la tâche actuelle : aucun prix inventé.
 - **Attention :** ce chantier remplace ou modifie la tâche planifiée « Mitonne : relevé des actions et site ». Préparer pour Diogo le nouveau texte de ses instructions, ou la désactiver une fois le relevé automatique en place.
+
+
+### Chantier 12 : fruits et légumes de saison
+- **Statut :** à faire
+- **Prérequis :** aucun
+- **Pourquoi :** des plats meilleurs et moins chers, et une demande de Diogo pour la version publique (voir `EVALUATION.md`).
+- **Contenu :** un calendrier mensuel des fruits et légumes suisses (récolte locale, stockage ou importé) pour chaque ingrédient du rayon « fl » ; bonus de score pour les recettes de saison, malus pour les légumes hors saison (tomates, courgettes, poivrons en hiver) ; badge « de saison » dans le détail du plat et raison « de saison » dans « % pour toi ». Pas de nouveau champ dans la sauvegarde.
+- **Terminé quand :** en novembre, une semaine type propose surtout des légumes de saison quand une alternative existe ; les tests couvrent le calendrier (chaque ingrédient « fl » a ses 12 mois) et le score.
+
+### Chantier 13 : mon canton
+- **Statut :** à faire
+- **Prérequis :** chantier 12 conseillé
+- **Pourquoi :** Diogo veut que le client choisisse son canton, pour des propositions et des prix de sa région.
+- **Contenu :** question « Ton canton » dans le questionnaire et les Réglages (nouveau champ `prefs.canton`, vide par défaut) ; magasins proposés par défaut selon la région ; recettes régionales (spécialités de Suisse romande, alémanique et italienne) mises en avant avec la raison « spécialité de ta région » ; mention claire « prix relevés pour le canton de Vaud » tant que le chantier 11 n'existe pas. Prévoir le champ pour les prix par canton.
+- **Terminé quand :** les anciennes sauvegardes s'ouvrent avec un canton vide, les tests couvrent le choix du canton et ses effets sur les propositions.
 
 ---
 
