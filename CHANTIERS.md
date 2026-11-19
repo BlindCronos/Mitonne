@@ -1,0 +1,89 @@
+# Chantiers de Mitonne
+
+Un chantier = une session Claude Code. Chaque chantier est prévu pour tenir dans une session et laisser le site publié, testé et utilisable à la fin.
+
+**Pour lancer un chantier :** ouvre une nouvelle session Claude Code sur le dépôt `BlindCronos/Mitonne` et écris simplement :
+- « Chantier 3 » pour un chantier précis ;
+- « Prochain chantier » pour le premier chantier « à faire » dont les prérequis sont remplis.
+
+Claude lit alors `CLAUDE.md` (règles et méthode), ce fichier et `AMELIORATIONS.md`, fait le chantier, publie et met à jour son statut ici.
+
+Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** (un prérequis manque).
+
+---
+
+## Phase 1 : une app simple et agréable, prête pour des testeurs
+
+### Chantier 1 : écran « Plats », la semaine proposée d'emblée
+- **Statut :** à faire
+- **Prérequis :** aucun
+- **Pourquoi :** l'audit du 2026-11-13 (format téléphone, 390 px) compte 9 touches entre le premier lancement et une semaine prête. L'écran de choix des plats fait 4,7 écrans de haut et 542 mots ; les filtres occupent tout le premier écran et aucun plat n'est visible sans défiler. Les concurrents vont plus vite : Miamz échange un repas « en un clic », Jow et Mealime proposent la semaine directement.
+- **Contenu :**
+  - À l'ouverture de l'étape « Plats », la semaine est déjà proposée (3 à 4 plats choisis par `autoPick`), avec un bouton « Échanger » par plat qui propose le meilleur plat suivant.
+  - Les filtres (catégories, protéines) sont repliés derrière un seul bouton « Envie de… ».
+  - Cartes courtes : nom, puis une ligne « kcal · protéines · minutes · action en cours ». Le détail (ingrédients, macros complètes, badge Fit) s'ouvre au toucher.
+  - On peut toujours ajouter un plat à la main depuis la liste complète.
+- **Terminé quand :**
+  - le premier plat proposé est visible sans défiler, sur téléphone ;
+  - 4 touches au plus entre l'ouverture de l'assistant et une semaine validée (hors questionnaire du premier lancement) ;
+  - `tests/ui.js` couvre « Échanger » et « Envie de… » ; les anciennes sauvegardes s'ouvrent sans erreur ; la version Claude fonctionne.
+
+### Chantier 2 : écrans « Semaine », « Batch », « Actions » et « Réglages » allégés
+- **Statut :** à faire
+- **Prérequis :** chantier 1 fait
+- **Pourquoi :** audit du 2026-11-13 : Semaine 3,6 écrans (619 mots), Batch 5,8 écrans (917 mots), Actions 16 écrans (1841 mots), Réglages 5,9 écrans (104 réglages visibles).
+- **Contenu :**
+  - Semaine et Batch : étapes repliables, seule l'étape en cours est ouverte.
+  - Actions : les 10 meilleures actions par enseigne, puis « Tout voir ».
+  - Réglages : regroupés en sections repliables (Mon foyer, Mes goûts, Courses, Cuisine, Données).
+- **Terminé quand :** chaque écran tient en 2 écrans de haut au plus à l'ouverture, aucune fonctionnalité n'a disparu, tests verts.
+
+### Chantier 3 : recettes, lot 1 (63 → environ 90)
+- **Statut :** à faire
+- **Prérequis :** aucun
+- **Pourquoi :** les applications de batch cooking annoncent de 250 (Batchii) à plus de 500 recettes (Basta), et leurs avis se plaignent de répétitions. Mitonne vise environ 120 recettes, toutes vraiment adaptées au batch.
+- **Contenu :** environ 27 recettes au format `BATCH`, en priorité dans les catégories les moins fournies (compter avec `CATS` et `protOf` avant de commencer) : végétarien, poisson, soupes, express, mijotés. Chaque ingrédient dans `ING` et `NUT`, valeurs nutritionnelles moyennes et honnêtes, règles de sécurité alimentaire de `CLAUDE.md`.
+- **Terminé quand :** `tests/check.js` passe (le seuil minimal de recettes est relevé à 85), chaque nouvelle recette se planifie seule et dans une semaine type.
+
+### Chantier 4 : recettes, lot 2 (environ 90 → environ 120) et variété
+- **Statut :** à faire
+- **Prérequis :** chantier 3 fait
+- **Contenu :** environ 30 recettes de plus, dont des desserts et en-cas fit préparés pendant la session (flans protéinés, cheesecake de nuit…). Renforcer la variété : `baseScore` pénalise déjà les plats des semaines précédentes (`hist`) ; ajouter une pénalité quand deux plats de la même semaine se ressemblent trop (même protéine et même cuisine).
+- **Terminé quand :** tests verts, seuil relevé à 115 recettes, une semaine type ne propose jamais deux plats de même protéine et même cuisine quand une alternative existe.
+
+### Chantier 5 : score de compatibilité « % pour toi »
+- **Statut :** à faire
+- **Prérequis :** chantier 1 fait
+- **Pourquoi :** pousser chacun vers les plats qu'il aimera le plus. Jow recommande selon les goûts et l'équipement, Yummly apprend des avis explicites et du comportement, Plaite apprend des balayages.
+- **Contenu :**
+  - Un score sur 100 par plat, affiché « 92 % pour toi », avec 1 ou 2 raisons courtes (« en action chez Coop », « tu aimes l'asiatique », « riche en protéines, comme ton objectif »).
+  - Il part de `baseScore` (objectif, cuisines aimées, favoris, piquant, promotions, historique) et ajoute l'apprentissage : 👍/👎 après le repas, plat échangé (signal négatif léger), plat gardé ou ajouté à la main (signal positif léger).
+  - Tout reste dans le navigateur : pas de serveur, pas de traceur. Nouveau champ dans `snapshot()`/`apply()` avec une valeur par défaut.
+  - Le pourcentage est un indice de préférence, pas une promesse : le dire simplement dans l'app.
+- **Terminé quand :** les plats sont triés par score, les raisons ne sont jamais vides, un 👎 fait baisser le plat et les plats proches, les tests couvrent le calcul et l'ancienne sauvegarde.
+
+### Chantier 6 : version pour testeurs
+- **Statut :** en attente
+- **Prérequis :** chantiers 1 et 2 faits ; Diogo a choisi le moyen de recevoir les avis des testeurs.
+- **Contenu :** accueil du premier lancement pensé pour quelqu'un qui ne connaît pas Mitonne, page « À propos » (ce que fait l'app, d'où viennent les prix, valeurs nutritionnelles estimées), bouton « Donner mon avis ».
+- **Terminé quand :** une personne qui découvre l'app prépare sa première semaine sans aide (à tester avec `tests/ui.js` en partant d'un navigateur vide).
+
+---
+
+## Phase 2 : passage en version pro (après les retours des testeurs)
+
+### Chantier 7 : restructurer le code
+- **Statut :** en attente
+- **Prérequis :** phase 1 faite et décision de Diogo de passer en version pro.
+- **Contenu :** séparer `index.html` (environ 2 250 lignes) en fichiers (styles, logique, recettes en fichiers de données), ajouter une étape de construction simple, faire tourner les tests automatiquement à chaque envoi (GitHub Actions). Mettre à jour `CLAUDE.md`, `tools/build-artifact.py` et les tests.
+- **Attention :** les deux tâches planifiées citent `index.html`, `data/actions.json` et `tools/build-artifact.py`. Si un chemin change, préparer pour Diogo le nouveau texte de leurs instructions : il doit le coller lui-même dans claude.ai/code.
+
+### Chantier 8 : hébergement commercial et nom de domaine
+- **Statut :** en attente
+- **Prérequis :** Diogo a créé un compte Cloudflare et acheté le nom de domaine.
+- **Contenu :** publication sur Cloudflare Pages avec le domaine, redirection depuis l'ancienne adresse GitHub Pages, contrôle que l'app installée (PWA) et les sauvegardes suivent.
+
+### Chantier 9 : comptes et synchronisation
+- **Statut :** en attente
+- **Prérequis :** chantier 8 fait, service choisi avec Diogo, déclaration de confidentialité prête.
+- **Contenu :** compte facultatif pour retrouver sa semaine sur téléphone et ordinateur, et partager la liste de courses. Sans compte, l'app continue de fonctionner comme aujourd'hui.
