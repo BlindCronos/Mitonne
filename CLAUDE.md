@@ -8,7 +8,7 @@ Mitonne est l'application de batch cooking de Diogo : choix des plats selon les 
 - `data/actions.json` : les promotions. **Ce fichier appartient à la tâche planifiée « Mitonne : relevé des actions et site » : ne le modifie jamais à la main ni dans une autre tâche.**
 - `icons/` : icônes de l'application.
 - `tests/check.js` : tests logiques, sans dépendance (`node tests/check.js`).
-- `tests/ui.js` : test dans un navigateur au format téléphone, en clair et en sombre (`node tests/ui.js [dossier-captures]`, ignoré si Playwright manque).
+- `tests/ui.js` : test dans un navigateur au format téléphone, en clair et en sombre (`node tests/ui.js [dossier-captures]`, ignoré si Playwright manque). Dans l'environnement Claude Code « Mitonne », Playwright est installé par le script de configuration : ce test doit donc tourner et réussir.
 - `tools/build-artifact.py` : fabrique la version Claude (artefact) à partir d'`index.html`.
 - `AMELIORATIONS.md` : journal des améliorations et idées en attente.
 - `CHANTIERS.md` : la feuille de route, découpée en chantiers (un chantier = une session).

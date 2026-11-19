@@ -2,7 +2,7 @@
 
 Un chantier = une session Claude Code. Chaque chantier est prévu pour tenir dans une session et laisser le site publié, testé et utilisable à la fin.
 
-**Pour lancer un chantier :** ouvre une nouvelle session Claude Code sur le dépôt `BlindCronos/Mitonne` et écris simplement :
+**Pour lancer un chantier :** dans Claude Code, ouvre une nouvelle session avec l'environnement **Mitonne** (le dépôt `BlindCronos/Mitonne` s'ajoute tout seul) et écris simplement :
 - « Chantier 3 » pour un chantier précis ;
 - « Prochain chantier » pour le premier chantier « à faire » dont les prérequis sont remplis.
 
