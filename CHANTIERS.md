@@ -74,7 +74,7 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Terminé quand :** les plats sont triés par score, les raisons ne sont jamais vides, un 👎 fait baisser le plat et les plats proches, les tests couvrent le calcul et l'ancienne sauvegarde.
 
 ### Chantier 6 : version pour testeurs
-- **Statut :** fait (2026-11-19, COMMIT)
+- **Statut :** fait (2026-11-19, 3138ec7)
 - **Prérequis :** chantiers 1 et 2 faits ; Diogo a choisi le moyen de recevoir les avis des testeurs.
 - **Contenu :** accueil du premier lancement pensé pour quelqu'un qui ne connaît pas Mitonne, page « À propos » (ce que fait l'app, d'où viennent les prix, valeurs nutritionnelles estimées), bouton « Donner mon avis ».
 - **Terminé quand :** une personne qui découvre l'app prépare sa première semaine sans aide (à tester avec `tests/ui.js` en partant d'un navigateur vide).
