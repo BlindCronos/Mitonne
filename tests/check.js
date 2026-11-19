@@ -65,7 +65,7 @@ section('data/actions.json', () => {
 section('recettes', () => {
   const spices = ['curry', 'paprika', 'cumin', 'piment', 'origan', 'thym', 'muscade'];
   const ids = new Set();
-  ok(P.BATCH.length >= 40, 'au moins 40 recettes attendues');
+  ok(P.BATCH.length >= 85, 'au moins 85 recettes attendues');
   P.BATCH.forEach(r => {
     ok(!ids.has(r.id), 'id de recette en double : ' + r.id); ids.add(r.id);
     ok(r.n && Array.isArray(r.ing) && r.ing.length && Array.isArray(r.st) && r.st.length, r.id + ' : structure incomplète');
@@ -81,10 +81,15 @@ section('recettes', () => {
       ok(typeof s[3] === 'string' && s[3].length > 10, r.id + ' étape ' + i + ' : texte manquant');
       (s[4] || []).forEach(j => ok(j < i, r.id + ' étape ' + i + ' : dépendance vers une étape suivante'));
     });
+    // Sécurité alimentaire : poisson et fruits de mer 2 jours au frigo au plus, riz cuit le jour même.
+    const sea = r.ing.concat(r.jour || []).some(x => /[fs]/.test(P.ING[x[0]] ? P.ING[x[0]].f : ''));
+    ok(!sea || r.fr <= 2, r.id + ' : poisson ou fruits de mer gardés plus de 2 jours au frigo');
+    ok(!r.ing.some(x => x[0] === 'riz'), r.id + ' : le riz doit être cuit le jour même (dans « jour »)');
     const mm = P.macros(r);
     ok(mm.k > 150 && mm.k < 1500 && mm.p >= 0, r.id + ' : calories par portion invraisemblables (' + Math.round(mm.k) + ')');
   });
-  ok(P.BATCH.filter(P.isFit).length >= 10, 'au moins 10 recettes « Fit » attendues');
+  ok(P.BATCH.filter(P.isFit).length >= 45, 'au moins 45 recettes « Fit » attendues');
+  ['poisson', 'vege'].forEach(g => ok(P.BATCH.filter(r => P.protOf(r) === g).length >= 10, 'au moins 10 recettes ' + g + ' attendues'));
 });
 
 // ---------- état et préférences ----------
@@ -103,6 +108,21 @@ section('chaque recette seule', () => {
     const s = P.session(w);
     ok(!s.tasks.some(t => t.t < 0), r.id + ' : une étape de la session n’est pas planifiée');
     ok(s.span > 0 && s.span < 400, r.id + ' : durée de session invraisemblable (' + s.span + ' min)');
+  });
+});
+
+section('chaque recette dans une semaine de 3 plats', () => {
+  freshState();
+  const ids = P.BATCH.map(r => r.id);
+  ids.forEach((id, i) => {
+    const pick = [id, ids[(i + 31) % ids.length], ids[(i + 59) % ids.length]];
+    const w = P.buildWeek(WZ.shopD, WZ.shopH, WZ.mode, WZ.cookH, pick);
+    const s = P.session(w);
+    ok(!s.tasks.some(t => t.t < 0), pick.join(' + ') + ' : une étape de la session n’est pas planifiée');
+    ok(s.span > 0 && s.span < 480, pick.join(' + ') + ' : durée de session invraisemblable (' + s.span + ' min)');
+    P.S.week = w;
+    ['viewCourses', 'viewBatch', 'viewSemaine'].forEach(v => ok(!BAD.test(P[v]()), pick.join(' + ') + ' : ' + v + ' affiche un texte invalide'));
+    P.S.week = null;
   });
 });
 
