@@ -84,6 +84,21 @@ const shots = process.argv[2];
         const bad = txt.match(/.{0,30}(undefined|NaN|\[object ).{0,30}/);
         if (bad) throw new Error('texte invalide « ' + bad[0] + ' »');
         await noHScroll('l’onglet ' + tab); await snap('3-' + tab);
+        // Chantier 2 : chaque écran tient en 2 écrans de haut au plus à l'ouverture.
+        await page.evaluate(() => window.scrollTo(0, 0));
+        const hgt = await page.evaluate(() => document.documentElement.scrollHeight);
+        if (tab !== 'courses' && hgt > 2 * 860) throw new Error('écran trop long à l’ouverture (' + hgt + ' px pour 1720 au plus)');
+        // Une section repliée s'ouvre au toucher.
+        const closed = await page.$('.fold:not(.open) .fold-h');
+        if (closed) {
+          const id = await closed.getAttribute('id');
+          await closed.click(); await page.waitForTimeout(120);
+          if (!(await page.$('#' + id + '[aria-expanded="true"]'))) throw new Error('une section repliée ne s’ouvre pas (' + id + ')');
+          const txt2 = await page.evaluate(() => document.body.innerText);
+          if (/undefined|NaN|\[object /.test(txt2)) throw new Error('texte invalide après ouverture d’une section');
+          await noHScroll('une section ouverte de l’onglet ' + tab);
+          await page.click('#' + id); await page.waitForTimeout(80);
+        }
       });
     }
     await step('panier', async () => {

@@ -187,6 +187,27 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .deal-n{font-weight:600;overflow-wrap:anywhere}
 .deal-s{color:var(--ink-2);font-size:.85rem}
 .card-acts{display:flex;gap:8px}
+.folds{display:flex;flex-direction:column}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding-inline:16px;-webkit-overflow-scrolling:touch}
+.chips.scroll::-webkit-scrollbar{display:none}
+.chips.scroll .chip{flex:none;white-space:nowrap}
+.fold .act{padding:.6rem 0}
+.fold .act-n{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fold .act-d{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fold{border-top:2px solid var(--rule)}
+.folds .fold:last-child,.fold+.btn,.fold:last-child{border-bottom:2px solid var(--rule)}
+.folds+.fold,.fold+.fold{border-top:0}
+.fold-hh{margin:0;font:inherit}
+.fold-h{appearance:none;width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t c" "m c";align-items:center;column-gap:12px;row-gap:2px;min-height:60px;padding:12px 2px;border:0;background:none;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+.fold-t{grid-area:t;font:700 1.25rem/1.15 var(--f-display);letter-spacing:-.01em}
+.fold-d{font:500 .9rem var(--f-body);color:var(--ink-2);letter-spacing:0;margin-left:4px}
+.fold-m{grid-area:m;font-size:.875rem;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.fold-h .chev{grid-area:c;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:square;transition:transform .15s}
+.fold.open .chev{transform:rotate(180deg)}
+.fold.past .fold-t{color:var(--ink-2)}
+.fold-b{display:flex;flex-direction:column;gap:14px;padding:0 0 18px}
+.h3{margin:.4rem 0 0;font:700 1.05rem var(--f-display)}
+.wide-l{align-self:flex-start}
 .wz-tools{display:flex;gap:8px;flex-wrap:wrap}
 .wz-tools .btn,.mini .btn.small{display:inline-flex;align-items:center;gap:6px}
 .wz-tools svg,.mini .btn.small svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
@@ -393,6 +414,7 @@ var COLORS=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
 var HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.4-7.5 10.4z"/></svg>';
 var SWAP='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>';
 var FILTER='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>';
+var CHEV='<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
 
 /* Ingrédients : clé, nom, rayon, drapeaux (m viande, b bœuf, p porc, a agneau, f poisson, s fruits de mer,
    g champignons, e épinards, h chou, c courge, o poivrons), unité (g par défaut), poids d'une pièce, nom de la pièce. */
@@ -1958,11 +1980,33 @@ function miniCard(x,wz,e,num){
 
 /* ---------- vues ---------- */
 function colorOf(w,id){var i=w.ids.indexOf(id);return COLORS[(i<0?0:i)%COLORS.length];}
+/* Section repliable. L'état choisi par la personne est gardé tant que l'app est ouverte ;
+   sinon la section suit sa valeur par défaut (ouverte pour l'étape en cours). */
+function isOpen(key,def){var F=S.ui.fold||{};return Object.prototype.hasOwnProperty.call(F,key)?!!F[key]:!!def;}
+function fold(key,title,meta,body,def,cls){
+  var open=isOpen(key,def),id='f-'+String(key).replace(/[^a-z0-9-]/gi,'');
+  return '<section class="fold'+(open?' open':'')+(cls?' '+cls:'')+'"><h2 class="fold-hh"><button class="fold-h" id="'+id+'" data-act="fold" data-v="'+esc(key)+'" data-def="'+(def?1:0)+'" aria-expanded="'+open+'">'+
+    '<span class="fold-t">'+title+'</span>'+(meta?'<span class="fold-m">'+meta+'</span>':'')+CHEV+'</button></h2>'+(open?'<div class="fold-b">'+body+'</div>':'')+'</section>';
+}
+function evRow(e,w,n){
+  var past=e.tm+e.len<n,cls=e.kind==='thaw'?' thaw':(e.kind==='shop'||e.kind==='cook'?' big':'');
+  var srcTxt=e.src==='congel'?'<span class="badge cold">Du congélateur</span>':e.src==='frigo'?'<span class="badge fridge">Du frigo</span>':e.src==='frais'?'<span class="badge fresh">Tout juste cuisiné</span>':'';
+  return '<li class="tl-row'+cls+(past?' done':'')+'"><span class="tl-time">'+hm(e.tm)+'</span><div class="tl-body"><span class="tl-k"'+(e.rid?' style="--c:'+colorOf(w,e.rid)+'"':'')+'>'+(e.rid?'<i></i>':'')+esc(e.k)+'</span>'+
+    '<span class="tl-txt">'+esc(e.txt)+'</span>'+(srcTxt?'<div class="badges">'+srcTxt+'</div>':'')+(e.sub?'<span class="tl-meta">'+esc(e.sub)+'</span>':'')+'</div>'+
+    (e.go?'<a class="btn small" href="#'+e.go+'">Ouvrir</a>':'<span></span>')+'</li>';
+}
+function evShort(e){
+  if(e.kind==='meal') return e.rid?shortName(B[e.rid]):'repas libre';
+  if(e.kind==='shop') return 'courses';
+  if(e.kind==='cook') return 'batch';
+  if(e.kind==='thaw') return 'décongeler';
+  return e.k.toLowerCase();
+}
 function viewSemaine(){
   if(!ready()) return loadingView();
   var w=S.week;
   if(!w) return noWeek();
-  var ev=events(w),L=shopping(w),ss=session(w),nx=nextEvent(ev),n=nowMin(),meals=w.slots.filter(function(s){return s.r;}).length;
+  var ev=events(w),L=shopping(w),ss=session(w),nx=nextEvent(ev),n=nowMin(),t=today(),meals=w.slots.filter(function(s){return s.r;}).length;
   var h='<section class="head"><h1 class="h1">Ta semaine</h1><p class="lede">'+meals+' repas · '+w.ids.length+' plats · courses '+dayName(w.shop.d)+' à '+w.shop.h+' · batch '+dayName(w.cook.d)+' de '+w.cook.h+' à '+hm(toMin(w.cook.d,w.cook.h)+ss.span)+'</p>';
   if(L.save>0.005) h+='<div class="save"><span class="save-n">'+fmtP(L.save)+'<small>CHF</small></span><span class="save-l">économisés grâce aux promos de ta liste</span></div>';
   h+='</section>';
@@ -1972,23 +2016,22 @@ function viewSemaine(){
     h+='<div class="next"><span class="next-k">'+(live?'Maintenant':'Prochaine étape · '+dayName(dOf(nx.tm))+' à '+hm(nx.tm))+'</span><p class="next-t">'+esc(nx.k)+' : '+esc(nx.txt)+'</p>'+(nx.sub?'<p class="next-s">'+esc(nx.sub)+'</p>':'')+
       (nx.go?'<a class="btn fill" href="#'+nx.go+'">'+(nx.go==='courses'?'Voir la liste de courses':'Ouvrir la session')+'</a>':'')+'</div>';
   }
-  var last='';
-  h+='<div class="dayg">';
-  ev.forEach(function(e){
-    var d=dOf(e.tm);
-    if(d!==last){if(last) h+='</ul>';h+='<h2 class="dayh">'+(d===today()?'Aujourd’hui':WD[wdOf(d)])+'<span>'+fmtDM(d)+'</span></h2><ul class="tl">';last=d;}
-    var past=e.tm+e.len<n,cls=e.kind==='thaw'?' thaw':(e.kind==='shop'||e.kind==='cook'?' big':'');
-    var srcTxt=e.src==='congel'?'<span class="badge cold">Du congélateur</span>':e.src==='frigo'?'<span class="badge fridge">Du frigo</span>':e.src==='frais'?'<span class="badge fresh">Tout juste cuisiné</span>':'';
-    h+='<li class="tl-row'+cls+(past?' done':'')+'"><span class="tl-time">'+hm(e.tm)+'</span><div class="tl-body"><span class="tl-k"'+(e.rid?' style="--c:'+colorOf(w,e.rid)+'"':'')+'>'+(e.rid?'<i></i>':'')+esc(e.k)+'</span>'+
-      '<span class="tl-txt">'+esc(e.txt)+'</span>'+(srcTxt?'<div class="badges">'+srcTxt+'</div>':'')+(e.sub?'<span class="tl-meta">'+esc(e.sub)+'</span>':'')+'</div>'+
-      (e.go?'<a class="btn small" href="#'+e.go+'">Ouvrir</a>':'<span></span>')+'</li>';
+  var days=[],by={};
+  ev.forEach(function(e){var d=dOf(e.tm);if(!by[d]){by[d]=[];days.push(d);}by[d].push(e);});
+  var cur=days.filter(function(d){return d>=t;})[0]||days[days.length-1];
+  h+='<div class="folds">';
+  days.forEach(function(d){
+    var list=by[d],done=list.every(function(e){return e.tm+e.len<n;}),seen={},meta=[];
+    list.forEach(function(e){var s=evShort(e);if(!seen[s]){seen[s]=1;meta.push(s);}});
+    var title=(d===t?'Aujourd’hui':WD[wdOf(d)])+' <span class="fold-d">'+fmtDM(d)+'</span>';
+    h+=fold('j-'+w.shop.d+'-'+d,title,done?'fait':esc(meta.join(' · ')),'<ul class="tl">'+list.map(function(e){return evRow(e,w,n);}).join('')+'</ul>',d===cur,done?'past':'');
   });
-  if(last) h+='</ul>';
   h+='</div>';
-  h+='<div class="btns">'+(n<toMin(w.shop.d,w.shop.h)?'<button class="btn" data-act="w-edit">Changer mes plats</button>':'')+'<button class="btn" data-act="copy-prog">Copier le programme</button></div>';
-  if(S.ui.copyText&&S.ui.copyKind==='prog') h+='<textarea class="copybox" id="copybox" readonly aria-label="Programme à copier">'+esc(S.ui.copyText)+'</textarea>';
-  h+='<button class="btn wide" data-act="w-new">Nouvelle semaine</button>';
-  h+=(WEB?'<button class="btn fill wide" data-act="ics">Ajouter à mon agenda</button><p class="fine">Les courses, la session et chaque décongélation arrivent dans ton calendrier, avec une alarme à l’heure. Sur iPhone, si rien ne s’ouvre depuis l’icône de l’écran d’accueil, ouvre Mitonne dans Safari et réessaie.</p>':'<p class="fine">Pour être prévenu à l’heure, mets ces étapes dans les rappels de ton téléphone, ou demande à Claude de le faire depuis la conversation.</p>')+KEEPING;
+  if(n<toMin(w.shop.d,w.shop.h)) h+='<button class="btn wide" data-act="w-edit">Changer mes plats</button>';
+  var more='<div class="btns"><button class="btn" data-act="copy-prog">Copier le programme</button><button class="btn" data-act="w-new">Nouvelle semaine</button></div>';
+  if(S.ui.copyText&&S.ui.copyKind==='prog') more+='<textarea class="copybox" id="copybox" readonly aria-label="Programme à copier">'+esc(S.ui.copyText)+'</textarea>';
+  more+=(WEB?'<button class="btn fill wide" data-act="ics">Ajouter à mon agenda</button><p class="fine">Les courses, la session et chaque décongélation arrivent dans ton calendrier, avec une alarme à l’heure. Sur iPhone, si rien ne s’ouvre depuis l’icône de l’écran d’accueil, ouvre Mitonne dans Safari et réessaie.</p>':'<p class="fine">Pour être prévenu à l’heure, mets ces étapes dans les rappels de ton téléphone, ou demande à Claude de le faire depuis la conversation.</p>')+KEEPING;
+  h+=fold('sem-plus',WEB?'Agenda, copie et conservation':'Rappels, copie et conservation','',more,!!(S.ui.copyText&&S.ui.copyKind==='prog'));
   return h;
 }
 function shortName(r){var n=r.n.split(',')[0];return n.length>30?n.slice(0,28).replace(/\s+\S*$/,'')+'…':n;}
@@ -2010,39 +2053,56 @@ function cookView(w){
   if(nx){var rn=B[nx.t.rid];h+='<div class="cook-next"><p class="label">Ensuite, vers '+hm(start+nx.t.t)+'</p><p>'+(rn?'<b>'+esc(rn.n)+'</b> · ':'')+esc(nx.t.txt)+'</p></div>';}
   return h+'</section>';
 }
+function stepRow(t,i,w,start){
+  var r=B[t.rid],clock=hm(start+t.t),meta;
+  if(t.kind==='free') return '<li class="tl-row free"><span class="tl-time">'+clock+'</span><div class="tl-body"><span class="tl-txt">'+t.txt+'</span><span class="tl-meta">environ '+dur(t.a)+'</span></div><span></span></li>';
+  meta=t.p?t.a+' min, puis '+dur(t.p)+(t.eq==='f'?' sur le feu':t.eq.charAt(0)==='o'?' au four':'')+' sans toi':t.a+' min';
+  var label=r?esc(r.n):(t.kind==='oven'?'Four':'Mise en route');
+  var timerBtn=t.p>=5?'<button class="btn small" data-act="timer" data-v="'+i+'">Minuteur '+dur(t.p)+'</button>':'';
+  return '<li class="tl-row'+(w.done[i]?' done':'')+'"><span class="tl-time">'+clock+'</span><div class="tl-body"><span class="tl-k" style="--c:'+(r?colorOf(w,t.rid):'var(--ink-2)')+'"><i></i>'+label+'</span>'+
+    '<span class="tl-txt">'+esc(t.txt)+'</span><span class="tl-meta">'+meta+'</span>'+(timerBtn?'<div>'+timerBtn+'</div>':'')+'</div>'+
+    '<input type="checkbox" id="bt-'+i+'" data-bt="'+i+'"'+(w.done[i]?' checked':'')+' aria-label="Étape faite"></li>';
+}
+var STEPS_NOW=3;
 function viewBatch(){
   if(!ready()) return loadingView();
   var w=S.week;
   if(!w) return noWeek();
   if(S.ui.cook) return cookView(w);
-  var ss=session(w),start=toMin(w.cook.d,w.cook.h),bc=boxCount(w),doneN=0,total=0;
+  var ss=session(w),start=toMin(w.cook.d,w.cook.h),bc=boxCount(w),doneN=0,total=0,key=w.cook.d+'-'+w.ids.join('.');
   ss.tasks.forEach(function(t,i){if(t.kind!=='free'){total++;if(w.done[i]) doneN++;}});
-  var h='<section class="head"><h1 class="h1">Session de batch cooking</h1><p class="lede">'+WD[wdOf(w.cook.d)]+' '+fmtDM(w.cook.d)+', de '+w.cook.h+' à '+hm(start+ss.span)+' environ. Les heures suivent ton heure de départ : si tu commences plus tard, décale-les d’autant.</p></section>';
+  var h='<section class="head"><h1 class="h1">Session de batch cooking</h1><p class="lede">'+WD[wdOf(w.cook.d)]+' '+fmtDM(w.cook.d)+', de '+w.cook.h+' à '+hm(start+ss.span)+' environ. Si tu commences plus tard, décale les heures d’autant.</p></section>';
   h+='<div class="facts"><div class="fact"><b>'+dur(ss.span)+'</b><span>de session</span></div><div class="fact"><b>'+dur(ss.act)+'</b><span>de travail actif</span></div>'+
     '<div class="fact"><b>'+bc.all+'</b><span>boîtes : '+bc.fridge+' au frigo, '+bc.freezer+' au congélateur</span></div><div class="fact"><b>'+ss.burners+'</b><span>plaque'+(ss.burners>1?'s':'')+' au maximum'+(ss.temps.length?', four à '+ss.temps.join(' puis ')+' °C':'')+'</span></div></div>';
-  h+='<section class="block"><h2 class="h2">Les plats</h2><div>'+w.ids.map(function(id){
+  h+='<button class="btn fill wide" data-act="cookmode">Passer en mode cuisine</button><p class="fine">Une seule étape à la fois, en grand, avec son minuteur : pratique quand tu as les mains dans la farine.</p>';
+  var dishes=w.ids.map(function(id){
     var r=B[id],por=portionsOf(w,id);
     return '<div class="dish" style="--c:'+colorOf(w,id)+'"><i></i><div><span class="tape">'+esc(shortName(r))+' · '+fmtDM(w.cook.d)+'</span><div class="dish-s">À écrire sur chaque couvercle · '+por+' portion'+(por>1?'s':'')+' · '+(S.prefs.freezer&&r.co?'se congèle':'frigo, '+r.fr+' jours au plus')+'</div><div class="dish-s">'+macroTxt(r,w.ap||1)+'</div>'+
       '<details><summary>Ingrédients pour la session</summary><ul class="ings">'+r.ing.map(function(x){var q=roundQ(x[0],x[1]*por/4*(w.ap||1)),vt=variantOf(x[0]);return '<li><span>'+esc(ING[x[0]].n)+(vt?' <span class="badge alt">'+vt+'</span>':'')+'</span><span class="q">'+(q?fmtQty(x[0],q):'au goût')+'</span></li>';}).join('')+'</ul></details></div></div>';
-  }).join('')+'</div></section>';
-  h+='<button class="btn fill wide" data-act="cookmode">Passer en mode cuisine</button><p class="fine">Une seule étape à la fois, en grand, avec son minuteur : pratique quand tu as les mains dans la farine.</p>';
-  h+='<section class="block"><div class="row" style="justify-content:space-between"><h2 class="h2">Pas à pas</h2><span class="fine">'+doneN+' sur '+total+' faites</span></div>'+
-    '<div class="prog" role="progressbar" aria-label="Avancement de la session" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+doneN+'"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div>';
-  if(navigator.wakeLock) h+='<button class="btn" data-act="wake">'+(WAKE?'L’écran reste allumé':'Garder l’écran allumé pendant la session')+'</button>';
-  h+='<ul class="tl">';
-  ss.tasks.forEach(function(t,i){
-    var r=B[t.rid],clock=hm(start+t.t),meta='';
-    if(t.kind==='free'){h+='<li class="tl-row free"><span class="tl-time">'+clock+'</span><div class="tl-body"><span class="tl-txt">'+t.txt+'</span><span class="tl-meta">environ '+dur(t.a)+'</span></div><span></span></li>';return;}
-    if(t.p) meta=t.a+' min, puis '+dur(t.p)+(t.eq==='f'?' sur le feu':t.eq.charAt(0)==='o'?' au four':'')+' sans toi';
-    else meta=t.a+' min';
-    var label=r?esc(r.n):(t.kind==='oven'?'Four':'Mise en route');
-    var timerBtn=t.p>=5?'<button class="btn small" data-act="timer" data-v="'+i+'">Minuteur '+dur(t.p)+'</button>':'';
-    h+='<li class="tl-row'+(w.done[i]?' done':'')+'"><span class="tl-time">'+clock+'</span><div class="tl-body"><span class="tl-k" style="--c:'+(r?colorOf(w,t.rid):'var(--ink-2)')+'"><i></i>'+label+'</span>'+
-      '<span class="tl-txt">'+esc(t.txt)+'</span><span class="tl-meta">'+meta+'</span>'+(timerBtn?'<div>'+timerBtn+'</div>':'')+'</div>'+
-      '<input type="checkbox" id="bt-'+i+'" data-bt="'+i+'"'+(w.done[i]?' checked':'')+' aria-label="Étape faite"></li>';
-  });
-  h+='</ul></section>';
-  h+='<section class="block"><h2 class="h2">Et ensuite</h2><p class="lede">L’onglet Semaine te dit chaque jour quoi manger et, la veille, quoi sortir du congélateur.</p>'+KEEPING+'</section>';
+  }).join('');
+  h+=fold('b-plats-'+key,'Les plats et les étiquettes',w.ids.length+' plats · '+bc.all+' boîtes',dishes,false);
+  var rows=ss.tasks.map(function(t,i){return {t:t,i:i};}),first=-1;
+  rows.forEach(function(x,j){if(first<0&&x.t.kind!=='free'&&!w.done[x.i]) first=j;});
+  if(first<0) first=rows.length;
+  var before=rows.slice(0,first).filter(function(x){return x.t.kind!=='free';}),now=[],later=[],cnt=0;
+  rows.slice(first).forEach(function(x){if(cnt<STEPS_NOW){now.push(x);if(x.t.kind!=='free') cnt++;}else later.push(x);});
+  var steps='<div class="prog" role="progressbar" aria-label="Avancement de la session" aria-valuemin="0" aria-valuemax="'+total+'" aria-valuenow="'+doneN+'"><i style="width:'+(total?Math.round(doneN/total*100):0)+'%"></i></div>';
+  if(navigator.wakeLock) steps+='<button class="btn" data-act="wake">'+(WAKE?'L’écran reste allumé':'Garder l’écran allumé pendant la session')+'</button>';
+  if(before.length){
+    var ob=isOpen('b-done-'+key,false);
+    steps+='<button class="btn small wide-l" id="f-b-done" data-act="fold" data-v="b-done-'+key+'" data-def="0" aria-expanded="'+ob+'">'+(ob?'Masquer':'Voir')+' les '+before.length+' étape'+(before.length>1?'s':'')+' faite'+(before.length>1?'s':'')+'</button>';
+    if(ob) steps+='<ul class="tl">'+rows.slice(0,first).map(function(x){return stepRow(x.t,x.i,w,start);}).join('')+'</ul>';
+  }
+  if(now.length) steps+='<ul class="tl">'+now.map(function(x){return stepRow(x.t,x.i,w,start);}).join('')+'</ul>';
+  else steps+='<p class="note">Toutes les étapes sont faites. Range les boîtes : '+bc.fridge+' au frigo, '+bc.freezer+' au congélateur.</p>';
+  var nl=later.filter(function(x){return x.t.kind!=='free';}).length;
+  if(nl){
+    var ol=isOpen('b-later-'+key,false);
+    if(ol) steps+='<ul class="tl">'+later.map(function(x){return stepRow(x.t,x.i,w,start);}).join('')+'</ul>';
+    steps+='<button class="btn wide" id="f-b-later" data-act="fold" data-v="b-later-'+key+'" data-def="0" aria-expanded="'+ol+'">'+(ol?'Masquer les étapes suivantes':'Voir les '+nl+' étapes suivantes')+'</button>';
+  }
+  h+=fold('b-pas-'+key,'Pas à pas',doneN+' sur '+total+' faites',steps,true);
+  h+=fold('b-apres','Et ensuite','conservation','<p class="lede">L’onglet Semaine te dit chaque jour quoi manger et, la veille, quoi sortir du congélateur.</p>'+KEEPING,false);
   return h;
 }
 function itemHtml(row,w){
@@ -2095,53 +2155,69 @@ function viewCourses(){
   h+='<button class="btn wide" id="b-uncheck" data-act="uncheck"'+(bk.got?'':' hidden')+'>Tout décocher</button>';
   return h;
 }
+var ACT_TOP=10;
+function actRow(a,t){
+  var until=a.to?(a.to===t?'<span class="last">dernier jour</span>':'jusqu’au '+fmtDay(a.to)):'sans date de fin';
+  return '<li class="act"><div class="act-txt"><span class="act-n">'+esc(a.n)+'</span><span class="act-d">'+until+(a.d?' · '+esc(a.d):'')+(a.cond?' · '+esc(a.cond):'')+'</span></div>'+tag(a)+'</li>';
+}
 function viewActions(){
   if(!ready()) return loadingView();
-  var D=S.week&&!weekOver(S.week)?S.week.shop.d:(S.ui.wiz?S.ui.wiz.shopD:today()),t=today();
+  var D=S.week&&!weekOver(S.week)?S.week.shop.d:(S.ui.wiz?S.ui.wiz.shopD:today()),t=today(),P=S.prefs;
   var list=S.flat.filter(function(a){return valid(a,D);});
-  var h='<section class="head"><h1 class="h1">Actions</h1><p class="lede">'+list.length+' action'+(list.length>1?'s':'')+' alimentaire'+(list.length>1?'s':'')+' valable'+(list.length>1?'s':'')+' le '+fmtDay(D)+'</p></section>';
-  h+=blk('Magasin','<div class="chips">'+chip('fstore','all','Tous',S.ui.fStore==='all')+ORDER.map(function(st){return chip('fstore',st,STORES[st],S.ui.fStore===st);}).join('')+'</div>');
-  h+=blk('Rayon','<div class="chips">'+chip('fcat','all','Tous',S.ui.fCat==='all')+RORDER.map(function(rc){return chip('fcat',rc,RAYONS[rc],S.ui.fCat===rc);}).join('')+'</div>');
-  var shown=list.filter(function(a){return (S.ui.fStore==='all'||a.st===S.ui.fStore)&&(S.ui.fCat==='all'||a.c===S.ui.fCat);})
-    .sort(function(a,b){return b.pct-a.pct||a.n.localeCompare(b.n,'fr');});
-  if(!shown.length) h+='<p class="note">'+(S.flat.length?'Aucune action relevée pour ce filtre le '+fmtDay(D)+'.':'Aucune action n’a encore été relevée.')+'</p>';
-  else h+='<ul class="acts">'+shown.map(function(a){
-    var until=a.to?(a.to===t?'<span class="last">dernier jour</span>':'jusqu’au '+fmtDay(a.to)):'sans date de fin';
-    return '<li class="act"><div class="act-txt"><span class="store">'+STORES[a.st]+'</span><span class="act-n">'+esc(a.n)+'</span><span class="act-d">'+
-      (a.d?esc(a.d)+' · ':'')+until+(a.cond?' · '+esc(a.cond):'')+'</span></div>'+tag(a)+'</li>';
-  }).join('')+'</ul>';
-  return h;
+  var h='<section class="head"><h1 class="h1">Actions</h1><p class="lede">'+list.length+' action'+(list.length>1?'s':'')+' alimentaire'+(list.length>1?'s':'')+' valable'+(list.length>1?'s':'')+' le '+fmtDay(D)+', les plus gros rabais d’abord.</p></section>';
+  h+=blk('Rayon','<div class="chips scroll">'+chip('fcat','all','Tous',S.ui.fCat==='all')+RORDER.map(function(rc){return chip('fcat',rc,RAYONS[rc],S.ui.fCat===rc);}).join('')+'</div>');
+  var shown=list.filter(function(a){return S.ui.fCat==='all'||a.c===S.ui.fCat;}).sort(function(a,b){return (b.pct||0)-(a.pct||0)||a.n.localeCompare(b.n,'fr');});
+  if(!shown.length) return h+'<p class="note">'+(S.flat.length?'Aucune action relevée pour ce filtre le '+fmtDay(D)+'.':'Aucune action n’a encore été relevée.')+'</p>';
+  var stores=ORDER.filter(function(st){return P.stores.indexOf(st)>=0;}).concat(ORDER.filter(function(st){return P.stores.indexOf(st)<0;}));
+  var firstSt=stores.filter(function(st){return shown.some(function(a){return a.st===st;});})[0];
+  h+='<div class="folds">';
+  stores.forEach(function(st){
+    var mine=shown.filter(function(a){return a.st===st;});
+    if(!mine.length) return;
+    var all=isOpen('a-all-'+st,false),top=all?mine:mine.slice(0,ACT_TOP),best=mine[0].pct;
+    var body='<ul class="acts">'+top.map(function(a){return actRow(a,t);}).join('')+'</ul>';
+    if(mine.length>ACT_TOP) body+='<button class="btn wide" id="f-a-all-'+st+'" data-act="fold" data-v="a-all-'+st+'" data-def="0" aria-expanded="'+all+'">'+(all?'Voir seulement les '+ACT_TOP+' meilleures':'Tout voir : '+mine.length+' actions '+STORES[st])+'</button>';
+    h+=fold('a-'+st,STORES[st],mine.length+' action'+(mine.length>1?'s':'')+(best?' · jusqu’à −'+best+' %':'')+(P.stores.indexOf(st)<0?' · pas dans tes magasins':''),body,st===firstSt);
+  });
+  return h+'</div>';
 }
 function viewReglages(){
   var p=S.prefs;
   var h='<section class="head"><h1 class="h1">Réglages</h1><p class="lede">Tes goûts et ton rythme. Les changements s’appliquent quand tu prépares ta prochaine semaine.</p></section>'+
-    '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button>';
-  h+='<section class="sect"><h2 class="h2">À table</h2>'+ctlPeople()+ctlBig()+'</section>';
-  h+='<section class="sect"><h2 class="h2">Repas couverts par le batch</h2>'+ctlGrid()+'</section>';
-  h+='<section class="sect"><h2 class="h2">Mon objectif</h2>'+ctlGoal()+'<p class="fine">'+NUTNOTE+'</p></section>';
-  h+='<section class="sect"><h2 class="h2">Ce que je mange</h2>'+ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY+'</section>';
-  h+='<section class="sect"><h2 class="h2">Cuisines préférées</h2>'+ctlCuis()+'</section>';
-  h+='<section class="sect"><h2 class="h2">Ma cuisine</h2>'+blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice())+blk('Plats différents par semaine',ctlDish())+'</section>';
-  h+='<section class="sect"><h2 class="h2">Courses</h2>'+blk('Mes magasins',ctlStores())+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ma priorité',ctlPrio())+'</section>';
-  h+='<section class="sect"><h2 class="h2">Décongélation</h2>'+blk('Heure du rappel, la veille au soir',ctlThaw())+KEEPING+'</section>';
-  h+='<section class="sect"><h2 class="h2">Mes plats</h2>';
-  if(p.fav.length) h+=blk('Favoris, proposés plus souvent','<ul class="srcs">'+p.fav.filter(function(id){return B[id];}).map(function(id){
+    '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button><div class="folds">';
+  var on=p.grid.filter(Boolean).length;
+  h+=fold('r-foyer','Mon foyer',p.people+' personne'+(p.people>1?'s':'')+' · '+on+' repas par semaine',
+    '<h3 class="h3">À table</h3>'+ctlPeople()+ctlBig()+'<h3 class="h3">Repas couverts par le batch</h3>'+ctlGrid(),false);
+  var gl=GOALS.filter(function(x){return x[0]===p.goal;})[0],dt=DIETS.filter(function(x){return x[0]===p.diet;})[0];
+  var fav='';
+  if(p.fav.length) fav+=blk('Favoris, proposés plus souvent','<ul class="srcs">'+p.fav.filter(function(id){return B[id];}).map(function(id){
     return '<li><b>'+esc(B[id].n)+'</b><button class="btn small" id="b-unfav-'+id+'" data-act="fav" data-v="'+id+'">Retirer</button></li>';}).join('')+'</ul>');
-  else h+='<p class="fine">Touche le cœur d’un plat quand tu prépares ta semaine : Mitonne le proposera plus souvent.</p>';
-  if(p.ban.length) h+='<div class="block"><p class="fine">Écartés : '+p.ban.filter(function(id){return B[id];}).map(function(id){return esc(B[id].n);}).join(', ')+'.</p><button class="btn" data-act="unban">Les proposer à nouveau</button></div>';
-  h+='</section>';
-  if(WEB) h+='<section class="sect"><h2 class="h2">Sauvegarde</h2><p class="fine">Tes réglages et ta semaine restent sur ce téléphone. Garde une copie de temps en temps, pour la retrouver si tu changes de téléphone ou effaces ton navigateur.</p>'+
-    '<div class="btns"><button class="btn" data-act="backup">Sauvegarder mes données</button><label class="btn" for="restore" style="display:inline-flex;align-items:center;justify-content:center">Restaurer une sauvegarde</label></div><input type="file" id="restore" accept="application/json,.json" hidden></section>';
-  h+='<section class="sect"><h2 class="h2">D’où viennent les prix</h2>'+refreshBlock();
+  else fav+='<p class="fine">Touche le cœur d’un plat quand tu prépares ta semaine : Mitonne le proposera plus souvent.</p>';
+  if(p.ban.length) fav+='<div class="block"><p class="fine">Écartés : '+p.ban.filter(function(id){return B[id];}).map(function(id){return esc(B[id].n);}).join(', ')+'.</p><button class="btn" data-act="unban">Les proposer à nouveau</button></div>';
+  h+=fold('r-gouts','Mes goûts',(gl?gl[1]:'')+(dt?' · '+dt[1].toLowerCase():''),
+    '<h3 class="h3">Mon objectif</h3>'+ctlGoal()+'<p class="fine">'+NUTNOTE+'</p>'+
+    '<h3 class="h3">Ce que je mange</h3>'+ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY+
+    '<h3 class="h3">Cuisines préférées</h3>'+ctlCuis()+'<h3 class="h3">Mes plats</h3>'+fav,false);
+  h+=fold('r-courses','Courses',p.stores.map(function(s){return STORES[s];}).join(', ')||'aucun magasin',
+    blk('Mes magasins',ctlStores())+blk('D’habitude, je fais mes courses',ctlHabit())+blk('Ma priorité',ctlPrio()),false);
+  h+=fold('r-cuisine','Cuisine',(p.freezer?'congélateur':'sans congélateur')+' · rappel à '+p.thawH,
+    blk('Four',ctlOven())+blk('Congélateur',ctlFreezer())+blk('Côté épices',ctlSpice())+blk('Plats différents par semaine',ctlDish())+
+    blk('Décongélation : heure du rappel, la veille au soir',ctlThaw())+KEEPING,false);
+  var dat='';
+  if(WEB) dat+='<h3 class="h3">Sauvegarde</h3><p class="fine">Tes réglages et ta semaine restent sur ce téléphone. Garde une copie de temps en temps, pour la retrouver si tu changes de téléphone ou effaces ton navigateur.</p>'+
+    '<div class="btns"><button class="btn" data-act="backup">Sauvegarder mes données</button><label class="btn" for="restore" style="display:inline-flex;align-items:center;justify-content:center">Restaurer une sauvegarde</label></div><input type="file" id="restore" accept="application/json,.json" hidden>';
+  dat+='<h3 class="h3">D’où viennent les prix</h3>'+refreshBlock();
   var rows=ORDER.filter(function(st){return S.actions[st];});
-  if(rows.length) h+='<ul class="srcs">'+rows.map(function(st){
+  if(rows.length) dat+='<ul class="srcs">'+rows.map(function(st){
     var d=S.actions[st],src=Array.isArray(d.sources)?d.sources.filter(function(x){return typeof x==='string';}).join(', '):'';
     return '<li><b>'+STORES[st]+'</b><span>'+(isIso(d.updated)?'relevé le '+fmtDay(d.updated):'date inconnue')+(src?' · '+esc(src):'')+'</span></li>';
   }).join('')+'</ul>';
-  else h+='<p class="fine">Aucun relevé chargé pour l’instant.</p>';
-  h+='<p class="fine">Mitonne relève les actions publiées par les enseignes le lundi, le jeudi et le vendredi matin. Les prix hors action ne sont pas suivis.</p>'+
-    '<p class="fine">Les relevés Migros, Coop, Aldi et Lidl valent pour la Suisse romande (canton de Vaud). Les actions Migros peuvent différer d’une coopérative régionale à l’autre : l’étiquette en magasin fait foi.</p></section>';
-  return h;
+  else dat+='<p class="fine">Aucun relevé chargé pour l’instant.</p>';
+  dat+='<p class="fine">Mitonne relève les actions publiées par les enseignes le lundi, le jeudi et le vendredi matin. Les prix hors action ne sont pas suivis.</p>'+
+    '<p class="fine">Les relevés Migros, Coop, Aldi et Lidl valent pour la Suisse romande (canton de Vaud). Les actions Migros peuvent différer d’une coopérative régionale à l’autre : l’étiquette en magasin fait foi.</p>';
+  var R=S.refresh;
+  h+=fold('r-donnees',WEB?'Données et promotions':'Promotions',WEB?'sauvegarde · prix':'actualiser · sources',dat,!!(R.msg||R.busy||R.waiting));
+  return h+'</div>';
 }
 function actionsSig(){
   return JSON.stringify(ORDER.map(function(st){var d=S.actions[st];return d?[d.updated,JSON.stringify(d.items||[]).length]:0;}));
@@ -2318,6 +2394,7 @@ function onClick(e){
   case 'w-auto': if(wz){wz.seed=(wz.seed||0)+1;wz.picks=[];wz.skip=[];wz.open={};wz.picks=autoPick(wz);render();toast('Nouvelle proposition');}break;
   case 'w-swap': if(wz){var nw=swapPick(wz,v);if(nw){wz.open={};render();toast(shortName(B[nw])+' remplace '+shortName(B[v]));}else toast('Aucun autre plat ne va avec ta sélection');}break;
   case 'w-open': if(wz){wz.open=wz.open||{};wz.open[v]=!wz.open[v];render();}break;
+  case 'fold': S.ui.fold=S.ui.fold||{};S.ui.fold[v]=!isOpen(v,el.getAttribute('data-def')==='1');render();break;
   case 'w-filt': if(wz){wz.fopen=!wz.fopen;render();}break;
   case 'w-list': if(wz){wz.lopen=!wz.lopen;wz.page=0;render();}break;
   case 'w-ok': if(wz&&wz.picks.length) validateWeek();break;

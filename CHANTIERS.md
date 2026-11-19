@@ -36,7 +36,8 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
   - `tests/ui.js` couvre « Échanger » et « Envie de… » ; les anciennes sauvegardes s'ouvrent sans erreur ; la version Claude fonctionne.
 
 ### Chantier 2 : écrans « Semaine », « Batch », « Actions » et « Réglages » allégés
-- **Statut :** à faire
+- **Statut :** fait (2026-11-19, COMMIT)
+- **Fait :** sections repliables partout (l'état choisi est gardé pendant la visite). Semaine : un jour par section, seul le jour en cours est ouvert, les autres résument leurs repas ; agenda, copie et conservation regroupés. Cuisine (batch) : bouton du mode cuisine en haut, plats et étiquettes repliés, pas à pas limité à l'étape en cours et aux 2 suivantes, étapes faites et suivantes derrière un bouton. Actions : une section par magasin (tes magasins d'abord, le premier ouvert), les 10 meilleures actions puis « Tout voir », filtre de rayon sur une ligne. Réglages : Mon foyer, Mes goûts, Courses, Cuisine, Données et promotions. Hauteur à l'ouverture (400 × 860) : Semaine 1630 px, Cuisine 1597, Actions 1636, Réglages 860 (avant : 2710, 4339, 14808, 4760). `tests/ui.js` vérifie la limite de 2 écrans et l'ouverture d'une section sur chaque onglet (sauf Courses, hors chantier).
 - **Prérequis :** chantier 1 fait
 - **Pourquoi :** audit du 2026-11-13 : Semaine 3,6 écrans (619 mots), Batch 5,8 écrans (917 mots), Actions 16 écrans (1841 mots), Réglages 5,9 écrans (104 réglages visibles).
 - **Contenu :**

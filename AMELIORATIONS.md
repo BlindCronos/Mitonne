@@ -8,6 +8,13 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : des écrans plus courts
+- Semaine : chaque jour se replie. Seul le jour en cours est ouvert, les autres montrent en une ligne ce que tu manges. L'agenda, la copie du programme et les conseils de conservation sont regroupés en bas.
+- Cuisine : le bouton « Passer en mode cuisine » est en haut. Le pas à pas montre l'étape en cours et les 2 suivantes ; les étapes faites et les suivantes s'affichent d'un toucher. Les plats et leurs étiquettes sont repliés.
+- Actions : une section par magasin, tes magasins d'abord, avec les 10 meilleures actions puis « Tout voir ».
+- Réglages : rangés en 5 sections (Mon foyer, Mes goûts, Courses, Cuisine, Données et promotions), avec un résumé de tes choix sur chacune.
+- Rien n'a disparu : tout est toujours là, à un toucher.
+
 ## 2026-11-19 : la semaine proposée d'emblée
 - Quand tu prépares ta semaine, Mitonne te propose tout de suite tes plats, numérotés, avec le nombre de repas de chacun, les calories, les protéines et la promo en cours.
 - Un plat ne te dit rien ? « Échanger » le remplace par le meilleur plat suivant qui va avec les autres. « Autre proposition » refait toute la semaine.
