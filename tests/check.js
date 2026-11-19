@@ -293,6 +293,23 @@ section('sauvegarde', () => {
   ok(P.S.prefs.cu.includes('mx'), 'la migration de l’ancienne cuisine américaine et mexicaine ne fonctionne plus');
 });
 
+section('premier lancement : accueil et à propos', () => {
+  P.S.prefs = P.defaults(); P.S.week = null; P.S.ui.q = null; P.S.ui.started = false; P.S.ui.about = false; P.S.loaded = true;
+  ok(P.mode() === 'welcome', 'un navigateur vide doit commencer par l’écran d’accueil (' + P.mode() + ')');
+  const wl = P.viewWelcome();
+  ok(!BAD.test(wl) && wl.indexOf('id="b-start"') >= 0 && wl.indexOf('data-act="about"') >= 0, 'écran d’accueil invalide');
+  P.S.ui.started = true;
+  ok(P.mode() === 'quiz', 'après « Commencer », le questionnaire doit s’ouvrir');
+  P.S.ui.about = true;
+  ok(P.mode() === 'about', 'la page À propos doit pouvoir s’ouvrir à tout moment');
+  const ab = P.viewAbout();
+  ok(!BAD.test(ab) && /D’où viennent les prix/.test(ab) && /estimations/.test(ab) && /chaque jeudi/i.test(ab), 'page À propos invalide ou incomplète');
+  ok(P.FEEDBACK_URL === '' || P.feedbackOK(), 'le lien du formulaire d’avis doit être un formulaire Google (docs.google.com/forms ou forms.gle)');
+  ok(!P.feedbackOK() || ab.indexOf('id="b-feedback"') >= 0, 'le bouton « Donner mon avis » manque dans À propos');
+  ok(html.indexOf('le lundi, le jeudi et le vendredi') < 0, 'l’app annonce encore des relevés le lundi et le vendredi');
+  P.S.ui.about = false; P.S.ui.started = false;
+});
+
 section('% pour toi : score, raisons, apprentissage', () => {
   // Les plats sont triés par score, le pourcentage reste dans ses bornes et les raisons ne sont jamais vides.
   const profiles = [{}, { goal: 'fit', cu: ['it', 'as'] }, { goal: 'muscle', prio: 'var', spice: 2 }, { diet: 'vege', freezer: false }];

@@ -127,6 +127,7 @@ button{font-family:inherit}
 .label{font:700 .8rem var(--f-display);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin:0}
 .block{display:flex;flex-direction:column;gap:10px}
 .sect{display:flex;flex-direction:column;gap:14px;padding-top:16px;border-top:2px solid var(--rule)}
+.sect>p{margin:0}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
 .note{background:var(--note);color:var(--note-ink);border-radius:var(--r-s);padding:.8rem .9rem;font-size:.92rem;margin:0;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
@@ -218,6 +219,11 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .h3{margin:.4rem 0 0;font:700 1.05rem var(--f-display)}
 .wide-l{align-self:flex-start}
 .wz-tools{display:flex;gap:8px;flex-wrap:wrap}
+.steps{list-style:none;margin:0;padding:0;counter-reset:st;display:flex;flex-direction:column;border-top:2px solid var(--rule)}
+.steps li{counter-increment:st;display:grid;grid-template-columns:2.4rem minmax(0,1fr);column-gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.steps li::before{content:'0' counter(st);grid-row:span 2;font:700 1.7rem/1 var(--f-display);letter-spacing:-.03em}
+.steps b{font:700 1.1rem var(--f-display)}
+.steps span{color:var(--ink-2);font-size:.95rem}
 .wz-ds{padding-top:16px;border-top:2px solid var(--rule)}
 .wz-tools .btn,.mini .btn.small{display:inline-flex;align-items:center;gap:6px}
 .wz-tools svg,.mini .btn.small svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
@@ -2170,7 +2176,7 @@ var KEEPING='<p class="fine">Frigo à 4 °C au plus. Plats cuisinés : 3 jours a
 function quizStep(q){
   var p=S.prefs;
   switch(q){
-  case 0: return {i:1,t:'Pour combien de personnes cuisines-tu ?',l:'Six questions rapides. Ensuite, chaque semaine, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.',b:ctlPeople()+ctlBig(),ok:true};
+  case 0: return {t:'Pour combien de personnes cuisines-tu ?',l:'Six questions rapides. Ensuite, chaque semaine, tu choisis tes plats et Mitonne organise tes courses, ta session de batch cooking et ta semaine.',b:ctlPeople()+ctlBig(),ok:true};
   case 1: return {t:'Quels repas ton batch doit-il couvrir ?',l:'Coche les midis et les soirs. Une seule session de cuisine par semaine peut couvrir jusqu’à 14 repas.',b:ctlGrid(),ok:p.grid.some(Boolean),hint:'Choisis au moins un repas.'};
   case 2: return {t:'Qu’est-ce que tu manges ?',l:'Mitonne n’écartera que ce que tu coches ici.',b:ctlDiet()+blk('Allergies et intolérances',ctlAlg())+blk('Je n’aime pas',ctlNo())+ALLERGY,ok:true};
   case 3: return {t:'Qu’est-ce qui te fait envie ?',l:'Ton objectif et tes cuisines préférées : Mitonne proposera ces plats plus souvent, sans écarter les autres.',b:blk('Ton objectif',ctlGoal())+blk('Cuisines',ctlCuis()),ok:true};
@@ -2185,6 +2191,32 @@ function viewQuiz(){
   if(!st.ok&&st.hint) h+='<p class="hint">'+st.hint+'</p>';
   h+='<div class="qfoot">'+(q>0?'<button class="btn" id="q-back" data-act="q-back">Retour</button>':(S.prefs.done?'<button class="btn" id="q-cancel" data-act="q-cancel">Annuler</button>':''))+
     '<button class="btn fill" id="q-next" data-act="'+(last?'q-done':'q-next')+'"'+(st.ok?'':' disabled')+'>'+(last?'Préparer ma semaine':'Suivant')+'</button></div></section>';
+  return h;
+}
+
+/* ---------- accueil, à propos, avis ---------- */
+/* Lien du formulaire d'avis des testeurs (Google Forms). Vide : le bouton « Donner mon avis » ne s'affiche pas. */
+var FEEDBACK_URL='';
+function feedbackOK(){return /^https:\/\/(docs\.google\.com\/forms\/|forms\.gle\/)/.test(FEEDBACK_URL);}
+function feedbackBtn(cls){return feedbackOK()?'<a class="btn '+(cls||'')+'" id="b-feedback" href="'+esc(FEEDBACK_URL)+'" target="_blank" rel="noopener">Donner mon avis</a>':'';}
+function viewWelcome(){
+  return '<section class="quiz welcome">'+ILLU+'<p class="label">Bienvenue</p><div class="head"><h1 class="h1">Cuisine une fois, mange bien toute la semaine</h1>'+
+    '<p class="lede">Mitonne prépare ta semaine de batch cooking avec les promotions de Migros, Coop, Denner, Aldi et Lidl.</p></div>'+
+    '<ol class="steps"><li><b>Tu choisis tes plats</b><span>Mitonne te propose une semaine selon tes goûts et les actions du moment. Un plat ne te dit rien ? Tu l’échanges.</span></li>'+
+    '<li><b>Tu fais tes courses</b><span>La liste est prête, rangée par magasin, avec les prix en action.</span></li>'+
+    '<li><b>Tu cuisines en une fois</b><span>Une session de 2 heures environ, guidée étape par étape avec des minuteurs. Ensuite, tu n’as plus qu’à réchauffer.</span></li></ol>'+
+    '<p class="fine">Gratuit, sans compte et sans publicité. Tes réglages restent sur ton téléphone.</p>'+
+    '<div class="qfoot"><button class="btn" id="b-about" data-act="about">À propos</button><button class="btn fill" id="b-start" data-act="start">Commencer</button></div></section>';
+}
+function viewAbout(){
+  var h='<section class="head"><p class="label">À propos</p><h1 class="h1">Mitonne</h1><p class="lede">Une app gratuite pour cuisiner une fois par semaine, manger bien tous les jours et dépenser moins grâce aux promotions.</p></section>';
+  h+='<section class="sect"><h2 class="h2">Ce que fait Mitonne</h2><p>Tu réponds à six questions sur ton foyer et tes goûts. Chaque semaine, Mitonne te propose des plats à cuisiner d’avance en tenant compte des actions des magasins. Il fait ta liste de courses, organise ta session de cuisine minute par minute et te dit chaque jour quoi manger et quoi sortir du congélateur.</p></section>';
+  h+='<section class="sect"><h2 class="h2">D’où viennent les prix</h2><p class="fine">Chaque jeudi matin, Mitonne relève les actions publiées par Migros, Coop, Denner, Aldi et Lidl, sur leurs sites et sur rappn.ch, pour la Suisse romande (canton de Vaud). Seuls les prix en action sont suivis. Ils peuvent changer d’une région à l’autre : l’étiquette en magasin fait foi.</p></section>';
+  h+='<section class="sect"><h2 class="h2">Calories et protéines</h2><p class="fine">'+NUTNOTE+'</p><p class="fine">'+SCORENOTE+'</p></section>';
+  h+='<section class="sect"><h2 class="h2">Conservation</h2>'+KEEPING+'</section>';
+  h+='<section class="sect"><h2 class="h2">Tes données</h2><p class="fine">Pas de compte, pas de serveur, pas de traceur, pas de publicité. Tes réglages, ta semaine et ce que Mitonne apprend de tes goûts restent dans ce navigateur. '+(WEB?'Tu peux en garder une copie dans Réglages, section « Données et promotions ».':'')+'</p></section>';
+  h+='<section class="sect"><h2 class="h2">Ton avis</h2><p class="fine">Mitonne est en test. Dis ce qui t’a plu, ce qui t’a bloqué, ce qui manque : chaque avis est lu.'+(feedbackOK()?' Le formulaire s’ouvre sur Google Forms : ce que tu y écris est envoyé à Google et lu par la personne qui développe Mitonne. N’y mets pas d’informations personnelles.':' Le formulaire d’avis arrive bientôt.')+'</p>'+feedbackBtn('fill wide')+'</section>';
+  h+='<button class="btn wide" id="b-about-close" data-act="about-close">Retour</button>';
   return h;
 }
 
@@ -2349,6 +2381,7 @@ function viewSemaine(){
   var more='<div class="btns"><button class="btn" data-act="copy-prog">Copier le programme</button><button class="btn" data-act="w-new">Nouvelle semaine</button></div>';
   if(S.ui.copyText&&S.ui.copyKind==='prog') more+='<textarea class="copybox" id="copybox" readonly aria-label="Programme à copier">'+esc(S.ui.copyText)+'</textarea>';
   more+=(WEB?'<button class="btn fill wide" data-act="ics">Ajouter à mon agenda</button><p class="fine">Les courses, la session et chaque décongélation arrivent dans ton calendrier, avec une alarme à l’heure. Sur iPhone, si rien ne s’ouvre depuis l’icône de l’écran d’accueil, ouvre Mitonne dans Safari et réessaie.</p>':'<p class="fine">Pour être prévenu à l’heure, mets ces étapes dans les rappels de ton téléphone, ou demande à Claude de le faire depuis la conversation.</p>')+KEEPING;
+  if(feedbackOK()) h+='<p class="fine">Mitonne est en test. <a href="'+esc(FEEDBACK_URL)+'" target="_blank" rel="noopener">Donne ton avis</a> : ça aide à l’améliorer.</p>';
   h+=fold('sem-plus',WEB?'Agenda, copie et conservation':'Rappels, copie et conservation','',more,!!(S.ui.copyText&&S.ui.copyKind==='prog'));
   return h;
 }
@@ -2502,7 +2535,7 @@ function viewActions(){
 function viewReglages(){
   var p=S.prefs;
   var h='<section class="head"><h1 class="h1">Réglages</h1><p class="lede">Tes goûts et ton rythme. Les changements s’appliquent quand tu prépares ta prochaine semaine.</p></section>'+
-    '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button><div class="folds">';
+    '<button class="btn wide" data-act="quiz">Refaire le questionnaire</button><div class="btns"><button class="btn" id="b-about" data-act="about">À propos de Mitonne</button>'+feedbackBtn('')+'</div><div class="folds">';
   var on=p.grid.filter(Boolean).length;
   h+=fold('r-foyer','Mon foyer',p.people+' personne'+(p.people>1?'s':'')+' · '+on+' repas par semaine',
     '<h3 class="h3">À table</h3>'+ctlPeople()+ctlBig()+'<h3 class="h3">Repas couverts par le batch</h3>'+ctlGrid(),false);
@@ -2531,7 +2564,7 @@ function viewReglages(){
     return '<li><b>'+STORES[st]+'</b><span>'+(isIso(d.updated)?'relevé le '+fmtDay(d.updated):'date inconnue')+(src?' · '+esc(src):'')+'</span></li>';
   }).join('')+'</ul>';
   else dat+='<p class="fine">Aucun relevé chargé pour l’instant.</p>';
-  dat+='<p class="fine">Mitonne relève les actions publiées par les enseignes le lundi, le jeudi et le vendredi matin. Les prix hors action ne sont pas suivis.</p>'+
+  dat+='<p class="fine">Mitonne relève les actions publiées par les enseignes chaque jeudi matin. Les prix hors action ne sont pas suivis.</p>'+
     '<p class="fine">Les relevés Migros, Coop, Aldi et Lidl valent pour la Suisse romande (canton de Vaud). Les actions Migros peuvent différer d’une coopérative régionale à l’autre : l’étiquette en magasin fait foi.</p>';
   var R=S.refresh;
   h+=fold('r-donnees',WEB?'Données et promotions':'Promotions',WEB?'sauvegarde · prix':'actualiser · sources',dat,!!(R.msg||R.busy||R.waiting));
@@ -2543,7 +2576,7 @@ function actionsSig(){
 function recentFire(){return Date.now()-(S.prefs.lastFire||0)<20*60000;}
 function refreshBlock(){
   var R=S.refresh,recent=recentFire();
-  var auto='<p class="fine">Les promotions se mettent aussi à jour toutes seules le lundi, le jeudi et le vendredi à 9:37.</p>';
+  var auto='<p class="fine">Les promotions se mettent aussi à jour toutes seules chaque jeudi vers 9:37.</p>';
   if(WEB) return '<button class="btn fill wide" id="b-refresh" data-act="refresh">Recharger les promotions</button><p class="fine">Mitonne relit les derniers prix publiés sur le site. Pour lancer un nouveau relevé tout de suite, ouvre <a href="'+ART_URL+'" target="_blank" rel="noopener">ta version dans Claude</a> et utilise son bouton Actualiser.</p>'+auto;
   if(R.avail===false) return '<p class="fine">L’actualisation à la demande n’est pas disponible dans cet affichage. Ouvre Mitonne dans claude.ai pour l’utiliser.</p>'+auto;
   if(R.avail===null) return auto;
@@ -2615,7 +2648,7 @@ function fetchActions(manual){
   });
 }
 var VIEWS={semaine:viewSemaine,courses:viewCourses,batch:viewBatch,actions:viewActions,reglages:viewReglages};
-function mode(){if(!S.loaded) return 'loading';if(!S.prefs.done||S.ui.q!=null) return 'quiz';if(S.ui.wiz) return 'wiz';return 'tabs';}
+function mode(){if(!S.loaded) return 'loading';if(S.ui.about) return 'about';if(!S.prefs.done&&S.ui.q==null&&!S.ui.started) return 'welcome';if(!S.prefs.done||S.ui.q!=null) return 'quiz';if(S.ui.wiz) return 'wiz';return 'tabs';}
 function render(){
   var fresh=document.getElementById('fresh'),view=document.getElementById('view'),tabs=document.getElementById('tabs');
   if(!view) return;
@@ -2624,13 +2657,13 @@ function render(){
   fresh.textContent=S.aState==='loading'?'Lecture des actions…':(S.aState==='ready'&&up?'Actions relevées le '+fmtDay(up):(S.aState==='ready'?'Aucun relevé':'Actions injoignables'));
   var md=mode();
   if(md==='quiz'&&S.ui.q==null) S.ui.q=0;
-  tabs.hidden=md==='quiz'||md==='wiz';
+  tabs.hidden=md==='quiz'||md==='wiz'||md==='welcome'||(md==='about'&&!S.prefs.done);
   var t=tabs.querySelectorAll('.tab');
   for(var i=0;i<t.length;i++){
     if(t[i].getAttribute('data-tab')===S.ui.tab) t[i].setAttribute('aria-current','page');
     else t[i].removeAttribute('aria-current');
   }
-  view.innerHTML=md==='quiz'?viewQuiz():md==='wiz'?viewWiz():md==='tabs'?VIEWS[S.ui.tab]():loadingView();
+  view.innerHTML=md==='welcome'?viewWelcome():md==='about'?viewAbout():md==='quiz'?viewQuiz():md==='wiz'?viewWiz():md==='tabs'?VIEWS[S.ui.tab]():loadingView();
   if(fid){var f=document.getElementById(fid);if(f&&f.focus) f.focus({preventScroll:true});}
 }
 var toastT=null;
@@ -2763,6 +2796,9 @@ function onClick(e){
   case 'q-cancel': S.ui.q=null;render();break;
   case 'q-done': p.done=true;S.ui.q=null;if(!S.week||weekOver(S.week)) S.ui.wiz=newWiz(false);save();render();window.scrollTo(0,0);break;
   case 'quiz': S.ui.q=0;render();window.scrollTo(0,0);break;
+  case 'start': S.ui.started=true;S.ui.q=0;render();window.scrollTo(0,0);break;
+  case 'about': S.ui.about=true;render();window.scrollTo(0,0);break;
+  case 'about-close': S.ui.about=false;render();window.scrollTo(0,0);break;
   case 'uncheck': if(S.week){S.week.checked={};save();render();}break;
   case 'timer':
     var ss=S.week&&session(S.week),tk=ss&&ss.tasks[+v];
@@ -2940,7 +2976,7 @@ if(typeof module==='object'&&module.exports) module.exports={S:S,ING:ING,BATCH:B
   viewSemaine:viewSemaine,viewCourses:viewCourses,viewBatch:viewBatch,viewActions:viewActions,viewReglages:viewReglages,viewQuiz:viewQuiz,viewWiz:viewWiz,
   defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm,
   macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore,
-  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt,swapPick:swapPick,repick:repick,newWiz:newWiz,learn:learn,affinity:affinity,reasons:reasons,pctOf:pctOf,SIG:SIG,validateWeek:validateWeek,voteEff:voteEff};
+  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt,swapPick:swapPick,repick:repick,newWiz:newWiz,learn:learn,affinity:affinity,reasons:reasons,pctOf:pctOf,SIG:SIG,validateWeek:validateWeek,voteEff:voteEff,viewWelcome:viewWelcome,viewAbout:viewAbout,mode:mode,feedbackOK:feedbackOK,FEEDBACK_URL:FEEDBACK_URL};
 else boot();
 })();
 </script>

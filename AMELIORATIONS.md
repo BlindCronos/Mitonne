@@ -9,6 +9,12 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : prête pour des testeurs
+- Au premier lancement, un écran d’accueil explique Mitonne en 3 étapes : tu choisis tes plats, tu fais tes courses, tu cuisines en une fois. Puis « Commencer » ouvre les 6 questions.
+- Nouvelle page « À propos » : ce que fait l’app, d’où viennent les prix, comment sont estimées les calories, ce que veut dire « % pour toi », la conservation et tes données. On la trouve sur l’écran d’accueil et dans Réglages.
+- Le bouton « Donner mon avis » est prêt : il apparaîtra dès que le formulaire sera en ligne.
+- Correction : les promotions sont relevées chaque jeudi matin. L’app annonçait par erreur aussi le lundi et le vendredi.
+
 ## 2026-11-19 : 120 recettes, desserts et en-cas fit
 - 30 recettes de plus : curry vert de crevettes, tacos de poisson, pad thaï léger, poulet teriyaki à la plaque, bœuf haché à la coréenne, boulettes suédoises légères, porc au caramel, bœuf sauté au brocoli, moussaka aux courgettes, butter tofu, quiche sans pâte au cottage cheese, gnocchi au four…
 - Nouveau : les desserts et en-cas fit, préparés pendant la session. Flan protéiné, cheesecake de nuit, overnight oats, baked oats, mousse au chocolat au skyr, muffins aux œufs, boules d’énergie et écorce glacée au skyr. Ils se choisissent à part, dans « Un dessert ou un en-cas ? », et ne prennent la place d’aucun repas.

@@ -42,7 +42,18 @@ const shots = process.argv[2];
       if (w > 400) throw new Error('défilement horizontal (' + w + ' px) sur ' + where);
     };
     const snap = async n => { if (shots) { fs.mkdirSync(shots, { recursive: true }); await page.screenshot({ path: path.join(shots, scheme + '-' + n + '.png'), fullPage: true }); } };
-    await step('chargement', async () => { await page.goto(url); await page.waitForSelector('#q-next', { timeout: 8000 }); await noHScroll('le questionnaire'); await snap('1-questionnaire'); });
+    await step('chargement', async () => {
+      // Navigateur vide : l'écran d'accueil explique Mitonne avant le questionnaire.
+      await page.goto(url); await page.waitForSelector('#b-start', { timeout: 8000 });
+      await noHScroll('l’accueil'); await snap('0-accueil');
+      await page.click('#b-about'); await page.waitForSelector('#b-about-close', { timeout: 3000 });
+      const ab = await page.evaluate(() => document.body.innerText);
+      if (!/D’où viennent les prix/.test(ab) || /undefined|NaN/.test(ab)) throw new Error('page À propos incomplète');
+      await noHScroll('À propos'); await snap('0-apropos');
+      await page.click('#b-about-close'); await page.waitForSelector('#b-start', { timeout: 3000 });
+      await page.click('#b-start'); await page.waitForSelector('#q-next', { timeout: 3000 });
+      await noHScroll('le questionnaire'); await snap('1-questionnaire');
+    });
     await step('questionnaire', async () => {
       for (let i = 0; i < 6; i++) { await page.click('#q-next'); await page.waitForTimeout(120); }
       await page.waitForSelector('#w-next', { timeout: 5000 });
