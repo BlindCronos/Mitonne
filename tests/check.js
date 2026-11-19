@@ -65,7 +65,7 @@ section('data/actions.json', () => {
 section('recettes', () => {
   const spices = ['curry', 'paprika', 'cumin', 'piment', 'origan', 'thym', 'muscade'];
   const ids = new Set();
-  ok(P.BATCH.length >= 85, 'au moins 85 recettes attendues');
+  ok(P.BATCH.length >= 115, 'au moins 115 recettes attendues');
   P.BATCH.forEach(r => {
     ok(!ids.has(r.id), 'id de recette en double : ' + r.id); ids.add(r.id);
     ok(r.n && Array.isArray(r.ing) && r.ing.length && Array.isArray(r.st) && r.st.length, r.id + ' : structure incomplète');
@@ -88,7 +88,8 @@ section('recettes', () => {
     const mm = P.macros(r);
     ok(mm.k > 150 && mm.k < 1500 && mm.p >= 0, r.id + ' : calories par portion invraisemblables (' + Math.round(mm.k) + ')');
   });
-  ok(P.BATCH.filter(P.isFit).length >= 45, 'au moins 45 recettes « Fit » attendues');
+  ok(P.BATCH.filter(P.isFit).length >= 65, 'au moins 65 recettes « Fit » attendues');
+  ok(P.BATCH.filter(r => r.ds).length >= 6, 'au moins 6 desserts ou en-cas attendus');
   ['poisson', 'vege'].forEach(g => ok(P.BATCH.filter(r => P.protOf(r) === g).length >= 10, 'au moins 10 recettes ' + g + ' attendues'));
 });
 
@@ -160,6 +161,64 @@ section('écran Plats : semaine proposée, Échanger, Envie de', () => {
   html = P.viewWiz();
   ok(!BAD.test(html) && html.indexOf('Pas pour moi') >= 0 && html.indexOf('data-act="w-pick"') >= 0, 'détail ou liste complète invalides');
   P.S.ui.wiz = null;
+});
+
+section('desserts et en-cas', () => {
+  freshState();
+  const ds = P.BATCH.filter(r => r.ds), meal = ['bolognaise', 'dense-bean-salad'];
+  ds.forEach(r => {
+    const w = P.buildWeek(WZ.shopD, WZ.shopH, WZ.mode, WZ.cookH, meal.concat([r.id]));
+    ok(w.ids.includes(r.id), r.id + ' : l’en-cas disparaît de la semaine');
+    ok(!w.slots.some(s => s.r === r.id), r.id + ' : un en-cas ne doit jamais prendre la place d’un repas');
+    ok(P.portionsOf(w, r.id) === 2 * w.people, r.id + ' : un en-cas donne 2 portions par personne');
+    const s = P.session(w);
+    ok(s.tasks.some(t => t.rid === r.id), r.id + ' : les étapes de l’en-cas manquent dans la session');
+    const L = P.shopping(w), keys = [];
+    Object.keys(L.byStore).forEach(st => L.byStore[st].forEach(x => keys.push(x.k)));
+    Object.keys(L.rest).forEach(rc => L.rest[rc].forEach(x => keys.push(x.k)));
+    (L.placard || []).forEach(x => keys.push(x.k));
+    ok(r.ing.every(x => keys.includes(x[0])), r.id + ' : des ingrédients de l’en-cas manquent dans la liste de courses');
+    P.S.week = w;
+    ['viewSemaine', 'viewBatch', 'viewCourses'].forEach(v => ok(!BAD.test(P[v]()), r.id + ' : ' + v + ' invalide'));
+    ok(/en-cas/.test(P.viewSemaine()), r.id + ' : l’en-cas n’est pas annoncé dans la semaine');
+    P.S.week = null;
+  });
+  // L'écran Plats propose les en-cas à part ; le choix automatique n'en prend jamais ; valider demande au moins un plat.
+  const z = Object.assign({}, WZ, { cat: 'all', prot: 'all', picks: [], step: 1 });
+  const pr = P.proposals(z);
+  ok(!pr.list.some(x => x.r.ds) && pr.snacks.length === ds.filter(P.allowed).length, 'les en-cas doivent être proposés à part');
+  z.picks = P.autoPick(z);
+  ok(!z.picks.some(id => P.B[id].ds), 'le choix automatique ne doit pas prendre d’en-cas');
+  z.picks.push(pr.snacks[0].r.id);
+  const n0 = z.picks.length;
+  z.picks = P.autoPick(z);
+  ok(z.picks.length === n0 && z.picks.includes(pr.snacks[0].r.id), 'compléter la semaine ne doit pas enlever l’en-cas choisi');
+  P.repick(Object.assign(z, { cat: 'sou' }));
+  ok(z.picks.includes(pr.snacks[0].r.id), 'changer d’envie ne doit pas enlever l’en-cas choisi');
+  z.cat = 'all'; P.S.ui.wiz = z;
+  const html = P.viewWiz();
+  ok(!BAD.test(html) && /Un dessert ou un en-cas/.test(html) && /\+ 1 en-cas/.test(html), 'écran Plats : section en-cas absente ou invalide');
+  P.S.ui.wiz = Object.assign({}, z, { picks: [pr.snacks[0].r.id] });
+  ok(/data-act="w-ok" disabled/.test(P.viewWiz()), 'valider une semaine sans aucun plat doit être impossible');
+  P.S.ui.wiz = null;
+});
+
+section('variété : jamais deux plats de même protéine et même cuisine', () => {
+  const profiles = [{}, { goal: 'fit' }, { goal: 'muscle' }, { diet: 'vege' }, { cu: ['it'], prio: 'var' }, { nDish: 5 }, { nDish: 5, goal: 'fit', cu: ['as', 'jk'] }, { diet: 'pesce' }];
+  const cats = ['all', 'fit', 'bowl', 'sou', 'express', 'mij'];
+  profiles.forEach(pf => cats.forEach(cat => [0, 1, 2].forEach(seed => {
+    freshState(); Object.assign(P.S.prefs, pf);
+    const z = Object.assign({}, WZ, { cat, prot: 'all', picks: [], seed });
+    const pk = P.autoPick(z), pr = P.proposals(z);
+    for (let i = 0; i < pk.length; i++) for (let j = i + 1; j < pk.length; j++) {
+      const a = P.B[pk[i]], b = P.B[pk[j]];
+      if (P.protOf(a) !== P.protOf(b) || a.cu !== b.cu) continue;
+      // Doublon admis seulement si aucun autre plat de la sélection ne l'évite.
+      const others = pk.filter(id => id !== b.id).map(id => P.B[id]);
+      const alt = pr.list.some(x => !pk.includes(x.r.id) && P.matchWz(x.r, z) && !others.some(o => P.protOf(o) === P.protOf(x.r) && o.cu === x.r.cu));
+      ok(!alt, JSON.stringify(pf) + ' ' + cat + ' : ' + a.id + ' et ' + b.id + ' ont la même protéine et la même cuisine');
+    }
+  })));
 });
 
 section('semaines types', () => {

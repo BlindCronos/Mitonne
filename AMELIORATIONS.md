@@ -9,6 +9,11 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : 120 recettes, desserts et en-cas fit
+- 30 recettes de plus : curry vert de crevettes, tacos de poisson, pad thaï léger, poulet teriyaki à la plaque, bœuf haché à la coréenne, boulettes suédoises légères, porc au caramel, bœuf sauté au brocoli, moussaka aux courgettes, butter tofu, quiche sans pâte au cottage cheese, gnocchi au four…
+- Nouveau : les desserts et en-cas fit, préparés pendant la session. Flan protéiné, cheesecake de nuit, overnight oats, baked oats, mousse au chocolat au skyr, muffins aux œufs, boules d’énergie et écorce glacée au skyr. Ils se choisissent à part, dans « Un dessert ou un en-cas ? », et ne prennent la place d’aucun repas.
+- Plus de variété : une même semaine ne propose plus deux plats avec la même protéine et la même cuisine (par exemple deux currys de poulet indiens), tant qu’une autre option existe.
+
 ## 2026-11-19 : « % pour toi »
 - Chaque plat proposé affiche maintenant un score, par exemple « 92 % pour toi », avec la raison principale : la promo du moment, « tu aimes la cuisine italienne », « léger et protéiné, comme ton objectif », « dans tes favoris »…
 - Mitonne apprend de tes choix : après chaque repas, l'onglet Semaine te demande « Tu as aimé ? ». Un pouce vers le haut fait revenir le plat plus souvent, un pouce vers le bas le fait reculer, lui et les plats qui lui ressemblent. Échanger un plat le fait un peu reculer, l'ajouter à la main le fait un peu avancer.

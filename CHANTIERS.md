@@ -55,7 +55,8 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Terminé quand :** `tests/check.js` passe (le seuil minimal de recettes est relevé à 85), chaque nouvelle recette se planifie seule et dans une semaine type.
 
 ### Chantier 4 : recettes, lot 2 (environ 90 → environ 120) et variété
-- **Statut :** à faire
+- **Statut :** fait (2026-11-19, COMMIT)
+- **Fait :** 120 recettes, dont 74 « Fit ». 22 plats (curry vert de crevettes, tacos de poisson, pad thaï léger, poulet teriyaki à la plaque, bœuf coréen, boulettes suédoises, porc au caramel, bœuf brocoli, moussaka aux courgettes, butter tofu, quiche sans pâte au cottage, gnocchi au four…) et 8 desserts et en-cas (`ds:1` : flan protéiné, cheesecake de nuit, overnight oats, baked oats, mousse au chocolat au skyr, muffins aux œufs, boules d’énergie, écorce glacée au skyr). Un en-cas ne prend jamais de repas : 2 portions par personne, préparé pendant la session, dans la liste de courses ; section facultative « Un dessert ou un en-cas ? » sur l’écran Plats. Variété : `pickOK` a 3 niveaux, et le niveau intermédiaire interdit deux plats de même protéine et de même cuisine avant toute autre concession. Nouveaux ingrédients : `flocons_avoine`, `fruits_rouges`, `cacao`, `banane`.
 - **Prérequis :** chantier 3 fait
 - **Contenu :** environ 30 recettes de plus, dont des desserts et en-cas fit préparés pendant la session (flans protéinés, cheesecake de nuit…). Renforcer la variété : `baseScore` pénalise déjà les plats des semaines précédentes (`hist`) ; ajouter une pénalité quand deux plats de la même semaine se ressemblent trop (même protéine et même cuisine).
 - **Terminé quand :** tests verts, seuil relevé à 115 recettes, une semaine type ne propose jamais deux plats de même protéine et même cuisine quand une alternative existe.

@@ -74,6 +74,10 @@ const shots = process.argv[2];
       await page.click('[data-act="w-auto"]'); await page.waitForTimeout(150);
       const n = await page.$$eval('.card[data-on="true"]', e => e.length);
       if (!n) throw new Error('« Autre proposition » ne choisit aucun plat');
+      // Ajouter un dessert ou un en-cas
+      await page.click('.wz-ds [data-act="w-pick"]'); await page.waitForTimeout(150);
+      const bar = await page.$eval('.wbar-s', e => e.textContent);
+      if (!/\+ 1 en-cas/.test(bar)) throw new Error('l’en-cas ajouté n’apparaît pas dans le résumé (' + bar + ')');
       await page.click('[data-act="w-ok"]'); await page.waitForTimeout(300);
       if (!(await page.evaluate(() => location.hash === '#semaine'))) throw new Error('« Valider ma semaine » ne mène pas à la semaine');
     });
