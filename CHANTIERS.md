@@ -45,7 +45,7 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Terminé quand :** chaque écran tient en 2 écrans de haut au plus à l'ouverture, aucune fonctionnalité n'a disparu, tests verts.
 
 ### Chantier 3 : recettes, lot 1 (63 → environ 90)
-- **Statut :** fait (2026-11-19, COMMIT)
+- **Statut :** fait (2026-11-19, 91c158f)
 - **Fait :** 27 recettes virales des réseaux en version fit et batch (bouchées de saumon, crevettes bang bang, feta pasta, dense bean salad, pâtes au cottage cheese, bowl bœuf patate douce et miel pimenté, Big Mac bowl, soupe lasagne, poulet marry me, egg roll in a bowl…). 90 recettes, dont 53 « Fit » ; 12 au poisson, 25 végétariennes, 12 soupes, 15 bowls. Nouveaux ingrédients : `cottage`, `risoni`, `poulet_hache` (à ajouter à la liste de clés de la tâche du jeudi pour leurs promotions).
 - **Prérequis :** aucun
 - **Pourquoi :** les applications de batch cooking annoncent de 250 (Batchii) à plus de 500 recettes (Basta), et leurs avis se plaignent de répétitions. Mitonne vise environ 120 recettes, toutes vraiment adaptées au batch.
