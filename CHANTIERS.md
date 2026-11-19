@@ -61,7 +61,7 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Terminé quand :** tests verts, seuil relevé à 115 recettes, une semaine type ne propose jamais deux plats de même protéine et même cuisine quand une alternative existe.
 
 ### Chantier 5 : score de compatibilité « % pour toi »
-- **Statut :** fait (2026-11-19, COMMIT)
+- **Statut :** fait (2026-11-19, ea2cf8e)
 - **Fait :** « 92 % pour toi » sur chaque plat de l'écran Plats, avec la promo et 1 ou 2 raisons courtes (`reasons`). Le score part de `baseScore` et ajoute `affinity` : une note apprise par plat (`prefs.taste`, entre -3 et 3) et, plus faiblement, celle des plats proches (même protéine, même cuisine, même ingrédient principal). Signaux : 👍 +1 et 👎 -1,5 après le repas (onglet Semaine, un avis par plat et par semaine, `week.votes`), Échanger -0,3, ajouter à la main +0,3, plat gardé dans une semaine validée +0,15 (jusqu'à 1). Liste et semaine proposée triées par score. Nouveaux champs `prefs.taste` et `week.votes`, vides par défaut ; anciennes sauvegardes testées.
 - **Prérequis :** chantier 1 fait
 - **Pourquoi :** pousser chacun vers les plats qu'il aimera le plus. Jow recommande selon les goûts et l'équipement, Yummly apprend des avis explicites et du comportement, Plaite apprend des balayages.
