@@ -85,6 +85,18 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Prérequis :** Diogo a créé le formulaire Google Forms (questions proposées dans la session du 2026-11-19, sans collecte d’adresse e-mail) et donne son lien.
 - **Contenu :** renseigner `FEEDBACK_URL` dans `index.html` (lien `https://forms.gle/…` ou `https://docs.google.com/forms/…`), incrémenter le cache, tester, publier. Le bouton « Donner mon avis » apparaît alors tout seul.
 
+### Chantier 10 : prix du panier estimé
+- **Statut :** fait (2026-11-19, COMMIT)
+- **Pourquoi :** Diogo veut que la personne connaisse le prix de son panier avant d’aller au magasin, pas seulement ses économies.
+- **Fait :** prix habituel estimé pour chaque ingrédient acheté (`PRICE` : paquet courant et prix moyen des grandes surfaces suisses), arrondi au paquet entier ; les produits en action gardent leur prix relevé. Total estimé et prix par portion dans Courses et Semaine, prix du panier dès l’écran Plats, total dans la liste copiée, prix estimé sur chaque article sans action. Un ingrédient secondaire n’est pris en action que s’il coûte moins que son paquet habituel. Les sources n’affichent plus rappn.
+
+### Chantier 11 : promotions et prix en direct
+- **Statut :** en attente
+- **Prérequis :** chantier 8 fait (hébergement) ; Diogo a choisi le service qui fera tourner le relevé (par exemple GitHub Actions ou une tâche planifiée Cloudflare) ; conditions d’utilisation des sites relevés vérifiées.
+- **Pourquoi :** Diogo veut que tout soit affiché en direct : les actions publiées par les enseignes doivent arriver dans l’app sans intervention, aussitôt relevées.
+- **Contenu :** relevé automatique et fréquent des actions (et, si possible, des prix habituels pour remplacer les estimations de `PRICE`), contrôle de cohérence avant publication, publication automatique de `data/actions.json` sur le site, date et heure du dernier relevé affichées dans l’app. Garder la règle d’exactitude de la tâche actuelle : aucun prix inventé.
+- **Attention :** ce chantier remplace ou modifie la tâche planifiée « Mitonne : relevé des actions et site ». Préparer pour Diogo le nouveau texte de ses instructions, ou la désactiver une fois le relevé automatique en place.
+
 ---
 
 ## Phase 2 : passage en version pro (après les retours des testeurs)

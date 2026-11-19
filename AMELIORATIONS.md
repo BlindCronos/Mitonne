@@ -9,6 +9,14 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : le prix de ton panier, avant d’aller au magasin
+- La liste de courses donne maintenant le total estimé de ton panier et le prix par portion, par exemple « 89.39 CHF, dont 26.27 économisés grâce aux promos, ≈ 4.97 par portion ».
+- Les produits en action gardent leur prix de la semaine. Les autres affichent un prix habituel estimé, arrondi au paquet entier, en gris.
+- Le prix du panier s’affiche aussi dans l’onglet Semaine et dès le choix des plats, pour comparer avant de valider.
+- La liste copiée ou envoyée se termine par le total estimé.
+- Mitonne ne prend plus une promo si elle coûte plus cher que le paquet habituel (par exemple 18 œufs en action quand il t’en faut 3).
+- Les sources des prix n’affichent plus le site d’agrégation utilisé pour le relevé.
+
 ## 2026-11-19 : prête pour des testeurs
 - Au premier lancement, un écran d’accueil explique Mitonne en 3 étapes : tu choisis tes plats, tu fais tes courses, tu cuisines en une fois. Puis « Commencer » ouvre les 6 questions.
 - Nouvelle page « À propos » : ce que fait l’app, d’où viennent les prix, comment sont estimées les calories, ce que veut dire « % pour toi », la conservation et tes données. On la trouve sur l’écran d’accueil et dans Réglages.

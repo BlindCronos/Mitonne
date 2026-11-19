@@ -293,6 +293,47 @@ section('sauvegarde', () => {
   ok(P.S.prefs.cu.includes('mx'), 'la migration de l’ancienne cuisine américaine et mexicaine ne fonctionne plus');
 });
 
+section('prix du panier', () => {
+  // Chaque ingrédient acheté a un prix habituel estimé, plausible.
+  const used = new Set(); P.BATCH.forEach(r => r.all.forEach(x => used.add(x[0])));
+  used.forEach(k => {
+    if (P.ING[k].r === 'pl') return;
+    const pr = P.PRICE[k];
+    ok(pr && pr[0] > 0 && pr[1] > 0 && pr[1] < 60, k + ' : prix habituel estimé manquant ou invraisemblable');
+  });
+  // Chaque article de la liste a un prix (action ou estimation), et le total est la somme des deux.
+  const weeks = [['bolognaise', 'curry-poulet', 'dense-bean-salad'], ['saumon-bites-bowl', 'chili-blanc', 'soupe-toscane', 'flan-proteine'], ['lasagnes', 'tofu-coreen']];
+  [{}, { people: 4, big: true }].forEach(pf => weeks.forEach(ids => {
+    freshState(); Object.assign(P.S.prefs, pf);
+    const w = P.buildWeek(WZ.shopD, WZ.shopH, WZ.mode, WZ.cookH, ids), L = P.shopping(w);
+    let pay = 0, est = 0;
+    Object.keys(L.byStore).forEach(st => L.byStore[st].forEach(r => { ok(r.c && r.c.total > 0, r.k + ' : article en action sans prix'); pay += r.c.total; }));
+    Object.keys(L.rest).forEach(rc => L.rest[rc].forEach(r => { ok(r.e && r.e.total > 0, r.k + ' : article sans prix estimé'); est += r.e.total; }));
+    // Une promo sur un ingrédient secondaire doit coûter moins que le paquet habituel.
+    Object.keys(L.byStore).forEach(st => L.byStore[st].forEach(r => { const e = P.estCost(r.k, r.q); const main = w.ids.some(id => P.B[id].main.includes(r.k)); ok(main || !e || r.c.total <= e.total + 0.05, r.k + ' : promo plus chère que le paquet habituel (' + r.c.total.toFixed(2) + ' > ' + e.total.toFixed(2) + ')'); }));
+    ok(Math.abs(L.pay - pay) < 0.01 && Math.abs(L.est - est) < 0.01 && Math.abs(L.total - pay - est) < 0.01, ids.join('+') + ' : total du panier incohérent');
+    const pp = L.total / L.por;
+    ok(L.por > 0 && pp > 1.5 && pp < 15, ids.join('+') + ' : prix par portion invraisemblable (' + pp.toFixed(2) + ' CHF)');
+    P.S.week = w;
+    ok(/Total estimé de ton panier/.test(P.viewCourses()) && /Panier estimé/.test(P.viewSemaine()), ids.join('+') + ' : le prix du panier n’est pas affiché');
+    ok(/TOTAL ESTIMÉ : env\. \d/.test(P.listText(w)), ids.join('+') + ' : la liste copiée ne donne pas le total estimé');
+    P.S.week = null;
+  }));
+  // L'écran Plats annonce le prix du panier avant de valider.
+  freshState();
+  const z = Object.assign({}, WZ, { cat: 'all', prot: 'all', picks: [], step: 1 });
+  z.picks = P.autoPick(z); P.S.ui.wiz = z;
+  ok(/panier ≈ <b>\d/.test(P.viewWiz()), 'l’écran Plats n’annonce pas le prix du panier');
+  P.S.ui.wiz = null;
+  // Les sources n'affichent jamais rappn.
+  freshState();
+  const keep = P.S.actions.migros && P.S.actions.migros.sources;
+  if (P.S.actions.migros) P.S.actions.migros.sources = ['migros.ch', 'rappn.ch'];
+  P.S.ui.fold = { 'r-donnees': true };
+  ok(!/rappn/i.test(P.viewReglages()) && !/rappn/i.test(P.viewAbout()), 'une source « rappn » est encore affichée');
+  P.S.ui.fold = {}; if (P.S.actions.migros) P.S.actions.migros.sources = keep;
+});
+
 section('premier lancement : accueil et à propos', () => {
   P.S.prefs = P.defaults(); P.S.week = null; P.S.ui.q = null; P.S.ui.started = false; P.S.ui.about = false; P.S.loaded = true;
   ok(P.mode() === 'welcome', 'un navigateur vide doit commencer par l’écran d’accueil (' + P.mode() + ')');

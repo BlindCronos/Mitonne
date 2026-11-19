@@ -128,6 +128,11 @@ button{font-family:inherit}
 .block{display:flex;flex-direction:column;gap:10px}
 .sect{display:flex;flex-direction:column;gap:14px;padding-top:16px;border-top:2px solid var(--rule)}
 .sect>p{margin:0}
+.tot{display:flex;flex-direction:column;gap:6px}
+.totals.sub{border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-2)}
+.totals.sub b{font-size:1.2rem;color:var(--ink)}
+.tag.est .tag-body{background:var(--tag-plain);color:var(--ink-2)}
+.tag.est .tag-price{font-size:1.15rem}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 
 .note{background:var(--note);color:var(--note-ink);border-radius:var(--r-s);padding:.8rem .9rem;font-size:.92rem;margin:0;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
@@ -1951,6 +1956,34 @@ function programText(w){
 }
 
 /* ---------- liste de courses ---------- */
+/* Prix habituels estimés, hors action : [taille d'un paquet courant dans l'unité de l'ingrédient (g, ml ou pièces), prix en CHF].
+   Moyennes arrondies des grandes surfaces suisses (gammes courantes, 2026). Ce sont des estimations : l'étiquette en magasin fait foi.
+   Le placard (huile, épices, bouillon, farine…) n'est pas compté : il est supposé déjà chez toi. */
+var PRICE={
+ poulet_blanc:[500,14.5],poulet_cuisse:[1000,12],poulet_haut:[500,13],poulet_hache:[400,9.5],dinde:[400,12.5],
+ boeuf_hache:[500,10.5],boeuf_maigre:[500,12.5],boeuf_steak:[400,22],boeuf_ragout:[500,15.5],
+ porc_cotelette:[500,11.5],porc_filet:[500,19.5],porc_roti:[1000,24],porc_fume:[1000,22],saucisse:[400,7.5],saucisson:[400,9.5],
+ lardons:[200,4.2],jambon:[200,5.5],cordon_bleu:[400,11],agneau:[300,15],chorizo:[200,4.5],
+ saumon_frais:[400,13.5],saumon_fume:[200,8.5],poisson_blanc:[400,11.5],poisson_pane:[400,7.5],moules:[1000,9.5],crevettes:[400,13],thon_boite:[150,2.7],
+ pommes_de_terre:[2500,4.95],patate_douce:[1000,5.5],carottes:[1000,2.4],oignons:[1000,2.4],ail:[10,1.2],gingembre:[1,0.6],poireaux:[1000,4.5],
+ courge:[1000,3.9],chou_blanc:[1000,2.9],chou_chinois:[500,2.8],chou_fleur:[800,3.9],brocoli:[500,3.5],epinards:[250,3.2],champignons:[250,2.95],
+ poivrons:[500,4.5],tomates:[500,3.5],salade:[200,2.5],avocat:[1,1.5],citron:[4,2.6],persil:[1,1.9],courgettes:[500,2.9],concombre:[400,1.5],
+ chou_frise:[300,3.9],banane:[1,0.4],fruits_rouges:[500,4.9],
+ oeufs:[6,4.2],creme:[250,3.2],lait:[1000,1.7],yogourt:[500,2.2],sere:[500,2.6],skyr:[450,3.2],fromage_frais:[200,2.6],cottage:[200,1.9],
+ beurre:[250,3.9],fromage_rape:[250,5.2],raclette:[400,8.5],mozzarella:[150,1.95],feta:[200,3.6],parmesan:[150,4.8],tofu:[250,3.5],
+ pate_gateau:[1,2.9],pate_pizza:[1,3.2],gnocchi:[500,2.9],pates_farcies:[500,5.9],
+ pates:[500,1.9],lasagne:[500,2.8],nouilles:[250,2.5],risoni:[500,2.4],riz:[1000,3.2],riz_risotto:[1000,3.9],semoule:[500,1.9],polenta:[500,2.2],
+ lentilles_vertes:[500,2.9],lentilles_corail:[500,3.2],pois_chiches:[400,1.4],haricots_rouges:[400,1.4],haricots_blancs:[400,1.4],mais:[285,1.6],
+ tomates_concassees:[400,1.3],concentre_tomate:[200,1.6],lait_coco:[400,2.4],coco_light:[400,2.6],pesto:[190,3.9],tortillas:[8,3.5],
+ pain:[500,3.2],pain_burger:[4,2.9],pain_pita:[4,2.9],compote_pommes:[700,2.8],cornichons:[350,2.9],olives:[200,2.9],petits_pois:[750,3.5],
+ vin_blanc:[750,7.9],gochujang:[250,6.5],beurre_cacahuete:[350,4.5],edamame:[400,4.9],flocons_avoine:[500,1.8],cacao:[250,4.5]
+};
+function estCost(k,q){
+  var p=PRICE[k];
+  if(!p||!q) return null;
+  var packs=Math.max(1,Math.ceil(q/p[0]-0.15));
+  return {packs:packs,size:p[0],total:packs*p[1]};
+}
 function shopping(w){
   var D=w.shop.d,need={},order=[],mains={};
   w.ids.forEach(function(id){
@@ -1962,22 +1995,30 @@ function shopping(w){
       need[x[0]]+=x[1]*por/4*(w.ap||1);
     });
   });
-  var out={byStore:{},rest:{},placard:[],pick:{},pay:0,save:0,n:0},anchors=[];
+  var out={byStore:{},rest:{},placard:[],pick:{},pay:0,save:0,est:0,total:0,n:0,por:0},anchors=[];
   var rows=order.map(function(k){var q=roundQ(k,need[k]);return {k:k,q:q,g:grams(k,q),a:null,c:null};});
   rows.forEach(function(row){
     if(!mains[row.k]) return;
     row.a=best(row.k,row.g,D);
     if(row.a&&anchors.indexOf(row.a.st)<0) anchors.push(row.a.st);
   });
-  rows.forEach(function(row){if(!mains[row.k]) row.a=best(row.k,row.g,D,{stores:anchors,minPct:1,over:4});});
+  rows.forEach(function(row){
+    if(mains[row.k]) return;
+    row.a=best(row.k,row.g,D,{stores:anchors,minPct:1,over:4});
+    // Un ingrédient secondaire n'est pris en action que si c'est vraiment moins cher que le paquet habituel.
+    var e=estCost(row.k,row.q);
+    if(row.a&&e&&cost(row.a,row.g).total>e.total+0.05) row.a=null;
+  });
   rows.forEach(function(row){
     var k=row.k,a=row.a;
     if(a){row.c=cost(a,row.g);out.pick[k]=a;}
     if(ING[k].r==='pl'){out.placard.push(row);return;}
     out.n++;
     if(a){(out.byStore[a.st]=out.byStore[a.st]||[]).push(row);out.pay+=row.c.total;out.save+=row.c.save;}
-    else (out.rest[ING[k].r]=out.rest[ING[k].r]||[]).push(row);
+    else{row.e=estCost(k,row.q);if(row.e) out.est+=row.e.total;(out.rest[ING[k].r]=out.rest[ING[k].r]||[]).push(row);}
   });
+  out.total=out.pay+out.est;
+  w.ids.forEach(function(id){out.por+=portionsOf(w,id);});
   Object.keys(out.byStore).forEach(function(st){out.byStore[st].sort(function(a,b){return RORDER.indexOf(ING[a.k].r)-RORDER.indexOf(ING[b.k].r);});});
   return out;
 }
@@ -2017,8 +2058,9 @@ function listText(w){
   RORDER.forEach(function(rc){
     var rows=L.rest[rc];if(!rows) return;
     if(!any){lines.push('SANS ACTION');any=true;}
-    rows.forEach(function(r){lines.push('- '+ING[r.k].n+(r.q?', '+fmtQty(r.k,r.q):''));});
+    rows.forEach(function(r){lines.push('- '+ING[r.k].n+(r.q?', '+fmtQty(r.k,r.q):'')+(r.e?' (≈ '+fmtP(r.e.total)+')':''));});
   });
+  if(L.total>0.005){lines.push('');lines.push('TOTAL ESTIMÉ : env. '+fmtP(L.total)+' CHF'+(L.save>0.005?', dont '+fmtP(L.save)+' économisés grâce aux promos':''));}
   if(L.placard.length){lines.push('');lines.push('PLACARD : '+L.placard.map(function(r){return ING[r.k].n.toLowerCase();}).join(', '));}
   return lines.join('\n');
 }
@@ -2167,6 +2209,8 @@ function ctlThaw(){return '<div class="chips">'+THAWH.map(function(h){return chi
 function ctlStores(){return '<div class="chips">'+ORDER.map(function(st){return chip('store',st,STORES[st],S.prefs.stores.indexOf(st)>=0);}).join('')+'</div>';}
 function ctlGoal(){return '<div class="opts">'+GOALS.map(function(x){return opt('goal',x[0],x[1],x[2],S.prefs.goal===x[0]);}).join('')+'</div>';}
 function ctlPrio(){return '<div class="opts">'+PRIO.map(function(x){return opt('prio',x[0],x[1],x[2],S.prefs.prio===x[0]);}).join('')+'</div>';}
+var PRICENOTE='Les produits en action ont leur prix relevé cette semaine. Les autres sont chiffrés à leur prix habituel estimé (moyenne des grandes surfaces suisses), arrondi au paquet entier. Le placard (huile, épices, bouillon, farine) n’est pas compté. L’étiquette en magasin fait foi.';
+function basketBox(L,full){return '<div class="save"><span class="save-n">'+fmtP(L.total)+'<small>CHF</small></span><span class="save-l">Panier estimé'+(L.save>0.005?', dont '+fmtP(L.save)+' économisés grâce aux promos':'')+(full&&L.por?' · ≈ '+fmtP(L.total/L.por)+' par portion':'')+'</span></div>';}
 var SCORENOTE='Le « % pour toi » est un indice de préférence, pas une promesse : il part de tes réglages, des actions de la semaine et de ce que Mitonne apprend de tes choix (ton avis après le repas, les plats que tu échanges ou ajoutes). Tout reste sur ton téléphone.';
 var NUTNOTE='Calories et macros par portion, accompagnement compris : ce sont des estimations faites d’après des valeurs nutritionnelles moyennes. Un plat « Fit » apporte au moins 28 g de protéines pour 620 kcal au plus, avec un tiers des calories au maximum venant des lipides.';
 var ALLERGY='<p class="fine">Mitonne écarte les plats qui contiennent ces aliments. Pour le gluten et le lactose, il garde les plats qui ont une version adaptée et te l’indique dans la liste de courses. Un produit peut contenir des traces : lis toujours les étiquettes.</p>';
@@ -2211,7 +2255,7 @@ function viewWelcome(){
 function viewAbout(){
   var h='<section class="head"><p class="label">À propos</p><h1 class="h1">Mitonne</h1><p class="lede">Une app gratuite pour cuisiner une fois par semaine, manger bien tous les jours et dépenser moins grâce aux promotions.</p></section>';
   h+='<section class="sect"><h2 class="h2">Ce que fait Mitonne</h2><p>Tu réponds à six questions sur ton foyer et tes goûts. Chaque semaine, Mitonne te propose des plats à cuisiner d’avance en tenant compte des actions des magasins. Il fait ta liste de courses, organise ta session de cuisine minute par minute et te dit chaque jour quoi manger et quoi sortir du congélateur.</p></section>';
-  h+='<section class="sect"><h2 class="h2">D’où viennent les prix</h2><p class="fine">Chaque jeudi matin, Mitonne relève les actions publiées par Migros, Coop, Denner, Aldi et Lidl, sur leurs sites et sur rappn.ch, pour la Suisse romande (canton de Vaud). Seuls les prix en action sont suivis. Ils peuvent changer d’une région à l’autre : l’étiquette en magasin fait foi.</p></section>';
+  h+='<section class="sect"><h2 class="h2">D’où viennent les prix</h2><p class="fine">Chaque jeudi matin, Mitonne relève les actions publiées par Migros, Coop, Denner, Aldi et Lidl pour la Suisse romande (canton de Vaud). Les autres produits sont chiffrés à un prix habituel estimé, pour te donner une idée du prix de ton panier. Ils peuvent changer d’une région à l’autre : l’étiquette en magasin fait foi.</p></section>';
   h+='<section class="sect"><h2 class="h2">Calories et protéines</h2><p class="fine">'+NUTNOTE+'</p><p class="fine">'+SCORENOTE+'</p></section>';
   h+='<section class="sect"><h2 class="h2">Conservation</h2>'+KEEPING+'</section>';
   h+='<section class="sect"><h2 class="h2">Tes données</h2><p class="fine">Pas de compte, pas de serveur, pas de traceur, pas de publicité. Tes réglages, ta semaine et ce que Mitonne apprend de tes goûts restent dans ce navigateur. '+(WEB?'Tu peux en garder une copie dans Réglages, section « Données et promotions ».':'')+'</p></section>';
@@ -2298,7 +2342,7 @@ function wizDishes(wz){
   h+='<p class="fine">'+SCORENOTE+'</p><p class="fine">'+NUTNOTE+'</p>';
   var n=mealIds(wz.picks).length,nd=snackIds(wz.picks).length;
   h+='<div class="wbar"><p class="wbar-s"><b>'+n+' plat'+(n>1?'s':'')+(nd?' + '+nd+' en-cas':'')+'</b>'+(n?'':' : ajoute au moins un plat')+
-    (e?' · session d’environ <b>'+dur(e.ss.span)+'</b>, dont '+dur(e.ss.act)+' de travail':'')+'</p>'+
+    (e?' · session d’environ <b>'+dur(e.ss.span)+'</b>, dont '+dur(e.ss.act)+' de travail':'')+(e&&n?' · panier ≈ <b>'+fmtP(shopping(e.w).total)+' CHF</b>':'')+'</p>'+
     '<div class="btns"><button class="btn" data-act="w-back">Retour</button><button class="btn fill" id="w-ok" data-act="w-ok"'+(n?'':' disabled')+'>Valider ma semaine</button></div></div></section>';
   return h;
 }
@@ -2358,7 +2402,7 @@ function viewSemaine(){
   if(!w) return noWeek();
   var ev=events(w),L=shopping(w),ss=session(w),nx=nextEvent(ev),n=nowMin(),t=today(),meals=w.slots.filter(function(s){return s.r;}).length;
   var h='<section class="head"><h1 class="h1">Ta semaine</h1><p class="lede">'+meals+' repas · '+dishTxt(w.ids)+' · courses '+dayName(w.shop.d)+' à '+w.shop.h+' · batch '+dayName(w.cook.d)+' de '+w.cook.h+' à '+hm(toMin(w.cook.d,w.cook.h)+ss.span)+'</p>';
-  if(L.save>0.005) h+='<div class="save"><span class="save-n">'+fmtP(L.save)+'<small>CHF</small></span><span class="save-l">économisés grâce aux promos de ta liste</span></div>';
+  if(L.total>0.005) h+=basketBox(L,true);
   h+='</section>';
   if(weekOver(w)) h+='<div class="note">Cette semaine est terminée. Les actions ont changé : choisis de nouveaux plats.<button class="btn" data-act="w-new">Préparer la semaine suivante</button></div>';
   else if(nx){
@@ -2461,8 +2505,9 @@ function itemHtml(row,w){
   var sub=a?esc(a.n)+(a.d?' · '+esc(a.d):'')+' · '+esc(packsTxt(row))+(untilTxt(a)?' · '+esc(untilTxt(a)):''):'',vt=variantOf(k);
   return '<li class="item'+(on?' done':'')+'"><input type="checkbox" id="ck-'+k+'" data-ck="'+k+'"'+(on?' checked':'')+'>'+
     '<label class="item-body" for="ck-'+k+'"><span class="item-top"><span class="item-n">'+esc(ING[k].n)+'</span><span class="item-q">'+fmtQty(k,row.q)+'</span></span>'+
-    (vt?'<span class="item-left">Prends la version '+vt+'</span>':'')+(sub?'<span class="item-sub">'+sub+'</span>':'')+(lt?'<span class="item-left">'+lt+'</span>':'')+'</label>'+(a?tag(a):'<span></span>')+'</li>';
+    (vt?'<span class="item-left">Prends la version '+vt+'</span>':'')+(sub?'<span class="item-sub">'+sub+'</span>':'')+(!a&&row.e?'<span class="item-sub">'+esc(estTxt(row))+'</span>':'')+(lt?'<span class="item-left">'+lt+'</span>':'')+'</label>'+(a?tag(a):row.e?'<span class="tag plain est"><span class="tag-body"><span class="tag-price">≈ '+fmtP(row.e.total)+'</span></span></span>':'<span></span>')+'</li>';
 }
+function estTxt(row){var e=row.e;return 'prix habituel estimé'+(e.packs>1?' · '+e.packs+' × '+fmtQty(row.k,e.size):' · '+fmtQty(row.k,e.size));}
 function byRayon(rows,w){
   var h='',cur='';
   rows.forEach(function(r){var rc=ING[r.k].r;if(rc!==cur){if(cur) h+='</ul>';h+='<h3 class="sub-h">'+RAYONS[rc]+'</h3><ul class="items">';cur=rc;}h+=itemHtml(r,w);});
@@ -2482,6 +2527,7 @@ function viewCourses(){
   var L=shopping(w);
   var h='<section class="head"><h1 class="h1">Liste de courses</h1><p class="lede">'+WD[wdOf(w.shop.d)]+' '+fmtDM(w.shop.d)+' à '+w.shop.h+' · '+L.n+' articles pour '+dishTxt(w.ids)+'</p>';
   var bk=basket(w,L);
+  if(L.total>0.005) h+=basketBox(L,true);
   h+='<p class="basket" id="basket" aria-live="polite"'+(bk.got?'':' hidden')+'>'+basketTxt(bk)+'</p></section>'+stateNote(w.shop.d);
   ORDER.forEach(function(st){
     var rows=L.byStore[st];if(!rows) return;
@@ -2498,8 +2544,10 @@ function viewCourses(){
     h+='<section class="grp"><h2 class="grp-h">Placard<span>vérifie ce qu’il te reste</span></h2><p class="lede">'+L.placard.map(function(r){
       var vt=variantOf(r.k);return esc(ING[r.k].n)+(vt?' <b>'+vt+'</b>':'')+(r.a?' (en action chez '+STORES[r.a.st]+', '+fmtP(r.a.p)+')':'');}).join(', ')+', sel, poivre.</p></section>';
   }
-  if(L.pay>0) h+='<div class="totals"><span>Produits en action</span><span><b>'+fmtP(L.pay)+'</b>'+(L.save>0.005?' au lieu de '+fmtP(L.pay+L.save):'')+'</span></div>'+
-    '<p class="fine">Seuls les produits en action ont un prix. Le reste de la liste n’est pas chiffré, car les prix hors action ne sont pas relevés.</p>';
+  if(L.total>0.005) h+='<div class="tot">'+(L.pay>0?'<div class="totals sub"><span>Produits en action</span><span><b>'+fmtP(L.pay)+'</b>'+(L.save>0.005?' au lieu de '+fmtP(L.pay+L.save):'')+'</span></div>':'')+
+    (L.est>0?'<div class="totals sub"><span>Autres produits, prix habituel estimé</span><span><b>≈ '+fmtP(L.est)+'</b></span></div>':'')+
+    '<div class="totals"><span>Total estimé de ton panier</span><span><b>≈ '+fmtP(L.total)+'</b> CHF</span></div></div>'+
+    '<p class="fine">'+PRICENOTE+'</p>';
   h+='<p class="fine">La liste comprend aussi ce qui se prépare le jour du repas : riz, pâtes, pain, salade.</p>';
   if(L.n) h+=canShare()?'<div class="btns"><button class="btn fill" id="b-share" data-act="share">Envoyer la liste</button><button class="btn" id="b-copy" data-act="copy">Copier</button></div>':'<button class="btn fill wide" id="b-copy" data-act="copy">Copier la liste</button>';
   if(S.ui.copyText&&S.ui.copyKind==='list') h+='<textarea class="copybox" id="copybox" readonly aria-label="Liste de courses à copier">'+esc(S.ui.copyText)+'</textarea>';
@@ -2560,7 +2608,7 @@ function viewReglages(){
   dat+='<h3 class="h3">D’où viennent les prix</h3>'+refreshBlock();
   var rows=ORDER.filter(function(st){return S.actions[st];});
   if(rows.length) dat+='<ul class="srcs">'+rows.map(function(st){
-    var d=S.actions[st],src=Array.isArray(d.sources)?d.sources.filter(function(x){return typeof x==='string';}).join(', '):'';
+    var d=S.actions[st],src=Array.isArray(d.sources)?d.sources.filter(function(x){return typeof x==='string'&&!/rappn/i.test(x);}).join(', '):'';
     return '<li><b>'+STORES[st]+'</b><span>'+(isIso(d.updated)?'relevé le '+fmtDay(d.updated):'date inconnue')+(src?' · '+esc(src):'')+'</span></li>';
   }).join('')+'</ul>';
   else dat+='<p class="fine">Aucun relevé chargé pour l’instant.</p>';
@@ -2976,7 +3024,7 @@ if(typeof module==='object'&&module.exports) module.exports={S:S,ING:ING,BATCH:B
   viewSemaine:viewSemaine,viewCourses:viewCourses,viewBatch:viewBatch,viewActions:viewActions,viewReglages:viewReglages,viewQuiz:viewQuiz,viewWiz:viewWiz,
   defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm,
   macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore,
-  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt,swapPick:swapPick,repick:repick,newWiz:newWiz,learn:learn,affinity:affinity,reasons:reasons,pctOf:pctOf,SIG:SIG,validateWeek:validateWeek,voteEff:voteEff,viewWelcome:viewWelcome,viewAbout:viewAbout,mode:mode,feedbackOK:feedbackOK,FEEDBACK_URL:FEEDBACK_URL};
+  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt,swapPick:swapPick,repick:repick,newWiz:newWiz,learn:learn,affinity:affinity,reasons:reasons,pctOf:pctOf,SIG:SIG,validateWeek:validateWeek,voteEff:voteEff,PRICE:PRICE,estCost:estCost,viewWelcome:viewWelcome,viewAbout:viewAbout,mode:mode,feedbackOK:feedbackOK,FEEDBACK_URL:FEEDBACK_URL};
 else boot();
 })();
 </script>
