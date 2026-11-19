@@ -3,6 +3,7 @@
 Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici, en tête, ce qui a changé (en langage simple) et met à jour les idées en attente. Les gros travaux sont dans `CHANTIERS.md`.
 
 ## Idées en attente
+- Liste de courses : un magasin par section repliable, comme l'onglet Actions (l'écran fait encore environ 3,5 écrans de haut).
 - Total des calories et protéines de la semaine, par jour.
 - Mode « frigo vide » : proposer des plats avec ce qui reste.
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
