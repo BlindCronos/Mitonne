@@ -187,6 +187,28 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center;justify-conten
 .deal-n{font-weight:600;overflow-wrap:anywhere}
 .deal-s{color:var(--ink-2);font-size:.85rem}
 .card-acts{display:flex;gap:8px}
+.wz-tools{display:flex;gap:8px;flex-wrap:wrap}
+.wz-tools .btn,.mini .btn.small{display:inline-flex;align-items:center;gap:6px}
+.wz-tools svg,.mini .btn.small svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wz-tools b{font-weight:700}
+.fbox{background:var(--sunk);border-radius:var(--r-s);padding:14px;display:flex;flex-direction:column;gap:14px}
+.card.mini{padding:12px 2px;gap:10px}
+.card.mini[data-on="true"]{background:var(--surface);box-shadow:none;padding-left:2px;padding-right:2px}
+.mini-row{display:flex;align-items:center;gap:12px;min-width:0}
+.mini-n{flex:none;width:2.1rem;font:700 1.7rem/1 var(--f-display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.mini-main{appearance:none;flex:1;min-width:0;min-height:44px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.mini-main .card-name{font-size:1.1rem}
+.mini-l{font-size:.875rem;color:var(--ink-2)}
+.mini-l .badge{vertical-align:1px}
+.mini-p{display:inline-block;background:var(--promo);color:var(--promo-ink);font:700 .78rem var(--f-display);letter-spacing:.02em;padding:.12rem .4rem;border-radius:2px}
+.mini .btn.small{flex:none}
+.mini .btn.swap{flex:none;width:76px;min-height:56px;padding:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.75rem}
+.mini .btn.swap svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wbar .btns .btn:first-child{flex:0 0 auto;min-width:0}
+.wbar .btns .btn.fill{flex:1}
+.mini-det{display:flex;flex-direction:column;gap:10px;padding-left:calc(2.1rem + 12px)}
+.picks .mini-det{padding-left:calc(2.1rem + 12px)}
+.cards:not(.picks) .mini-det{padding-left:0}
 .card-acts .btn:not(.icon){flex:1}
 
 .next{background:var(--hi);color:var(--hi-ink);border-radius:var(--r-s);padding:16px;display:flex;flex-direction:column;gap:8px}
@@ -369,6 +391,8 @@ var BURNERS=4;
 var QN=6;
 var COLORS=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
 var HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.4-7.5 10.4z"/></svg>';
+var SWAP='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>';
+var FILTER='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>';
 
 /* Ingrédients : clé, nom, rayon, drapeaux (m viande, b bœuf, p porc, a agneau, f poisson, s fruits de mer,
    g champignons, e épinards, h chou, c courge, o poivrons), unité (g par défaut), poids d'une pièce, nom de la pièce. */
@@ -1685,27 +1709,56 @@ function proposals(wz){
     .sort(function(a,b){return b.s-a.s;});
   return {list:list,n:n,target:t,por:por};
 }
+function pickOK(r,picks,strict){
+  var P=S.prefs,g=rgroup(r),groups=picks.map(function(id){return rgroup(B[id]);}),cus=picks.map(function(id){return B[id].cu;});
+  var ovens=picks.filter(function(id){return hasTag(B[id],'ov');}).length,fresh=picks.filter(function(id){return !B[id].co;}).length;
+  if(P.diet==='flexi'&&g!=='vege'&&groups.some(function(x){return x!=='vege';})) return false;
+  if(!strict) return true;
+  if(g!=='vege'&&groups.indexOf(g)>=0) return false;
+  if(cus.filter(function(x){return x===r.cu;}).length>=1) return false;
+  if(hasTag(r,'ov')&&ovens>=2) return false;
+  if(!r.co&&(fresh>=1||!P.freezer&&fresh>=2)) return false;
+  return true;
+}
+var PASSES=[[true,true],[false,true],[true,false],[false,false]];
 function autoPick(wz){
-  var pr=proposals(wz),picks=wz.picks.slice(),P=S.prefs;
-  function ok(r,strict){
-    var g=rgroup(r),groups=picks.map(function(id){return rgroup(B[id]);}),cus=picks.map(function(id){return B[id].cu;});
-    var ovens=picks.filter(function(id){return hasTag(B[id],'ov');}).length,fresh=picks.filter(function(id){return !B[id].co;}).length;
-    if(P.diet==='flexi'&&g!=='vege'&&groups.some(function(x){return x!=='vege';})) return false;
-    if(!strict) return true;
-    if(g!=='vege'&&groups.indexOf(g)>=0) return false;
-    if(cus.filter(function(x){return x===r.cu;}).length>=1) return false;
-    if(hasTag(r,'ov')&&ovens>=2) return false;
-    if(!r.co&&(fresh>=1||!P.freezer&&fresh>=2)) return false;
-    return true;
-  }
-  [[true,true],[false,true],[true,false],[false,false]].forEach(function(o){
+  var pr=proposals(wz),picks=wz.picks.slice();
+  PASSES.forEach(function(o){
     pr.list.forEach(function(c){
       if(picks.length>=pr.target||picks.indexOf(c.r.id)>=0) return;
       if(o[1]&&!matchWz(c.r,wz)) return;
-      if(ok(c.r,o[0])) picks.push(c.r.id);
+      if(pickOK(c.r,picks,o[0])) picks.push(c.r.id);
     });
   });
   return picks;
+}
+/* « Échanger » : remplace un plat par le meilleur plat suivant qui va avec les autres.
+   Les plats déjà écartés pendant ce choix ne reviennent qu'une fois la liste épuisée. */
+function swapPick(wz,id){
+  var ix=wz.picks.indexOf(id);
+  if(ix<0) return null;
+  var pr=proposals(wz),rest=wz.picks.filter(function(x){return x!==id;}),cand=null;
+  wz.skip=wz.skip||[];
+  if(wz.skip.indexOf(id)<0) wz.skip.push(id);
+  PASSES.some(function(o){
+    for(var i=0;i<pr.list.length;i++){
+      var r=pr.list[i].r;
+      if(wz.picks.indexOf(r.id)>=0||wz.skip.indexOf(r.id)>=0) continue;
+      if(o[1]&&!matchWz(r,wz)) continue;
+      if(pickOK(r,rest,o[0])){cand=r.id;return true;}
+    }
+    return false;
+  });
+  if(!cand&&wz.skip.length>1){wz.skip=[id];return swapPick(wz,id);}
+  if(cand) wz.picks[ix]=cand;
+  return cand;
+}
+/* Garde les plats qui vont avec l'envie choisie et complète la semaine. */
+function repick(wz){
+  wz.picks=wz.picks.filter(function(id){return B[id]&&matchWz(B[id],wz);});
+  var t=proposals(wz).target;
+  if(wz.picks.length>t) wz.picks=wz.picks.slice(0,t);
+  wz.picks=autoPick(wz);wz.skip=[];
 }
 
 /* ---------- petits morceaux d'interface ---------- */
@@ -1844,24 +1897,6 @@ function estimate(wz){
   wz._k=key;wz._e={w:w,ss:ss};
   return wz._e;
 }
-function wizDishes(wz){
-  var pr=proposals(wz),c=cookOf(wz.shopD,wz.shopH,wz.mode,wz.cookH),P=S.prefs;
-  var picked=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)>=0;}),others=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)<0&&matchWz(x.r,wz);});
-  var per=8,pages=Math.max(1,Math.ceil(others.length/per)),pg=wz.page%pages,show=picked.concat(others.slice(pg*per,pg*per+per));
-  var h='<section class="quiz"><p class="label">Ta semaine · étape 2 sur 2</p><div class="head"><h1 class="h1">Qu’est-ce qui te ferait envie ?</h1>'+
-    '<p class="lede">'+pr.n+' repas à couvrir à partir de '+dayName(c.d)+'. '+pr.target+' plats suffisent : chacun revient environ '+Math.max(1,Math.round(pr.n/pr.target))+' fois. Les propositions tiennent compte des actions du '+fmtDay(wz.shopD)+'.</p></div>'+blk('Plats différents cette semaine',ctlDish())+stateNote(wz.shopD)+filtersHtml(wz,pr);
-  if(!pr.n) h+='<p class="note">Aucun repas n’est coché après la session. Choisis tes midis et tes soirs dans Réglages.</p>';
-  h+='<ul class="cards">'+show.map(function(x){return propCard(x,wz);}).join('')+'</ul>';
-  if(!others.length&&pr.list.length) h+='<p class="note">Aucun autre plat dans cette sélection. Essaie une autre envie, ou « Tout ».</p>';
-  if(others.length>per) h+='<button class="btn wide" data-act="w-more">Voir d’autres plats</button>';
-  h+='<p class="fine">'+NUTNOTE+'</p>';
-  var e=estimate(wz);
-  h+='<div class="wbar"><p class="wbar-s"><b>'+wz.picks.length+' plat'+(wz.picks.length>1?'s':'')+' choisi'+(wz.picks.length>1?'s':'')+'</b> sur '+pr.target+' conseillés'+
-    (e?' · session d’environ <b>'+dur(e.ss.span)+'</b>, dont '+dur(e.ss.act)+' de travail':'')+'</p>'+
-    '<div class="btns"><button class="btn" data-act="w-back">Retour</button><button class="btn" data-act="w-auto">'+(wz.picks.length?'Compléter pour moi':'Choisir pour moi')+'</button></div>'+
-    '<button class="btn fill wide" data-act="w-ok"'+(wz.picks.length?'':' disabled')+'>Valider ma semaine</button></div></section>';
-  return h;
-}
 function filtersHtml(wz,pr){
   var all=pr.list.map(function(x){return x.r;}),cat=wz.cat||'all',pro=wz.prot||'all';
   var cats=CATS.filter(function(c){return c[0]==='all'||c[0]===cat||all.some(c[2]);});
@@ -1871,16 +1906,54 @@ function filtersHtml(wz,pr){
     (prots.length>2?blk('Avec','<div class="chips tight">'+prots.map(function(c){return chip('w-prot',c[0],c[1],pro===c[0]);}).join('')+'</div>'):'')+
     '<p class="count">'+n+' plat'+(n>1?'s':'')+(on?' dans cette sélection':' possibles avec tes réglages')+'</p></div>';
 }
-function propCard(x,wz){
-  var r=x.r,on=wz.picks.indexOf(r.id)>=0,fav=S.prefs.fav.indexOf(r.id)>=0,a=x.md&&x.md.a;
-  var keep=S.prefs.freezer&&r.co?'<span class="badge cold">Se congèle</span>':'<span class="badge fridge">Frigo, '+r.fr+' jours</span>';
-  var h='<li class="card" data-on="'+on+'"><div class="card-head"><span>'+CUSHORT[r.cu]+(rgroup(r)==='vege'?' · végétarien':'')+'</span><span>≈ '+r.act+' min de travail</span></div>'+
-    '<h3 class="card-name">'+esc(r.n)+'</h3>'+(r.sv?'<p class="card-sv">'+esc(r.sv)+'</p>':'')+macroHtml(r,apF())+'<div class="badges">'+(isFit(r)?'<span class="badge fit">Fit</span>':'')+keep+(hasTag(r,'ov')?'<span class="badge">Four</span>':'')+'</div>';
-  if(a){var u=untilTxt(a);h+='<div class="deal"><div class="deal-txt"><span class="store">'+STORES[a.st]+'</span><span class="deal-n">'+esc(a.n)+'</span>'+(u?'<span class="deal-s">'+esc(u)+'</span>':'')+'</div>'+tag(a)+'</div>';}
-  h+='<div class="card-acts"><button class="btn'+(on?' fill':'')+'" id="b-pick-'+r.id+'" data-act="w-pick" data-v="'+r.id+'" aria-pressed="'+on+'">'+(on?'Choisi ✓':'Je prends')+'</button>'+
-    '<button class="btn icon" id="b-fav-'+r.id+'" data-act="fav" data-v="'+r.id+'" aria-pressed="'+fav+'" aria-label="'+(fav?'Retirer des favoris':'Ajouter aux favoris')+'">'+HEART+'</button>'+
-    (on?'':'<button class="btn small" id="b-ban-'+r.id+'" data-act="ban" data-v="'+r.id+'">Pas pour moi</button>')+'</div></li>';
+function wizDishes(wz){
+  var pr=proposals(wz),c=cookOf(wz.shopD,wz.shopH,wz.mode,wz.cookH),e=estimate(wz),byId={};
+  pr.list.forEach(function(x){byId[x.r.id]=x;});
+  var picked=wz.picks.map(function(id){return byId[id];}).filter(Boolean),others=pr.list.filter(function(x){return wz.picks.indexOf(x.r.id)<0&&matchWz(x.r,wz);});
+  var cat=wz.cat||'all',pro=wz.prot||'all',lab=[];
+  if(cat!=='all') CATS.forEach(function(x){if(x[0]===cat) lab.push(x[1]);});
+  if(pro!=='all') PROTS.forEach(function(x){if(x[0]===pro) lab.push(x[1]);});
+  var h='<section class="quiz"><p class="label">Ta semaine · étape 2 sur 2</p><div class="head"><h1 class="h1">Tes plats de la semaine</h1>'+
+    '<p class="lede">'+pr.n+' repas à partir de '+dayName(c.d)+', choisis selon les actions du '+fmtDay(wz.shopD)+'. Touche un plat pour voir le détail.</p></div>'+stateNote(wz.shopD);
+  h+='<div class="wz-tools"><button class="btn small" id="w-filt" data-act="w-filt" aria-expanded="'+!!wz.fopen+'">'+FILTER+'Envie de…'+(lab.length?' <b>'+esc(lab.join(', '))+'</b>':'')+'</button>'+
+    '<button class="btn small" id="w-auto" data-act="w-auto">Autre proposition</button></div>';
+  if(wz.fopen) h+='<div class="fbox">'+blk('Plats différents cette semaine',ctlDish())+filtersHtml(wz,pr)+'</div>';
+  if(!pr.n) h+='<p class="note">Aucun repas n’est coché après la session. Choisis tes midis et tes soirs dans Réglages.</p>';
+  if(picked.length) h+='<ol class="cards picks">'+picked.map(function(x,i){return miniCard(x,wz,e,i+1);}).join('')+'</ol>';
+  else if(pr.list.length) h+='<p class="note">Aucun plat ne correspond à cette envie. Essaie une autre envie, ou ajoute un plat à la main.</p>';
+  h+='<button class="btn wide" id="w-list" data-act="w-list" aria-expanded="'+!!wz.lopen+'">'+(wz.lopen?'Masquer la liste des plats':'Ajouter un plat à la main')+'</button>';
+  if(wz.lopen){
+    var per=8,pages=Math.max(1,Math.ceil(others.length/per)),pg=wz.page%pages;
+    h+='<ul class="cards">'+others.slice(pg*per,pg*per+per).map(function(x){return miniCard(x,wz,e,0);}).join('')+'</ul>';
+    if(!others.length&&pr.list.length) h+='<p class="note">Aucun autre plat dans cette sélection. Essaie une autre envie, ou « Tout ».</p>';
+    if(others.length>per) h+='<button class="btn wide" data-act="w-more">Voir d’autres plats</button>';
+  }
+  h+='<p class="fine">'+NUTNOTE+'</p>';
+  var n=wz.picks.length;
+  h+='<div class="wbar"><p class="wbar-s"><b>'+n+' plat'+(n>1?'s':'')+'</b>'+(n?'':' : ajoute au moins un plat')+
+    (e?' · session d’environ <b>'+dur(e.ss.span)+'</b>, dont '+dur(e.ss.act)+' de travail':'')+'</p>'+
+    '<div class="btns"><button class="btn" data-act="w-back">Retour</button><button class="btn fill" id="w-ok" data-act="w-ok"'+(n?'':' disabled')+'>Valider ma semaine</button></div></div></section>';
   return h;
+}
+function promoShort(a){return a.pct?'−'+a.pct+' % chez '+STORES[a.st]:'En action chez '+STORES[a.st];}
+function miniCard(x,wz,e,num){
+  var r=x.r,on=wz.picks.indexOf(r.id)>=0,open=!!(wz.open&&wz.open[r.id]),fav=S.prefs.fav.indexOf(r.id)>=0,a=x.md&&x.md.a,m=macros(r),f=apF();
+  var nm=on&&e?e.w.slots.filter(function(s){return s.r===r.id;}).length:0;
+  var line=(nm?nm+' repas · ':'')+kcal(m.k*f)+' kcal · '+Math.round(m.p*f)+' g protéines · '+r.act+' min';
+  var h='<li class="card mini" data-on="'+on+'" data-id="'+r.id+'"><div class="mini-row">'+(num?'<span class="mini-n" aria-hidden="true">'+('0'+num).slice(-2)+'</span>':'')+
+    '<button class="mini-main" id="b-open-'+r.id+'" data-act="w-open" data-v="'+r.id+'" aria-expanded="'+open+'"><span class="card-name">'+esc(r.n)+'</span>'+
+    '<span class="mini-l">'+line+(isFit(r)?' · <span class="badge fit">Fit</span>':'')+'</span>'+(a?'<span class="mini-p">'+esc(promoShort(a))+'</span>':'')+'</button>'+
+    (on?'<button class="btn swap" id="b-swap-'+r.id+'" data-act="w-swap" data-v="'+r.id+'">'+SWAP+'Échanger</button>':'<button class="btn small" id="b-pick-'+r.id+'" data-act="w-pick" data-v="'+r.id+'" aria-pressed="false">Ajouter</button>')+'</div>';
+  if(open){
+    var keep=S.prefs.freezer&&r.co?'<span class="badge cold">Se congèle</span>':'<span class="badge fridge">Frigo, '+r.fr+' jours</span>';
+    h+='<div class="mini-det"><p class="card-sv">'+esc(CUSHORT[r.cu]+(rgroup(r)==='vege'?' · végétarien':'')+(r.sv?' · '+r.sv:''))+'</p>'+macroHtml(r,f)+
+      '<div class="badges">'+keep+(hasTag(r,'ov')?'<span class="badge">Four</span>':'')+'</div>';
+    if(a){var u=untilTxt(a);h+='<div class="deal"><div class="deal-txt"><span class="store">'+STORES[a.st]+'</span><span class="deal-n">'+esc(a.n)+'</span>'+(u?'<span class="deal-s">'+esc(u)+'</span>':'')+'</div>'+tag(a)+'</div>';}
+    h+='<div class="card-acts">'+(on?'<button class="btn" id="b-pick-'+r.id+'" data-act="w-pick" data-v="'+r.id+'" aria-pressed="true">Retirer</button>':'')+
+      '<button class="btn icon" id="b-fav-'+r.id+'" data-act="fav" data-v="'+r.id+'" aria-pressed="'+fav+'" aria-label="'+(fav?'Retirer des favoris':'Ajouter aux favoris')+'">'+HEART+'</button>'+
+      '<button class="btn" id="b-ban-'+r.id+'" data-act="ban" data-v="'+r.id+'">Pas pour moi</button></div></div>';
+  }
+  return h+'</li>';
 }
 
 /* ---------- vues ---------- */
@@ -2238,11 +2311,15 @@ function onClick(e){
   case 'w-cancel': S.ui.wiz=null;render();break;
   case 'w-day': if(wz&&isIso(v)){wz.shopD=v;render();}break;
   case 'w-mode': if(wz){wz.mode=v;render();}break;
-  case 'w-next': if(wz){wz.step=1;wz.page=0;render();window.scrollTo(0,0);}break;
+  case 'w-next': if(wz){wz.step=1;wz.page=0;if(!wz.picks.length){wz.picks=autoPick(wz);wz.skip=[];}render();window.scrollTo(0,0);}break;
   case 'w-back': if(wz){wz.step=0;render();window.scrollTo(0,0);}break;
   case 'w-more': if(wz){wz.page++;render();}break;
   case 'w-pick': if(wz){toggleIn(wz.picks,v);render();}break;
-  case 'w-auto': if(wz){wz.picks=autoPick(wz);render();}break;
+  case 'w-auto': if(wz){wz.seed=(wz.seed||0)+1;wz.picks=[];wz.skip=[];wz.open={};wz.picks=autoPick(wz);render();toast('Nouvelle proposition');}break;
+  case 'w-swap': if(wz){var nw=swapPick(wz,v);if(nw){wz.open={};render();toast(shortName(B[nw])+' remplace '+shortName(B[v]));}else toast('Aucun autre plat ne va avec ta sélection');}break;
+  case 'w-open': if(wz){wz.open=wz.open||{};wz.open[v]=!wz.open[v];render();}break;
+  case 'w-filt': if(wz){wz.fopen=!wz.fopen;render();}break;
+  case 'w-list': if(wz){wz.lopen=!wz.lopen;wz.page=0;render();}break;
   case 'w-ok': if(wz&&wz.picks.length) validateWeek();break;
   case 'fav': toggleIn(p.fav,v);save();render();break;
   case 'ban': if(p.ban.indexOf(v)<0) p.ban.push(v);if(wz) wz.picks=wz.picks.filter(function(x){return x!==v;});save();render();toast('Ce plat ne sera plus proposé');break;
@@ -2276,13 +2353,13 @@ function onClick(e){
   case 'spice': p.spice=+v;prefChanged();break;
   case 'oven': p.oven=v==='1';prefChanged();break;
   case 'freezer': p.freezer=v==='1';prefChanged();break;
-  case 'ndish': p.nDish=+v;prefChanged();break;
+  case 'ndish': p.nDish=+v;if(wz&&wz.step===1) repick(wz);prefChanged();break;
   case 'habit': var hb=HABITS[+v];if(hb){p.shopDay=hb[0];p.shopH=hb[1];prefChanged();}break;
   case 'thaw': p.thawH=v;prefChanged();break;
   case 'prio': p.prio=v;prefChanged();break;
   case 'goal': if(GOALS.some(function(x){return x[0]===v;})){p.goal=v;prefChanged();}break;
-  case 'w-cat': if(wz){wz.cat=v;wz.page=0;render();}break;
-  case 'w-prot': if(wz){wz.prot=v;wz.page=0;render();}break;
+  case 'w-cat': if(wz){wz.cat=v;wz.page=0;repick(wz);render();}break;
+  case 'w-prot': if(wz){wz.prot=v;wz.page=0;repick(wz);render();}break;
   case 'store': toggleIn(p.stores,v);p.stores=ORDER.filter(function(x){return p.stores.indexOf(x)>=0;});prefChanged();break;
   case 'q-next': S.ui.q=Math.min(QN-1,(S.ui.q||0)+1);render();window.scrollTo(0,0);break;
   case 'q-back': S.ui.q=Math.max(0,(S.ui.q||0)-1);render();window.scrollTo(0,0);break;
@@ -2463,7 +2540,7 @@ if(typeof module==='object'&&module.exports) module.exports={S:S,ING:ING,BATCH:B
   viewSemaine:viewSemaine,viewCourses:viewCourses,viewBatch:viewBatch,viewActions:viewActions,viewReglages:viewReglages,viewQuiz:viewQuiz,viewWiz:viewWiz,
   defaults:defaults,apply:apply,snapshot:snapshot,today:today,allowed:allowed,rgroup:rgroup,toMin:toMin,hm:hm,
   macros:macros,isFit:isFit,CATS:CATS,catOK:catOK,matchWz:matchWz,protOf:protOf,NUT:NUT,variantOf:variantOf,baseScore:baseScore,
-  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt};
+  icsText:icsText,icsEsc:icsEsc,basket:basket,basketTxt:basketTxt,swapPick:swapPick,repick:repick,newWiz:newWiz};
 else boot();
 })();
 </script>

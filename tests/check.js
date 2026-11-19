@@ -126,6 +126,42 @@ section('chaque recette dans une semaine de 3 plats', () => {
   });
 });
 
+section('écran Plats : semaine proposée, Échanger, Envie de', () => {
+  freshState();
+  const z = Object.assign({}, WZ, { cat: 'all', prot: 'all', picks: [], step: 1 });
+  z.picks = P.autoPick(z);
+  const n0 = z.picks.length;
+  ok(n0 >= 2, 'la semaine proposée d’emblée a moins de 2 plats (' + n0 + ')');
+  P.S.ui.wiz = z;
+  let html = P.viewWiz();
+  ok(!BAD.test(html), 'écran Plats invalide');
+  ok(html.indexOf('data-act="w-swap"') >= 0 && html.indexOf('data-act="w-filt"') >= 0, 'boutons « Échanger » ou « Envie de… » absents');
+  // Échanger plusieurs fois le premier plat : toujours un plat autorisé, différent des autres, sans doublon.
+  const seen = new Set([z.picks[0]]);
+  for (let i = 0; i < 6; i++) {
+    const old = z.picks[0], nw = P.swapPick(z, old);
+    ok(nw && nw !== old, 'Échanger ne propose pas d’autre plat (tour ' + i + ')');
+    ok(z.picks.length === n0 && new Set(z.picks).size === n0, 'Échanger change le nombre de plats ou crée un doublon');
+    ok(P.allowed(P.B[z.picks[0]]), 'Échanger propose un plat non autorisé : ' + z.picks[0]);
+    seen.add(z.picks[0]);
+  }
+  ok(seen.size >= 5, 'Échanger tourne en rond sur trop peu de plats (' + seen.size + ')');
+  // Envie de : les plats qui ne vont pas sont remplacés.
+  ['sou', 'bowl', 'express', 'fit'].forEach(cat => {
+    z.cat = cat; z.prot = 'all'; P.repick(z);
+    ok(z.picks.length > 0, 'Envie « ' + cat + ' » : plus aucun plat proposé');
+    ok(z.picks.every(id => P.catOK(P.B[id], cat)), 'Envie « ' + cat + ' » : un plat proposé ne correspond pas');
+    ok(!BAD.test(P.viewWiz()), 'Envie « ' + cat + ' » : écran invalide');
+  });
+  z.cat = 'all'; z.prot = 'poisson'; P.repick(z);
+  ok(z.picks.length > 0 && z.picks.every(id => P.protOf(P.B[id]) === 'poisson'), 'Avec « poisson » : un plat proposé n’est pas au poisson');
+  // Ouvrir le détail et la liste complète.
+  z.prot = 'all'; P.repick(z); z.open = {}; z.open[z.picks[0]] = true; z.lopen = true; z.fopen = true;
+  html = P.viewWiz();
+  ok(!BAD.test(html) && html.indexOf('Pas pour moi') >= 0 && html.indexOf('data-act="w-pick"') >= 0, 'détail ou liste complète invalides');
+  P.S.ui.wiz = null;
+});
+
 section('semaines types', () => {
   const cases = [
     { goal: 'eq' }, { goal: 'fit' }, { goal: 'muscle' },

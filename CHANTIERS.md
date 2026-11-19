@@ -21,7 +21,8 @@ Statuts possibles : **à faire**, **fait (AAAA-MM-JJ, commit)**, **en attente** 
 - **Contenu :** noir et blanc francs, jaune d'étiquette pour ce qui compte (économies, prochaine étape, prix), rouge réservé aux promotions ; Outfit pour les titres et les chiffres, Plus Jakarta Sans pour le texte ; angles de 2 à 6 px, filets noirs de 2 px entre les sections ; zones à toucher de 44 px au moins, cases à cocher de 28 px ; en sombre, le jaune devient la couleur d'action. Nouveau logo (« MITONNE » sur étiquette jaune), nouvelle icône, onglet « Batch » renommé « Cuisine ». Aucun changement de fonctionnement : les chantiers 1 et 2 simplifient ensuite les écrans dans ce style.
 
 ### Chantier 1 : écran « Plats », la semaine proposée d'emblée
-- **Statut :** à faire
+- **Statut :** fait (2026-11-19, COMMIT)
+- **Fait :** la semaine est proposée dès l'ouverture de l'étape « Plats » (plats numérotés 01, 02, 03, avec le nombre de repas de chacun), un bouton « Échanger » par plat, « Autre proposition » pour tout refaire, les filtres et le nombre de plats repliés derrière « Envie de… » (changer d'envie remplace les plats qui ne vont plus), le détail au toucher, et la liste complète derrière « Ajouter un plat à la main ». 2 touches entre « Choisir mes plats » et une semaine validée ; l'écran tient en un seul écran de téléphone.
 - **Prérequis :** aucun
 - **Pourquoi :** l'audit du 2026-11-13 (format téléphone, 390 px) compte 9 touches entre le premier lancement et une semaine prête. L'écran de choix des plats fait 4,7 écrans de haut et 542 mots ; les filtres occupent tout le premier écran et aucun plat n'est visible sans défiler. Les concurrents vont plus vite : Miamz échange un repas « en un clic », Jow et Mealime proposent la semaine directement.
 - **Contenu :**

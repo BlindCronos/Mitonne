@@ -51,12 +51,31 @@ const shots = process.argv[2];
       await page.click('#w-next'); await page.waitForTimeout(200);
       await page.waitForSelector('.card', { timeout: 5000 });
       await noHScroll('le choix des plats'); await snap('2-plats');
-      const chip = await page.$('[id^="c-w-cat-"]:not([id$="-all"])');
-      if (chip) { await chip.click(); await page.waitForTimeout(150); }
+      // La semaine est proposée d'emblée et le premier plat se voit sans défiler.
+      const n0 = await page.$$eval('.picks .card[data-on="true"]', e => e.length);
+      if (n0 < 2) throw new Error('semaine non proposée d’emblée (' + n0 + ' plat)');
+      const top = await page.$eval('.picks .card', e => e.getBoundingClientRect().bottom);
+      if (top > 860) throw new Error('le premier plat proposé n’est pas visible sans défiler (' + Math.round(top) + ' px)');
+      // Échanger
+      const first = await page.$eval('.picks .card', e => e.dataset.id);
+      await page.click('.picks .card [data-act="w-swap"]'); await page.waitForTimeout(150);
+      const after = await page.$eval('.picks .card', e => e.dataset.id);
+      if (after === first) throw new Error('« Échanger » ne change pas le plat');
+      // Détail au toucher
+      await page.click('.picks .card .mini-main'); await page.waitForTimeout(100);
+      if (!(await page.$('.picks .mini-det'))) throw new Error('le détail du plat ne s’ouvre pas');
+      // Envie de…
+      await page.click('#w-filt'); await page.waitForTimeout(100);
+      await page.click('#c-w-cat-sou'); await page.waitForTimeout(150);
+      const n1 = await page.$$eval('.picks .card[data-on="true"]', e => e.length);
+      if (!n1) throw new Error('« Envie de… » soupes ne propose aucun plat');
+      await noHScroll('les filtres'); await snap('2-plats-envie');
+      await page.click('#c-w-cat-all'); await page.waitForTimeout(150);
       await page.click('[data-act="w-auto"]'); await page.waitForTimeout(150);
       const n = await page.$$eval('.card[data-on="true"]', e => e.length);
-      if (!n) throw new Error('« Choisir pour moi » ne choisit aucun plat');
+      if (!n) throw new Error('« Autre proposition » ne choisit aucun plat');
       await page.click('[data-act="w-ok"]'); await page.waitForTimeout(300);
+      if (!(await page.evaluate(() => location.hash === '#semaine'))) throw new Error('« Valider ma semaine » ne mène pas à la semaine');
     });
     for (const tab of ['semaine', 'courses', 'batch', 'actions', 'reglages']) {
       await step('onglet ' + tab, async () => {

@@ -8,6 +8,13 @@ Chaque semaine, la tâche « Mitonne : amélioration hebdomadaire » ajoute ici,
 - Liste de courses : ranger les articles cochés en bas, pour ne voir que ce qu’il reste à prendre.
 - Envoyer aussi le programme de la semaine par message, comme la liste de courses.
 
+## 2026-11-19 : la semaine proposée d'emblée
+- Quand tu prépares ta semaine, Mitonne te propose tout de suite tes plats, numérotés, avec le nombre de repas de chacun, les calories, les protéines et la promo en cours.
+- Un plat ne te dit rien ? « Échanger » le remplace par le meilleur plat suivant qui va avec les autres. « Autre proposition » refait toute la semaine.
+- Les envies (soupes, bowls, fit, express…) et le nombre de plats sont rangés derrière « Envie de… ». Changer d'envie remplace les plats qui ne vont plus.
+- Touche un plat pour voir le détail : macros complètes, conservation, promo, favoris, « Pas pour moi ».
+- Tu peux toujours ajouter un plat à la main depuis la liste complète.
+
 ## 2026-11-19 : 27 recettes virales, en version fit
 - 90 recettes au lieu de 63. Les nouvelles viennent des recettes qui tournent sur les réseaux, adaptées au batch cooking et allégées : bouchées de saumon, crevettes « bang bang », pâtes à la feta au four, dense bean salad, pâtes à la sauce au cottage cheese, bowl de bœuf aux patates douces et miel pimenté, Big Mac bowl, soupe lasagne, poulet « marry me », egg roll in a bowl, chili blanc, souvlaki…
 - Plus de choix là où il en manquait : 12 plats au poisson (au lieu de 6), 25 végétariens, 12 soupes, 15 bowls.
